@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edu-Augmentation | Interactive Mastery</title>
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        amo: {
+                            blue: '#2563eb',
+                            slate: '#0f172a',
+                            light: '#f8fafc'
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <link rel="stylesheet" href="assets/css/global.css">
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+
+    <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+<body class="h-screen flex flex-col">
+
+    <header class="h-16 flex items-center justify-between px-8 bg-white border-b border-slate-200 z-50">
+        <div class="flex items-center space-x-3">
+            <div class="w-8 h-8 bg-amo-blue rounded-lg flex items-center justify-center text-white">
+                <i data-lucide="book-open" class="w-5 h-5"></i>
+            </div>
+            <span class="font-bold text-xl tracking-tight text-amo-slate">Edu-Augmentation</span>
+        </div>
+        
+        <div class="flex items-center space-x-6">
+            <div id="learning-progress" class="hidden md:flex items-center space-x-2">
+                <span class="text-sm font-medium text-slate-500">Mastery Progress</span>
+                <div class="w-32 h-2 bg-slate-100 rounded-full overflow-hidden">
+                    <div id="progress-bar" class="h-full bg-amo-blue transition-all duration-500" style="width: 0%"></div>
+                </div>
+            </div>
+            <button class="p-2 text-slate-400 hover:text-amo-blue transition-colors">
+                <i data-lucide="settings" class="w-5 h-5"></i>
+            </button>
+        </div>
+    </header>
+
+    <main id="app-viewport" class="flex-grow relative">
+        <sidebar-layout id="main-layout">
+            </sidebar-layout>
+    </main>
+
+    <footer class="h-8 bg-slate-50 border-t border-slate-200 flex items-center px-4 justify-between text-[10px] text-slate-400 uppercase tracking-widest font-semibold">
+        <span>GUID: <span id="session-guid" class="text-slate-500">Initializing...</span></span>
+        <span id="connection-status" class="flex items-center">
+            <span class="w-1.5 h-1.5 bg-green-500 rounded-full mr-2"></span>
+            Gemini 3.1 Pro Engine Active
+        </span>
+    </footer>
+
+    <script type="module">
+        import { Store } from './services/Store.js';
+        
+        // Initialize Icons
+        lucide.createIcons();
+
+        // Initialize Store and State
+        window.addEventListener('DOMContentLoaded', () => {
+            console.log("[*] AMO Shell initialized.");
+            document.getElementById('session-guid').textContent = crypto.randomUUID().split('-')[0];
+        });
+    </script>
+    <script type="module" src="app.js"></script>
+</body>
+</html>

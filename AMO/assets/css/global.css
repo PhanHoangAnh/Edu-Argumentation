@@ -1,0 +1,41 @@
+/* AMO/assets/css/global.css */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&family=Fira+Code:wght@400;500&display=swap');
+
+:root {
+    --amo-primary: #2563eb;    /* Royal Blue */
+    --amo-secondary: #64748b;  /* Slate */
+    --amo-bg: #f8fafc;         /* Off-white background */
+    --amo-text: #0f172a;       /* Deep Navy */
+}
+
+body {
+    font-family: 'Inter', sans-serif;
+    background-color: var(--amo-bg);
+    color: var(--amo-text);
+    -webkit-font-smoothing: antialiased;
+    overflow: hidden; /* We handle scrolling inside components */
+}
+
+/* Custom Scrollbar for Elegance */
+::-webkit-scrollbar {
+    width: 6px;
+}
+::-webkit-scrollbar-track {
+    background: transparent;
+}
+::-webkit-scrollbar-thumb {
+    background: #cbd5e1;
+    border-radius: 10px;
+}
+::-webkit-scrollbar-thumb:hover {
+    background: #94a3b8;
+}
+
+/* KaTeX Adjustment for better alignment in prose */
+.katex-display {
+    margin: 1.5em 0;
+    padding: 1em;
+    background: #ffffff;
+    border-radius: 8px;
+    box-shadow: inset 0 0 0 1px rgba(0,0,0,0.05);
+}
