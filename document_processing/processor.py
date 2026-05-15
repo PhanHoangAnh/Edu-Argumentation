@@ -23,6 +23,7 @@ class DocumentProcessor:
         os.makedirs(self.assets_dir, exist_ok=True)
 
     def extract_physical_images(self, file_path: str):
+        """Extracts all embedded images from the PDF locally."""
         print(f"[*] Physically extracting images from {file_path}...")
         doc = fitz.open(file_path)
         image_map = []
@@ -41,7 +42,6 @@ class DocumentProcessor:
                 with open(img_path, "wb") as f:
                     f.write(image_bytes)
                 
-                # Logic: Use fig_p[PAGE]_[INDEX] to help Gemini map them
                 image_map.append({
                     "figure_id": f"fig_p{page_index+1}_{img_index+1}",
                     "uri": f"assets/{img_name}",
@@ -50,20 +50,32 @@ class DocumentProcessor:
         return image_map
 
     def process_document(self, file_path: str):
+        # 1. Local Image Extraction
         local_assets = self.extract_physical_images(file_path)
-        print(f"[*] Uploading to Gemini File API...")
+
+        # 2. Upload to Gemini File API
+        print(f"[*] Uploading {file_path} to Gemini...")
         uploaded_file = self.client.files.upload(file=file_path)
 
+        # 3. Strict Tutor Instruction with LaTeX Math Contract
         system_instruction = """
-        ROLE: You are a Strict Expert Tutor. Your goal is comprehensive mastery.
-        TASK: Deconstruct the document into a high-detail Syllabus.
+        ROLE: You are a Strict Expert Tutor and Academic Researcher.
+        TASK: Deconstruct the document into a high-detail Syllabus JSON for an interactive book.
         
-        STRICT PEDAGOGICAL RULES:
-        1. HIERARCHY: Course -> Topics -> Subjects -> Problems.
-        2. NO SUMMARIZATION: Capture every technical detail, formula, and step-by-step procedure.
-        3. FIGURE MAPPING: For diagrams, you MUST use the figure_id format 'fig_p[PAGE]_[INDEX]'.
-           Example: The first image on page 5 must be 'fig_p5_1'.
+        STRICT FORMATTING RULES:
+        1. MATHEMATICAL FORMULAS: 
+           - You MUST use LaTeX for all mathematical expressions.
+           - For inline math, use: \\( equation \\).
+           - For block/standalone math, use: $$ equation $$.
+           - Never use plain text or Unicode for symbols like summation, limits, or fractions.
         
+        2. HIERARCHY: Course -> Topics -> Subjects -> Problems.
+        
+        3. NO INFORMATION LOSS: Capture every nuance. If the document explains a process, describe it step-by-step in 'comprehensive_analysis_md'.
+        
+        4. FIGURE MAPPING: Use the format 'fig_p[PAGE]_[INDEX]' (e.g., fig_p5_1). 
+           Explain the 'Learning Objective' of each diagram.
+
         JSON SCHEMA:
         {
           "course_title": "string",
@@ -80,11 +92,11 @@ class DocumentProcessor:
         }
         """
 
-        print(f"[*] Expert Analysis in progress (Cloud)...")
+        print(f"[*] Analysis in progress (Applying LaTeX Math Protocol)...")
         try:
             response = self.client.models.generate_content(
                 model=self.model_id,
-                contents=[uploaded_file, "Generate the full tutor-grade Knowledge Map JSON."],
+                contents=[uploaded_file, "Generate the Master Syllabus JSON with LaTeX math support."],
                 config=types.GenerateContentConfig(
                     system_instruction=system_instruction,
                     response_mime_type="application/json",
@@ -95,19 +107,20 @@ class DocumentProcessor:
             full_data["extracted_assets"] = local_assets
             return full_data
         except Exception as e:
-            raise Exception(f"Analysis or Parsing failed: {str(e)}")
+            raise Exception(f"Analysis failed: {str(e)}")
 
 if __name__ == "__main__":
     try:
         processor = DocumentProcessor()
+        # Ensure this file exists in your source/ directory
         source_file = "source/AWS-Certified-ML-Engineer-Associate-Slides.pdf"
         
         if os.path.exists(source_file):
             result = processor.process_document(source_file)
             output_path = "output/augmented_tutorial.json"
             with open(output_path, "w") as f:
-                json.dump(result, f, indent=2)
-            print(f"[+] Success! Detailed tutorial saved to {output_path}")
+                json.dump(result, f, indent=2, ensure_ascii=False)
+            print(f"[+] Success! Math-ready tutorial saved to {output_path}")
         else:
             print(f"[!] Error: {source_file} not found.")
     except Exception as e:
