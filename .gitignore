@@ -1,0 +1,17 @@
+# Credentials
+.env
+
+# Environments
+.venv/
+env/
+venv/
+bin/
+
+# Project Data (Large files)
+source/*
+output/*
+
+# Python cache
+__pycache__/
+*.py[cod]
+*$py.class
