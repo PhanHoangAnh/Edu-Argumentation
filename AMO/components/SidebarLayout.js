@@ -8,63 +8,32 @@ class SidebarLayout extends HTMLElement {
     }
 
     async connectedCallback() {
-        // 1. Load Template and CSS
-        const templateReq = await fetch('./templates/SidebarLayout.html');
-        const templateHtml = await templateReq.text();
+        const res = await fetch('./templates/SidebarLayout.html');
+        this.shadowRoot.innerHTML = await res.text();
         
-        const sheet = new CSSStyleSheet();
-        // Inject Tailwind via @import so it works inside Shadow DOM
-        await sheet.replace(`@import url('https://cdn.tailwindcss.com');`);
-        this.shadowRoot.adoptedStyleSheets = [sheet];
-
-        this.shadowRoot.innerHTML = templateHtml;
-
-        // 2. Listen for Store Updates
+        // Listen for Store changes
         window.addEventListener('amo-state-changed', (e) => {
-            if (e.detail.property === 'topics') this.renderTOC(e.detail.value);
-            if (e.detail.property === 'courseTitle') this.updateTitle(e.detail.value);
+            if (property === 'topics') this.renderTOC(e.detail.value);
+            if (property === 'currentSubject') this.highlightActive(e.detail.value);
         });
-    }
 
-    updateTitle(title) {
-        // Update the header outside the shadow DOM if needed, 
-        // or just handle internal title changes here.
-        const headerTitle = document.getElementById('course-title');
-        if (headerTitle) headerTitle.textContent = title;
+        // Initialize Content Renderer inside the layout
+        this.renderVisuals(Store.state.currentSubject?.learning_figures || []);
     }
 
     renderTOC(topics) {
-        const container = this.shadowRoot.getElementById('chapter-list');
-        container.innerHTML = ''; // Clear loader
-
-        topics.forEach((topic, tIdx) => {
-            // Create Chapter Header
-            const chapterEl = document.createElement('div');
-            chapterEl.className = "mb-4";
-            chapterEl.innerHTML = `<h3 class="text-sm font-bold text-slate-700 px-2 py-1">${topic.topic_name}</h3>`;
-            
-            // Create Subject Links
-            const subjectList = document.createElement('ul');
-            subjectList.className = "mt-1 space-y-1";
-            
-            topic.subjects.forEach((subject, sIdx) => {
-                const li = document.createElement('li');
-                li.innerHTML = `
-                    <button class="w-full text-left px-3 py-2 text-sm rounded-md transition-colors hover:bg-blue-50 hover:text-blue-600 text-slate-600">
-                        ${subject.subject_title}
+        const list = this.shadowRoot.getElementById('chapter-list');
+        list.innerHTML = topics.map(t => `
+            <div class="mb-4">
+                <h3 class="text-xs font-bold text-slate-400 uppercase p-2">${t.topic_name}</h3>
+                ${t.subjects.map(s => `
+                    <button class="w-full text-left p-2 text-sm rounded hover:bg-slate-100 transition" 
+                            onclick="window.dispatchSubject('${s.subject_title}')">
+                        ${s.subject_title}
                     </button>
-                `;
-                li.querySelector('button').onclick = () => {
-                    // Update the global state
-                    Store.state.currentSubject = subject;
-                };
-                subjectList.appendChild(li);
-            });
-
-            chapterEl.appendChild(subjectList);
-            container.appendChild(chapterEl);
-        });
+                `).join('')}
+            </div>
+        `).join('');
     }
 }
-
 customElements.define('sidebar-layout', SidebarLayout);
