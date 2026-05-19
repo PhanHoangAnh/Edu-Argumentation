@@ -10,6 +10,7 @@ bin/
 # Project Data (Large files)
 source/*
 output/*
+assests/*
 
 # Python cache
 __pycache__/

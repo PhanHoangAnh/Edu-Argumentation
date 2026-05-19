@@ -3,41 +3,448 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Edu-Augmentation | Interactive Mastery</title>
+    <title>Edu-Augmentation | Monolithic Engine</title>
 
     <script src="https://cdn.tailwindcss.com"></script>
-    
-    <link rel="stylesheet" href="assets/css/global.css">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        amo: { blue: '#2563eb', slate: '#0f172a', light: '#f8fafc' }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Fira+Code:wght@400;500&display=swap');
+        body { font-family: 'Inter', sans-serif; -webkit-font-smoothing: antialiased; background-color: #f8fafc; color: #0f172a; }
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
+        ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+        .katex-display { margin: 1.5em 0; padding: 1em; background: #ffffff; border-radius: 8px; box-shadow: inset 0 0 0 1px rgba(0,0,0,0.05); }
+    </style>
 
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
     <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+
     <script src="https://unpkg.com/lucide@latest"></script>
 </head>
-<body class="h-screen flex flex-col bg-slate-50">
+<body class="h-screen flex flex-col overflow-hidden">
 
-    <header class="h-16 flex items-center justify-between px-8 bg-white border-b border-slate-200 z-50">
+    <header class="h-16 flex items-center justify-between px-8 bg-white border-b border-slate-200 z-50 shrink-0">
         <div class="flex items-center space-x-3">
-            <div class="p-2 bg-blue-600 rounded-lg text-white">
+            <div class="w-8 h-8 bg-amo-blue rounded-lg flex items-center justify-center text-white">
                 <i data-lucide="book-open" class="w-5 h-5"></i>
             </div>
-            <span class="font-bold text-xl text-slate-800">Edu-Augmentation</span>
+            <span class="font-bold text-xl tracking-tight text-amo-slate" id="header-app-title">Edu-Augmentation</span>
         </div>
-        <div id="course-title" class="text-sm font-medium text-slate-500 truncate max-w-md"></div>
+        
+        <div class="flex items-center space-x-6">
+            <button id="btn-reupload" class="hidden text-xs font-semibold text-slate-500 hover:text-amo-blue flex items-center space-x-1 border border-slate-200 bg-slate-50 px-2.5 py-1.5 rounded-md transition-colors">
+                <i data-lucide="refresh-cw" class="w-3.5 h-3.5"></i>
+                <span>Switch File</span>
+            </button>
+            <div class="flex items-center space-x-2">
+                <span class="text-sm font-medium text-slate-500">Mastery Score:</span>
+                <span id="score-counter" class="text-sm font-bold text-amo-blue bg-blue-50 px-2.5 py-1 rounded-md border border-blue-200">0 pts</span>
+            </div>
+            <div class="flex items-center space-x-2">
+                <span class="text-sm font-medium text-slate-500">Progress</span>
+                <div class="w-32 h-2 bg-slate-100 rounded-full overflow-hidden border border-slate-200">
+                    <div id="mastery-progress-bar" class="h-full bg-amo-blue transition-all duration-500" style="width: 0%"></div>
+                </div>
+            </div>
+        </div>
     </header>
 
-    <main id="app-viewport" class="flex-grow relative overflow-hidden">
-        <sidebar-layout></sidebar-layout>
-    </main>
+    <div id="upload-overlay" class="absolute inset-0 bg-slate-900/40 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+        <div class="bg-white rounded-2xl max-w-xl w-full p-8 shadow-2xl border border-slate-100 text-center space-y-6">
+            <div class="w-16 h-16 bg-blue-50 rounded-2xl text-amo-blue flex items-center justify-center mx-auto border border-blue-100 shadow-sm">
+                <i data-lucide="file-json" class="w-8 h-8"></i>
+            </div>
+            <div>
+                <h3 class="text-xl font-bold text-slate-900">Load Augmented Tutorial</h3>
+                <p class="text-sm text-slate-500 mt-2">Select your generated <code class="bg-slate-100 px-1.5 py-0.5 rounded text-xs font-mono text-slate-700">augmented_tutorial.json</code>. Everything processes in your browser cache with zero upload latency.</p>
+            </div>
+            
+            <div id="drop-zone" class="border-2 border-dashed border-slate-200 hover:border-amo-blue rounded-xl p-8 bg-slate-50 cursor-pointer transition-colors group">
+                <input type="file" id="file-input" accept=".json" class="hidden">
+                <i data-lucide="upload-cloud" class="w-10 h-10 text-slate-400 group-hover:text-amo-blue mx-auto mb-2 transition-colors"></i>
+                <p class="text-xs font-medium text-slate-600">Drag and drop file here, or <span class="text-amo-blue underline">browse local drive</span></p>
+            </div>
+            <div id="upload-error" class="hidden text-xs font-medium text-red-600 bg-red-50 p-3 border border-red-100 rounded-lg"></div>
+        </div>
+    </div>
 
-    <footer class="h-8 bg-white border-t border-slate-200 flex items-center px-4 justify-between text-[10px] text-slate-400 uppercase tracking-widest">
-        <span>Session ID: <span id="session-guid">...</span></span>
-        <span class="flex items-center">
-            <span class="w-2 h-2 bg-green-500 rounded-full mr-2"></span>
-            Gemini 3.1 Pro Online
-        </span>
-    </footer>
+    <div class="flex flex-grow overflow-hidden relative">
+        
+        <nav class="w-72 flex-shrink-0 border-r border-slate-200 bg-white overflow-y-auto p-5 select-none">
+            <h2 class="text-xs font-bold text-slate-400 uppercase tracking-widest mb-4">Table of Contents</h2>
+            <div id="toc-container" class="space-y-4">
+                <div class="text-xs text-slate-400 italic p-2">Waiting for data payload ingestion...</div>
+            </div>
+        </nav>
 
-    <script type="module" src="app.js"></script>
+        <main class="flex-grow flex flex-col bg-white overflow-hidden">
+            <div class="flex border-b border-slate-200 bg-slate-50/70 px-8 shrink-0">
+                <button id="tab-lesson" class="border-b-2 border-amo-blue text-amo-blue font-semibold px-4 py-3 text-sm flex items-center space-x-2 transition-all">
+                    <i data-lucide="file-text" class="w-4 h-4"></i>
+                    <span>Augmented Lesson</span>
+                </button>
+                <button id="tab-quiz" class="border-b-2 border-transparent text-slate-500 hover:text-slate-800 font-medium px-4 py-3 text-sm flex items-center space-x-2 transition-all">
+                    <i data-lucide="award" class="w-4 h-4"></i>
+                    <span>Interactive Quiz</span>
+                </button>
+            </div>
+
+            <div class="flex-grow overflow-y-auto px-12 py-10" id="pane-scroll-container">
+                <article id="lesson-view" class="prose prose-slate max-w-none block">
+                    <h1 id="view-subject-title" class="text-3xl font-extrabold text-slate-900 tracking-tight mb-6">Select a module to begin</h1>
+                    <div id="view-markdown-body" class="text-slate-700 leading-relaxed text-lg space-y-4">
+                        Please use the left sidebar navigation menu to choose an item from your AWS Machine Learning guide.
+                    </div>
+                </article>
+
+                <div id="quiz-view" class="max-w-3xl mx-auto hidden space-y-6">
+                    <div class="bg-blue-50 border border-blue-200 rounded-xl p-5 flex items-start space-x-3">
+                        <i data-lucide="help-circle" class="w-5 h-5 text-amo-blue mt-0.5"></i>
+                        <div>
+                            <h4 class="font-bold text-blue-900 text-sm">Adaptive Testing Sandbox</h4>
+                            <p class="text-xs text-blue-700 mt-1 leading-relaxed">Answer the generated questionnaire items extracted straight from this slides module. Successful answers score points and build your cumulative mastery record.</p>
+                        </div>
+                    </div>
+                    <div id="quiz-cards-stack" class="space-y-6">
+                        </div>
+                </div>
+            </div>
+        </main>
+
+        <aside class="w-80 flex-shrink-0 border-l border-slate-200 bg-slate-50/50 overflow-y-auto p-6">
+            <h2 class="text-xs font-bold text-slate-400 uppercase tracking-widest mb-4">Contextual Media</h2>
+            <div id="visuals-stack" class="space-y-4">
+                <div class="text-xs text-slate-400 italic text-center py-8">Select a module section to view cross-referenced figures.</div>
+            </div>
+        </aside>
+    </div>
+
+    <script>
+        let TUTORIAL_DATA = null;
+        let AppState = {
+            currentSubject: null,
+            score: 0,
+            completedQuizzes: new Set()
+        };
+
+        const els = {
+            uploadOverlay: document.getElementById('upload-overlay'),
+            dropZone: document.getElementById('drop-zone'),
+            fileInput: document.getElementById('file-input'),
+            uploadError: document.getElementById('upload-error'),
+            btnReupload: document.getElementById('btn-reupload'),
+            appTitle: document.getElementById('header-app-title'),
+            toc: document.getElementById('toc-container'),
+            subTitle: document.getElementById('view-subject-title'),
+            mdBody: document.getElementById('view-markdown-body'),
+            visuals: document.getElementById('visuals-stack'),
+            quizStack: document.getElementById('quiz-cards-stack'),
+            tabLesson: document.getElementById('tab-lesson'),
+            tabQuiz: document.getElementById('tab-quiz'),
+            lessonView: document.getElementById('lesson-view'),
+            quizView: document.getElementById('quiz-view'),
+            scoreCounter: document.getElementById('score-counter'),
+            progressBar: document.getElementById('mastery-progress-bar'),
+            scrollPane: document.getElementById('pane-scroll-container')
+        };
+
+        function initFileLoader() {
+            if (!els.dropZone || !els.fileInput) return;
+            
+            els.dropZone.onclick = () => els.fileInput.click();
+            els.fileInput.onchange = (e) => handleFile(e.target.files[0]);
+
+            els.dropZone.ondragover = (e) => { e.preventDefault(); els.dropZone.classList.add('border-amo-blue', 'bg-blue-50/50'); };
+            els.dropZone.ondragleave = () => els.dropZone.classList.remove('border-amo-blue', 'bg-blue-50/50');
+            els.dropZone.ondrop = (e) => { e.preventDefault(); handleFile(e.dataTransfer.files[0]); };
+
+            if (els.btnReupload) {
+                els.btnReupload.onclick = () => {
+                    els.uploadOverlay.classList.remove('hidden');
+                    els.fileInput.value = '';
+                };
+            }
+        }
+
+        function handleFile(file) {
+            if (!file) return;
+            if (!file.name.endsWith('.json')) {
+                showError("Invalid structural format. Please supply a valid parsed .json profile.");
+                return;
+            }
+
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                try {
+                    const parsedData = JSON.parse(e.target.result);
+                    if (!parsedData.course_title && !parsedData.topics) {
+                        throw new Error("Missing structural taxonomy parameters (course_title or topics missing).");
+                    }
+                    
+                    TUTORIAL_DATA = parsedData;
+                    if (els.uploadError) els.uploadError.classList.add('hidden');
+                    if (els.uploadOverlay) els.uploadOverlay.classList.add('hidden');
+                    if (els.btnReupload) els.btnReupload.classList.remove('hidden');
+                    
+                    buildApplicationEngine();
+                } catch (err) {
+                    showError(`JSON Processing Interrupted: ${err.message}`);
+                }
+            };
+            reader.readAsText(file);
+        }
+
+        function showError(msg) {
+            if (!els.uploadError) return;
+            els.uploadError.textContent = msg;
+            els.uploadError.classList.remove('hidden');
+            els.dropZone.classList.remove('border-amo-blue', 'bg-blue-50/50');
+        }
+
+        function initTabs() {
+            if (!els.tabLesson || !els.tabQuiz) return;
+            els.tabLesson.onclick = () => switchTab('lesson');
+            els.tabQuiz.onclick = () => switchTab('quiz');
+        }
+
+        function switchTab(activeTab) {
+            if (!els.scrollPane || !els.tabLesson || !els.tabQuiz || !els.lessonView || !els.quizView) return;
+            els.scrollPane.scrollTop = 0;
+            if (activeTab === 'lesson') {
+                els.tabLesson.className = "border-b-2 border-amo-blue text-amo-blue font-semibold px-4 py-3 text-sm flex items-center space-x-2 transition-all bg-white rounded-t-md shadow-sm";
+                els.tabQuiz.className = "border-b-2 border-transparent text-slate-500 hover:text-slate-800 font-medium px-4 py-3 text-sm flex items-center space-x-2 transition-all";
+                els.lessonView.style.display = 'block';
+                els.quizView.style.display = 'none';
+            } else {
+                els.tabQuiz.className = "border-b-2 border-amo-blue text-amo-blue font-semibold px-4 py-3 text-sm flex items-center space-x-2 transition-all bg-white rounded-t-md shadow-sm";
+                els.tabLesson.className = "border-b-2 border-transparent text-slate-500 hover:text-slate-800 font-medium px-4 py-3 text-sm flex items-center space-x-2 transition-all";
+                els.quizView.style.display = 'block';
+                els.lessonView.style.display = 'none';
+            }
+        }
+
+        function buildApplicationEngine() {
+            if (!TUTORIAL_DATA || !els.toc) return;
+            els.appTitle.textContent = TUTORIAL_DATA.course_title || "Edu-Augmentation";
+            els.toc.innerHTML = ''; 
+            
+            const topics = TUTORIAL_DATA.topics || [];
+            topics.forEach((topic) => {
+                const section = document.createElement('div');
+                section.className = "mb-4 border-b border-slate-100 pb-3 last:border-0";
+                section.innerHTML = `<h3 class="text-xs font-bold text-slate-400 uppercase tracking-wider px-2 mb-2 leading-tight">${topic.topic_name}</h3>`;
+                
+                const ul = document.createElement('ul');
+                ul.className = "space-y-0.5";
+                
+                const subjects = topic.subjects || [];
+                subjects.forEach((subject) => {
+                    const li = document.createElement('li');
+                    const btn = document.createElement('button');
+                    btn.className = "w-full text-left px-3 py-2 text-xs rounded-lg transition-all text-slate-600 hover:bg-slate-100 hover:text-slate-900 font-medium line-clamp-2 leading-relaxed";
+                    btn.textContent = subject.subject_title;
+                    
+                    btn.onclick = () => {
+                        els.toc.querySelectorAll('button').forEach(b => b.className = "w-full text-left px-3 py-2 text-xs rounded-lg transition-all text-slate-600 hover:bg-slate-100 hover:text-slate-900 font-medium line-clamp-2 leading-relaxed");
+                        btn.className = "w-full text-left px-3 py-2 text-xs rounded-lg transition-all bg-blue-50 text-amo-blue font-bold shadow-sm border border-blue-100/50 line-clamp-2 leading-relaxed";
+                        
+                        loadSubject(subject);
+                    };
+                    
+                    li.appendChild(btn);
+                    ul.appendChild(li);
+                });
+                
+                section.appendChild(ul);
+                els.toc.appendChild(section);
+            });
+
+            if (TUTORIAL_DATA.topics && TUTORIAL_DATA.topics[0]?.subjects?.[0]) {
+                const initialBtn = els.toc.querySelector('button');
+                if (initialBtn) initialBtn.click();
+            }
+        }
+
+        function loadSubject(subject) {
+            if (!subject) return;
+            AppState.currentSubject = subject;
+            switchTab('lesson');
+
+            if (els.subTitle) els.subTitle.textContent = subject.subject_title;
+            if (els.mdBody) els.mdBody.innerHTML = marked.parse(subject.comprehensive_analysis_md || '');
+
+            if (window.renderMathInElement && els.mdBody) {
+                renderMathInElement(els.mdBody, {
+                    delimiters: [
+                        {left: '$$', right: '$$', display: true},
+                        {left: '\\(', right: '\\)', display: false}
+                    ],
+                    throwOnError: false
+                });
+            }
+
+            // CRITICAL FIX: Extension-Agnostic Media Matching Engine
+            if (els.visuals) {
+                els.visuals.innerHTML = '';
+                const figures = subject.learning_figures || subject.figures || subject.learning_objectives || [];
+                
+                if (figures.length > 0) {
+                    figures.forEach(fig => {
+                        const asset = TUTORIAL_DATA.extracted_assets ? TUTORIAL_DATA.extracted_assets.find(a => a.figure_id === fig.figure_id) : null;
+                        
+                        // Extract base file token name without extensions (e.g. "page_103_img_1")
+                        const rawUri = asset ? asset.uri : (fig.uri || fig.figure_id || '');
+                        const baseFilename = rawUri.split('/').pop().split('.')[0];
+                        
+                        const card = document.createElement('div');
+                        card.className = "bg-white p-3 rounded-xl border border-slate-200 shadow-sm space-y-2 hover:shadow-md transition-shadow duration-200";
+
+                        // Leverages native fallback chain logic to attempt .png then fallback to .jpeg / .jpg extensions automatically
+                        card.innerHTML = `
+                            <img src="assets/${baseFilename}.png" class="w-full h-auto rounded-lg bg-slate-100 border border-slate-100 shadow-inner" 
+                                 onerror="this.onerror=null; this.src='assets/${baseFilename}.jpeg'; this.onerror=()=>this.src='assets/${baseFilename}.jpg'; this.onerror=()=>this.src='https://placehold.co/600x400/f1f5f9/94a3b8?text=Visual+Aid';">
+                            <div class="bg-slate-50 p-2 rounded-md border border-slate-100 text-[10px] text-slate-400 font-mono select-all">ID: ${fig.figure_id}</div>
+                            <p class="text-[11px] text-slate-500 italic leading-relaxed font-medium">${fig.learning_objective || fig.description || 'Visual Reference Asset'}</p>
+                        `;
+                        els.visuals.appendChild(card);
+                    });
+                } else {
+                    els.visuals.innerHTML = `<div class="text-xs text-slate-400 italic text-center py-8">No diagram mapping associated with this lesson segment.</div>`;
+                }
+            }
+
+            renderQuizPane(subject);
+        }
+
+        // CRITICAL FIX: Safe Event Handlers Binding Logic (Zero lookup crash points)
+        function renderQuizPane(subject) {
+            if (!els.quizStack) return;
+            els.quizStack.innerHTML = '';
+            
+            const quizSource = subject.quiz || subject.quizzes || subject.quiz_questions || [];
+            
+            if (quizSource.length === 0) {
+                els.quizStack.innerHTML = `
+                    <div class="text-sm text-slate-400 italic text-center py-12 space-y-3">
+                        <i data-lucide="help-circle" class="w-8 h-8 mx-auto text-slate-300"></i>
+                        <p>No active quiz items compiled by the processor for this slide subject.</p>
+                    </div>`;
+                lucide.createIcons();
+                return;
+            }
+
+            quizSource.forEach((q, idx) => {
+                const card = document.createElement('div');
+                card.className = "bg-white border border-slate-200 rounded-xl p-6 shadow-sm relative overflow-hidden transition-all duration-200";
+                
+                const questionText = q.question || q.problem_statement || 'Question Text Missing';
+                const correctAnswer = q.answer || q.correct_solution || '';
+                
+                // Using session state reference directly inside the element wrapper closure to avoid lookup mutations
+                const isSolved = AppState.completedQuizzes.has(`${subject.subject_title}_q${idx}`);
+
+                card.innerHTML = `
+                    <div class="flex items-center justify-between mb-3 border-b border-slate-50 pb-2">
+                        <span class="text-xs font-bold uppercase tracking-wider text-slate-400">Assessment Milestone ${idx + 1}</span>
+                        <span class="badge-slot text-[10px] font-bold px-2 py-0.5 rounded-full uppercase tracking-wider ${isSolved ? 'bg-green-100 text-green-700' : 'hidden'}">${isSolved ? 'Solved (+10 pts)' : ''}</span>
+                    </div>
+                    <p class="text-slate-800 font-semibold text-base mb-4 leading-relaxed">${questionText}</p>
+                    
+                    <div class="space-y-3">
+                        <input type="text" class="quiz-input w-full border border-slate-200 p-3 text-sm rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none transition-all font-medium" 
+                               placeholder="Input parameters for validation..." ${isSolved ? 'disabled' : ''} value="${isSolved ? correctAnswer : ''}">
+                        <div class="flex items-center space-x-2 dynamic-actions-bar">
+                            <button class="btn-submit px-4 py-2 bg-slate-900 hover:bg-black text-white text-xs font-bold rounded-lg transition-all shadow-sm ${isSolved ? 'hidden' : ''}">
+                                Verify Verification
+                            </button>
+                            <button class="btn-reveal px-4 py-2 border border-slate-200 hover:bg-slate-50 text-slate-600 text-xs font-bold rounded-lg transition-all ${isSolved ? 'hidden' : ''}">
+                                Reveal Key
+                            </button>
+                        </div>
+                        <div class="feedback-box hidden p-3 rounded-lg text-xs font-semibold border mt-2"></div>
+                    </div>
+                `;
+
+                els.quizStack.appendChild(card);
+
+                // Scope local queries directly within the context of the generated node item 
+                const input = card.querySelector('.quiz-input');
+                const submitBtn = card.querySelector('.btn-submit');
+                const revealBtn = card.querySelector('.btn-reveal');
+                const feedback = card.querySelector('.feedback-box');
+                const badge = card.querySelector('.badge-slot');
+
+                if (submitBtn) {
+                    submitBtn.onclick = () => {
+                        const userVal = input.value.trim().toLowerCase();
+                        const correctVal = correctAnswer.trim().toLowerCase();
+
+                        feedback.classList.remove('hidden', 'bg-red-50', 'text-red-700', 'border-red-200', 'bg-green-50', 'text-green-700', 'border-green-200');
+
+                        if (userVal === correctVal || (correctVal.includes(userVal) && userVal.length > 2)) {
+                            feedback.className = "feedback-box p-3 rounded-lg text-xs font-semibold border mt-2 bg-green-50 text-green-700 border-green-200";
+                            feedback.textContent = "Correct assessment profile! Milestone validated. Mastery score updated (+10 points).";
+                            
+                            badge.className = "badge-slot text-[10px] font-bold px-2 py-0.5 rounded-full uppercase tracking-wider bg-green-100 text-green-700";
+                            badge.textContent = "Solved (+10 pts)";
+                            
+                            input.disabled = true;
+                            submitBtn.className = "hidden";
+                            revealBtn.className = "hidden";
+
+                            const sessionKey = `${subject.subject_title}_q${idx}`;
+                            if (!AppState.completedQuizzes.has(sessionKey)) {
+                                AppState.completedQuizzes.add(sessionKey);
+                                executeScoreSystems(10);
+                            }
+                        } else {
+                            feedback.className = "feedback-box p-3 rounded-lg text-xs font-semibold border mt-2 bg-red-50 text-red-700 border-red-200";
+                            feedback.textContent = `Incorrect metrics payload. Review module parameters and adjust targeting entries.`;
+                            feedback.classList.remove('hidden');
+                        }
+                    };
+                }
+
+                if (revealBtn) {
+                    revealBtn.onclick = () => {
+                        feedback.className = "feedback-box p-3 rounded-lg text-xs font-semibold border mt-2 bg-amber-50 text-amber-700 border-amber-200";
+                        feedback.textContent = `Target String Reference Key: "${correctAnswer}"`;
+                        feedback.classList.remove('hidden');
+                    };
+                }
+            });
+            lucide.createIcons();
+        }
+
+        function executeScoreSystems(points) {
+            if(!els.scoreCounter || !els.progressBar) return;
+            AppState.score += points;
+            els.scoreCounter.textContent = `${AppState.score} pts`;
+            
+            const totalPossibleSubjects = TUTORIAL_DATA.topics ? TUTORIAL_DATA.topics.flatMap(t => t.subjects || []).length : 1;
+            const percentage = Math.min((AppState.completedQuizzes.size / totalPossibleSubjects) * 100, 100);
+            els.progressBar.style.width = `${percentage}%`;
+        }
+
+        window.onload = () => {
+            lucide.createIcons();
+            initFileLoader();
+            initTabs();
+        };
+    </script>
 </body>
 </html>
