@@ -10,6 +10,7 @@ OBJECTIVE
 
 Generate a single, valid JSON object containing exactly two root keys: tutorialData and quizData.
 The content must be deeply technical, scenario-based, and utilize Markdown and LaTeX for rich formatting.
+The source input may be a book, a chapter excerpt, or a long-form article. Use only the supplied text as the basis for the module.
 
 CRITICAL JSON & FORMATTING RULES (FAILURE IS NOT AN OPTION):
 
@@ -119,4 +120,4 @@ EXAMPLE SKELETON
 ]
 }
 
-Now, generate the JSON for the topic requested.
+Now, generate the JSON for the source material requested.
