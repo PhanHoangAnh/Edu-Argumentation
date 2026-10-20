@@ -1,0 +1,17 @@
+{
+  "name": "edu-argumentation-quiz-app",
+  "version": "1.0.0",
+  "private": true,
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "start": "node server.js",
+    "generate:module": "node book_to_questions.js",
+    "test": "node --test",
+    "test:gemini": "node test_gemini.js"
+  },
+  "dependencies": {
+    "pdfjs-dist": "^4.10.38"
+  }
+}

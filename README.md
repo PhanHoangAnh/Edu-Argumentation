@@ -9,7 +9,7 @@ The same JSON format can also be generated from longer source material such as b
 * **Static Data Layer (`aws-quiz-app/data/`)**: Contains the bundled course modules, questions, options, and explanations as JSON.
 * **Front-End Interface (`aws-quiz-app/index.html` & `aws-quiz-app/js/app.js`)**: Built utilizing pure JavaScript, HTML5, and CSS without heavy framework overhead (avoiding React, opting for clean DOM management).
 * **AI Worker / Integration (`aws-quiz-app/js/ai-worker.js` & `aws-quiz-app/server.js`)**: The worker requests dynamic scenarios from the same-origin Node API; the Gemini API key remains in the server environment, not browser code.
-* **Book-to-Questions CLI (`book_to_questions.js`)**: Accepts a text book or chapter excerpt and generates the same `tutorialData` + `quizData` structure used by the web app.
+* **Book-to-Questions CLI (`book_to_questions.js`)**: Accepts text-based PDF, Markdown, or plain-text sources and generates the same `tutorialData` + `quizData` structure used by the web app.
 
 ### How It Works
 
@@ -22,8 +22,8 @@ The same JSON format can also be generated from longer source material such as b
 
 If your assignment is to build an AI that reads books and generates learning questions, the cleanest path in this repository is:
 
-1. Extract the book into plain text or markdown.
-2. Pass the text into `book_to_questions.js`.
+1. Provide a text-based PDF, plain-text, or Markdown file. Scanned/image-only PDFs need OCR before processing.
+2. Run `GEMINI_API_KEY="your-key" npm run generate:module -- --input chapter.pdf --output module.json` from `aws-quiz-app`.
 3. Let Gemini return strict JSON with `tutorialData` and `quizData`.
 4. Load that JSON directly into the existing web app.
 
@@ -36,7 +36,7 @@ This keeps the whole system simple: the book becomes the source of truth, and th
 ### Prerequisites
 
 * A modern web browser (Chrome, Firefox, Edge, Safari).
-* Node.js 18 or later for the built-in server and its native `fetch` support.
+* Node.js 20 or later for the built-in server, native `fetch`, and PDF text extraction.
 
 ### Running Locally
 
@@ -44,24 +44,24 @@ This keeps the whole system simple: the book becomes the source of truth, and th
 2. Navigate into the application directory:
 ```bash
 cd aws-quiz-app
-
+npm install
 ```
 
 
 3. Start the app server, optionally providing a Gemini key to enable AI question generation:
 ```bash
-GEMINI_API_KEY="your-gemini-api-key" node server.js
+GEMINI_API_KEY="your-gemini-api-key" npm start
 ```
 
 4. Open `http://localhost:8000`. The server binds to `127.0.0.1` by default. Without `GEMINI_API_KEY`, course and quiz features still work, but AI generation returns a configuration error. Do not expose this unauthenticated server directly to the public internet; add authentication and deployment-specific abuse protections before public hosting.
 
-To run the Gemini smoke test, start the server with `GEMINI_API_KEY` set, then run `node test_gemini.js` from `aws-quiz-app` in another terminal. This makes a real Gemini request and generates 20 questions.
+Run local unit tests with `npm test`. To run the Gemini smoke test, start the server with `GEMINI_API_KEY` set, then run `npm run test:gemini` from `aws-quiz-app` in another terminal. This makes a real Gemini request and generates 20 questions.
 
 ---
 
 ## Improvements for Later Versions
 
 * **Modular Web Components**: Refactor UI elements into native Web Components with Shadow DOM for cleaner encapsulation and modular styling.
-* **Enhanced Error Handling & Validation**: Add schema validation (using JSON Schema) for incoming course data to gracefully handle malformed JSON inputs.
-* **Dynamic AI Prompt Tuning**: Upgrade the `ai-worker.js` implementation to support customizable system instructions for generating tailored practice questions.
-* **Book Ingestion Pipeline**: Add PDF/text extraction plus chapter chunking so longer books can be processed without manually copying excerpts.
+* **Enhanced Error Handling & Validation**: Adopt a shared JSON Schema contract to complement the current runtime validation of course data.
+* **Dynamic AI Prompt Tuning**: Add customizable system instructions on the Node server for generating tailored practice questions.
+* **Book Ingestion Pipeline**: Add OCR and user-facing import flow; text extraction for PDF, Markdown, and plain text plus chapter chunking are already supported.

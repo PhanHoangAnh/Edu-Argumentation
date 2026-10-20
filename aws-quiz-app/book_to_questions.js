@@ -163,6 +163,38 @@ BOOK TEXT
 ${bookText}`;
 }
 
+async function extractPdfText(inputPath) {
+    const { getDocument } = await import('pdfjs-dist/legacy/build/pdf.mjs');
+    const pdfBytes = new Uint8Array(await fs.readFile(inputPath));
+    const pdf = await getDocument({
+        data: pdfBytes,
+        isEvalSupported: false,
+        useSystemFonts: true
+    }).promise;
+    const pages = [];
+
+    try {
+        for (let pageNumber = 1; pageNumber <= pdf.numPages; pageNumber++) {
+            const page = await pdf.getPage(pageNumber);
+            const content = await page.getTextContent();
+            const pageText = content.items
+                .filter(item => typeof item.str === 'string')
+                .map(item => `${item.str}${item.hasEOL ? '\n' : ' '}`)
+                .join('')
+                .trim();
+            if (pageText) pages.push(pageText);
+        }
+    } finally {
+        await pdf.destroy();
+    }
+
+    const text = pages.join('\n\n').trim();
+    if (!text) {
+        throw new Error('PDF contains no extractable text. Scanned or image-only PDFs require OCR first.');
+    }
+    return text;
+}
+
 function validateModule(moduleData) {
     if (!moduleData || typeof moduleData !== 'object') {
         throw new Error('Model output must be a JSON object.');
@@ -339,7 +371,7 @@ async function main() {
     const args = parseArgs(process.argv.slice(2));
 
     if (!args.input) {
-        console.error('Usage: node book_to_questions.js --input <book.txt> [--output <module.json>] [--title <book title>] [--questions 10]');
+        console.error('Usage: node book_to_questions.js --input <book.txt|book.md|book.pdf> [--output <module.json>] [--title <book title>] [--questions 10]');
         process.exit(1);
     }
 
@@ -349,7 +381,13 @@ async function main() {
     }
 
     const inputPath = path.resolve(args.input);
-    const rawText = await fs.readFile(inputPath, 'utf8');
+    const inputExtension = path.extname(inputPath).toLowerCase();
+    if (!['.txt', '.md', '.pdf'].includes(inputExtension)) {
+        throw new Error('Input file must have a .txt, .md, or .pdf extension.');
+    }
+    const rawText = inputExtension === '.pdf'
+        ? await extractPdfText(inputPath)
+        : await fs.readFile(inputPath, 'utf8');
     const bookTitle = args.title || path.basename(inputPath, path.extname(inputPath));
     const trimmedText = rawText.replace(/\r\n/g, '\n').trim();
 
@@ -392,7 +430,15 @@ async function main() {
     }
 }
 
-main().catch(error => {
-    console.error(error.message);
-    process.exit(1);
-});
+if (require.main === module) {
+    main().catch(error => {
+        console.error(error.message);
+        process.exit(1);
+    });
+}
+
+module.exports = {
+    distributeQuestions,
+    extractPdfText,
+    splitTextIntoChunks
+};
