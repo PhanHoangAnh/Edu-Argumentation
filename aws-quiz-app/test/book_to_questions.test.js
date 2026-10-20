@@ -3,7 +3,11 @@ const fs = require('node:fs/promises');
 const os = require('node:os');
 const path = require('node:path');
 const test = require('node:test');
-const { extractPdfText } = require('../book_to_questions');
+const {
+    distributeQuestions,
+    extractPdfText,
+    splitTextIntoChunks
+} = require('../book_to_questions');
 
 function createPdf(text) {
     const escapedText = text.replace(/[\\()]/g, '\\$&');
@@ -51,4 +55,33 @@ test('reports PDFs with no extractable text', async t => {
         extractPdfText(inputPath),
         /Scanned or image-only PDFs require OCR first/
     );
+});
+
+test('rejects malformed PDF input', async t => {
+    const directory = await fs.mkdtemp(path.join(os.tmpdir(), 'edu-argumentation-pdf-'));
+    t.after(() => fs.rm(directory, { recursive: true, force: true }));
+    const filePath = path.join(directory, 'malformed.pdf');
+    await fs.writeFile(filePath, 'not a PDF');
+
+    await assert.rejects(extractPdfText(filePath));
+});
+
+test('splits long unbroken lines without exceeding the chunk limit', () => {
+    const text = 'x'.repeat(25);
+    const chunks = splitTextIntoChunks(text, 10);
+    assert.deepEqual(chunks.map(chunk => chunk.length), [10, 10, 5]);
+    assert.equal(chunks.join(''), text);
+});
+
+test('normalizes invalid chunk limits to a safe minimum', () => {
+    const chunks = splitTextIntoChunks('abc', 0);
+    assert.deepEqual(chunks, ['a', 'b', 'c']);
+    assert.deepEqual(splitTextIntoChunks('abc', 0.5), ['a', 'b', 'c']);
+});
+
+test('distributes no more or fewer questions than requested', () => {
+    assert.deepEqual(distributeQuestions(10, 3), [4, 3, 3]);
+    assert.deepEqual(distributeQuestions(2, 5), [1, 1, 0, 0, 0]);
+    assert.deepEqual(distributeQuestions(0, 2), [0, 0]);
+    assert.equal(distributeQuestions(-5, 2).reduce((sum, count) => sum + count, 0), 0);
 });

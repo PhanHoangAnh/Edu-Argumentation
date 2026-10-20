@@ -40,6 +40,9 @@ function stripCodeFences(text) {
 }
 
 function splitTextIntoChunks(text, maxChars) {
+    const chunkLimit = Number.isFinite(maxChars) && maxChars > 0
+        ? Math.max(1, Math.floor(maxChars))
+        : 1;
     const paragraphs = text
         .replace(/\r\n/g, '\n')
         .split(/\n{2,}/)
@@ -55,18 +58,34 @@ function splitTextIntoChunks(text, maxChars) {
         currentChunk = '';
     };
 
+    const splitLongLine = line => {
+        const parts = [];
+        let remaining = line;
+        while (remaining.length > chunkLimit) {
+            let splitAt = remaining.lastIndexOf(' ', chunkLimit);
+            if (splitAt <= 0) splitAt = chunkLimit;
+            parts.push(remaining.slice(0, splitAt).trim());
+            remaining = remaining.slice(splitAt).trimStart();
+        }
+        if (remaining) parts.push(remaining);
+        return parts;
+    };
+
     for (const paragraph of paragraphs) {
-        if (paragraph.length > maxChars) {
+        if (paragraph.length > chunkLimit) {
             pushCurrentChunk();
             const lines = paragraph.split('\n').map(line => line.trim()).filter(Boolean);
             let lineChunk = '';
 
             for (const line of lines) {
-                if ((lineChunk + '\n' + line).trim().length > maxChars && lineChunk.trim()) {
-                    chunks.push(lineChunk.trim());
-                    lineChunk = line;
-                } else {
-                    lineChunk = lineChunk ? `${lineChunk}\n${line}` : line;
+                for (const linePart of splitLongLine(line)) {
+                    const nextLineChunk = lineChunk ? `${lineChunk}\n${linePart}` : linePart;
+                    if (nextLineChunk.length > chunkLimit && lineChunk) {
+                        chunks.push(lineChunk);
+                        lineChunk = linePart;
+                    } else {
+                        lineChunk = nextLineChunk;
+                    }
                 }
             }
 
@@ -77,7 +96,7 @@ function splitTextIntoChunks(text, maxChars) {
         }
 
         const nextChunk = currentChunk ? `${currentChunk}\n\n${paragraph}` : paragraph;
-        if (nextChunk.length > maxChars && currentChunk.trim()) {
+        if (nextChunk.length > chunkLimit && currentChunk.trim()) {
             pushCurrentChunk();
             currentChunk = paragraph;
         } else {
@@ -90,14 +109,15 @@ function splitTextIntoChunks(text, maxChars) {
 }
 
 function distributeQuestions(totalQuestions, chunkCount) {
-    const safeChunkCount = Math.max(1, chunkCount);
-    const base = Math.floor(totalQuestions / safeChunkCount);
-    let remainder = totalQuestions % safeChunkCount;
+    const safeChunkCount = Number.isInteger(chunkCount) && chunkCount > 0 ? chunkCount : 1;
+    const safeTotal = Number.isInteger(totalQuestions) && totalQuestions > 0 ? totalQuestions : 0;
+    const base = Math.floor(safeTotal / safeChunkCount);
+    let remainder = safeTotal % safeChunkCount;
 
     return Array.from({ length: safeChunkCount }, () => {
         const value = base + (remainder > 0 ? 1 : 0);
         if (remainder > 0) remainder--;
-        return Math.max(1, value);
+        return value;
     });
 }
 
@@ -440,5 +460,6 @@ if (require.main === module) {
 module.exports = {
     distributeQuestions,
     extractPdfText,
+    parseArgs,
     splitTextIntoChunks
 };

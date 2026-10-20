@@ -8,7 +8,6 @@ const PORT = Number(process.env.PORT || 8000);
 const MAX_REQUEST_BYTES = 1024 * 1024;
 const RATE_LIMIT_WINDOW_MS = 60 * 1000;
 const RATE_LIMIT_REQUESTS = 5;
-const rateLimitBuckets = new Map();
 
 const contentTypes = {
     '.css': 'text/css; charset=utf-8',
@@ -68,7 +67,7 @@ function validateRequestBody(body) {
     }
 }
 
-function isRateLimited(clientAddress) {
+function isRateLimited(clientAddress, rateLimitBuckets) {
     const now = Date.now();
     const recentRequests = (rateLimitBuckets.get(clientAddress) || [])
         .filter(timestamp => now - timestamp < RATE_LIMIT_WINDOW_MS);
@@ -212,7 +211,7 @@ async function generateQuestions(body) {
     throw new HttpError(502, `Question generation failed: ${lastError.message}`);
 }
 
-async function handleAiQuizRequest(request, response) {
+async function handleAiQuizRequest(request, response, rateLimitBuckets) {
     if (request.method !== 'POST') {
         response.setHeader('Allow', 'POST');
         throw new HttpError(405, 'Method not allowed.');
@@ -220,10 +219,10 @@ async function handleAiQuizRequest(request, response) {
     if (!process.env.GEMINI_API_KEY) {
         throw new HttpError(503, 'AI quiz generation is not configured. Set GEMINI_API_KEY on the server.');
     }
-    if (request.headers['content-type']?.split(';')[0] !== 'application/json') {
+    if (request.headers['content-type']?.split(';')[0].trim().toLowerCase() !== 'application/json') {
         throw new HttpError(415, 'Content-Type must be application/json.');
     }
-    if (isRateLimited(request.socket.remoteAddress || 'unknown')) {
+    if (isRateLimited(request.socket.remoteAddress || 'unknown', rateLimitBuckets)) {
         throw new HttpError(429, 'Too many AI quiz requests. Try again in a minute.');
     }
 
@@ -274,35 +273,56 @@ function serveStaticFile(request, response, pathname) {
     fs.createReadStream(filePath).pipe(response);
 }
 
-if (!Number.isInteger(PORT) || PORT < 1 || PORT > 65535) {
-    throw new Error('PORT must be an integer between 1 and 65535.');
+function createAppServer() {
+    const rateLimitBuckets = new Map();
+    return http.createServer(async (request, response) => {
+        try {
+            const requestUrl = new URL(request.url, 'http://localhost');
+            if (requestUrl.pathname === '/api/ai-quiz') {
+                await handleAiQuizRequest(request, response, rateLimitBuckets);
+                return;
+            }
+            if (request.method !== 'GET' && request.method !== 'HEAD') {
+                response.setHeader('Allow', 'GET, HEAD');
+                throw new HttpError(405, 'Method not allowed.');
+            }
+            serveStaticFile(request, response, requestUrl.pathname);
+        } catch (error) {
+            const statusCode = error instanceof HttpError ? error.statusCode : 500;
+            if (statusCode >= 500) console.error('Request error:', error);
+            sendJson(response, statusCode, { error: error.message || 'Internal server error.' });
+        }
+    });
 }
 
-const server = http.createServer(async (request, response) => {
-    try {
-        const requestUrl = new URL(request.url, 'http://localhost');
-        if (requestUrl.pathname === '/api/ai-quiz') {
-            await handleAiQuizRequest(request, response);
-            return;
-        }
-        if (request.method !== 'GET' && request.method !== 'HEAD') {
-            response.setHeader('Allow', 'GET, HEAD');
-            throw new HttpError(405, 'Method not allowed.');
-        }
-        serveStaticFile(request, response, requestUrl.pathname);
-    } catch (error) {
-        const statusCode = error instanceof HttpError ? error.statusCode : 500;
-        if (statusCode >= 500) console.error('Request error:', error);
-        sendJson(response, statusCode, { error: error.message || 'Internal server error.' });
+function startServer(port = PORT, host = HOST) {
+    if (!Number.isInteger(port) || port < 0 || port > 65535) {
+        throw new Error('PORT must be an integer between 0 and 65535.');
     }
-});
+    const server = createAppServer();
+    server.listen(port, host, () => {
+        const address = server.address();
+        console.log(`Edu-Argumentation server listening at http://${host}:${address.port}`);
+        if (host !== '127.0.0.1' && host !== 'localhost' && host !== '::1') {
+            console.warn('This server has no user authentication; do not expose it to the public internet.');
+        }
+        if (!process.env.GEMINI_API_KEY) {
+            console.warn('GEMINI_API_KEY is not set. Course features work, but AI quiz generation will be unavailable.');
+        }
+    });
+    return server;
+}
 
-server.listen(PORT, HOST, () => {
-    console.log(`Edu-Argumentation server listening at http://${HOST}:${PORT}`);
-    if (HOST !== '127.0.0.1' && HOST !== 'localhost' && HOST !== '::1') {
-        console.warn('This server has no user authentication; do not expose it to the public internet.');
-    }
-    if (!process.env.GEMINI_API_KEY) {
-        console.warn('GEMINI_API_KEY is not set. Course features work, but AI quiz generation will be unavailable.');
-    }
-});
+if (require.main === module) {
+    startServer();
+}
+
+module.exports = {
+    HttpError,
+    createAppServer,
+    isRateLimited,
+    readJsonBody,
+    startServer,
+    validateGeneratedQuestions,
+    validateRequestBody
+};
