@@ -149,6 +149,9 @@ function sleep(milliseconds) {
 async function generateQuestions(body) {
     const promptText = buildPrompt(body.tutorialData, body.quizData);
     let lastError;
+    const primaryModel = process.env.GEMINI_MODEL || 'gemini-3.5-flash';
+    // The final attempt uses a lighter model in case the primary is overloaded.
+    const fallbackModel = process.env.GEMINI_FALLBACK_MODEL || 'gemini-3.5-flash-lite';
 
     for (let attempt = 1; attempt <= 3; attempt++) {
         const controller = new AbortController();
@@ -156,7 +159,7 @@ async function generateQuestions(body) {
 
         try {
             const response = await fetch(
-                `https://generativelanguage.googleapis.com/v1beta/models/${encodeURIComponent(process.env.GEMINI_MODEL || 'gemini-3.5-flash')}:generateContent?key=${encodeURIComponent(process.env.GEMINI_API_KEY)}`,
+                `https://generativelanguage.googleapis.com/v1beta/models/${encodeURIComponent(attempt < 3 ? primaryModel : fallbackModel)}:generateContent?key=${encodeURIComponent(process.env.GEMINI_API_KEY)}`,
                 {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
@@ -215,7 +218,7 @@ async function generateQuestions(body) {
             clearTimeout(timeout);
         }
 
-        if (attempt < 3) await sleep(1500 * attempt);
+        if (attempt < 3) await sleep(3000 * attempt);
     }
 
     throw new HttpError(502, `Question generation failed: ${lastError.message}`);
