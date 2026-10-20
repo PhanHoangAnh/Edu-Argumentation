@@ -188,7 +188,17 @@ async function generateQuestions(body) {
                 if ((response.status === 429 || response.status >= 500) && attempt < 3) {
                     lastError = new Error(`Gemini returned HTTP ${response.status}.`);
                 } else {
-                    throw new HttpError(502, `Gemini request failed with HTTP ${response.status}.`);
+                    const detail = await response.json().then(
+                        (body) => body?.error?.message,
+                        () => undefined
+                    );
+                    const hint = response.status === 429
+                        ? ' Quota or rate limit reached; wait a minute, check your Gemini plan/quota, or set GEMINI_MODEL to a different model.'
+                        : '';
+                    throw new HttpError(
+                        502,
+                        `Gemini request failed with HTTP ${response.status}.${hint}${detail ? ` Details: ${String(detail).slice(0, 300)}` : ''}`
+                    );
                 }
             } else {
                 const payload = await response.json();
