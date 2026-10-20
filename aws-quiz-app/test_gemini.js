@@ -1,90 +1,70 @@
-const fs = require('fs');
+#!/usr/bin/env node
 
-// 1. Read API Key
-let API_KEY = '';
-try {
-    const configContent = fs.readFileSync('./js/config.js', 'utf8');
-    const match = configContent.match(/GEMINI_API_KEY:\s*['"]([^'"]+)['"]/);
-    if (match) API_KEY = match[1];
-} catch (e) {
-    console.error("Failed to read config.js");
-    process.exit(1);
+const fs = require('node:fs/promises');
+const path = require('node:path');
+
+const appUrl = new URL(process.env.EDU_ARGUMENTATION_URL || 'http://127.0.0.1:8000');
+const modulePath = process.argv[2]
+    ? path.resolve(process.argv[2])
+    : path.join(__dirname, 'data', 'Deployment-MLOps.json');
+
+function validateQuestions(questions) {
+    if (!Array.isArray(questions) || questions.length !== 20) {
+        throw new Error(`Expected 20 generated questions, received ${Array.isArray(questions) ? questions.length : 'invalid data'}.`);
+    }
+
+    questions.forEach((question, index) => {
+        const prefix = `Question ${index + 1}`;
+        if (!question || typeof question.question !== 'string' || !question.question.trim()) {
+            throw new Error(`${prefix} has no question text.`);
+        }
+        if (!Array.isArray(question.options) || question.options.length !== 4
+            || question.options.some(option => typeof option !== 'string' || !option.trim())) {
+            throw new Error(`${prefix} must contain four non-empty options.`);
+        }
+        if (!Number.isInteger(question.correct) || question.correct < 0 || question.correct > 3) {
+            throw new Error(`${prefix} has an invalid correct-answer index.`);
+        }
+        if (!Array.isArray(question.explanations) || question.explanations.length !== 4
+            || question.explanations.some(explanation => typeof explanation !== 'string' || !explanation.trim())) {
+            throw new Error(`${prefix} must contain four non-empty explanations.`);
+        }
+    });
 }
 
-// 2. Read Local Data Files
-const tutorialData = fs.readFileSync('./data/tutorialData.js', 'utf8');
-const quizData = fs.readFileSync('./data/quizData.js', 'utf8');
+async function main() {
+    const moduleData = JSON.parse(await fs.readFile(modulePath, 'utf8'));
+    if (!moduleData.tutorialData || !Array.isArray(moduleData.quizData)) {
+        throw new Error('Input module must contain tutorialData and quizData.');
+    }
 
-const promptText = `You are an expert AWS Machine Learning Specialty instructor. 
-Based ONLY on the following tutorial data, generate 5 advanced practice questions.
-Ensure the new questions DO NOT duplicate the existing static questions provided below.
-Keep explanations concise (1-2 sentences max).
-
-Tutorial Data:
-${tutorialData}
-
-Existing Static Questions:
-${quizData}`;
-
-async function testAPI() {
-    console.log("Sending isolated test request to Gemini API...");
+    const controller = new AbortController();
+    const timeout = setTimeout(() => controller.abort(), 370_000);
+    let response;
     try {
-        const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${API_KEY}`, {
+        response = await fetch(new URL('/api/ai-quiz', appUrl), {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
+            signal: controller.signal,
             body: JSON.stringify({
-                contents: [{ parts: [{ text: promptText }] }],
-                generationConfig: {
-                    temperature: 0.2,
-                    maxOutputTokens: 8192,
-                    responseMimeType: "application/json",
-                    responseSchema: {
-                        type: "ARRAY",
-                        items: {
-                            type: "OBJECT",
-                            properties: {
-                                question: { type: "STRING" },
-                                options: { type: "ARRAY", items: { type: "STRING" } },
-                                correct: { type: "INTEGER" },
-                                explanations: { type: "ARRAY", items: { type: "STRING" } }
-                            },
-                            required: ["question", "options", "correct", "explanations"]
-                        }
-                    }
-                }
+                tutorialData: moduleData.tutorialData,
+                quizData: moduleData.quizData
             })
         });
-
-        const data = await response.json();
-        
-        if (data.error) {
-            console.error("\n--- API ERROR RESPONSE ---");
-            console.error(JSON.stringify(data.error, null, 2));
-            return;
-        }
-
-        const candidate = data.candidates[0];
-        console.log("\n--- DIAGNOSTICS ---");
-        console.log("Finish Reason:", candidate.finishReason);
-        if (candidate.safetyRatings) {
-            console.log("Safety Ratings Triggered:", JSON.stringify(candidate.safetyRatings.filter(r => r.probability !== "NEGLIGIBLE"), null, 2));
-        }
-
-        console.log("\n--- PARSE TEST ---");
-        const rawText = candidate.content.parts[0].text;
-        console.log("Total Character Length:", rawText.length);
-        
-        try {
-            const parsed = JSON.parse(rawText);
-            console.log("Parse SUCCESS! Output is valid JSON. Question count:", parsed.length);
-        } catch (e) {
-            console.log("Parse FAILED at end of string:", rawText.substring(rawText.length - 100));
-            console.error("\nError:", e.message);
-        }
-
-    } catch (error) {
-        console.error("Network/Fetch Error:", error.message);
+    } finally {
+        clearTimeout(timeout);
     }
+
+    const payload = await response.json();
+    if (!response.ok) {
+        throw new Error(payload.error || `AI server returned HTTP ${response.status}.`);
+    }
+
+    validateQuestions(payload);
+    console.log(`Gemini smoke test passed: generated ${payload.length} valid questions using ${modulePath}.`);
 }
 
-testAPI();
+main().catch(error => {
+    console.error(`Gemini smoke test failed: ${error.message}`);
+    process.exitCode = 1;
+});

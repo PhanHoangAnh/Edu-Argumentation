@@ -55,6 +55,8 @@ GEMINI_API_KEY="your-gemini-api-key" node server.js
 
 4. Open `http://localhost:8000`. The server binds to `127.0.0.1` by default. Without `GEMINI_API_KEY`, course and quiz features still work, but AI generation returns a configuration error. Do not expose this unauthenticated server directly to the public internet; add authentication and deployment-specific abuse protections before public hosting.
 
+To run the Gemini smoke test, start the server with `GEMINI_API_KEY` set, then run `node test_gemini.js` from `aws-quiz-app` in another terminal. This makes a real Gemini request and generates 20 questions.
+
 ---
 
 ## Improvements for Later Versions
