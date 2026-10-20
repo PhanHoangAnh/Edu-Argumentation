@@ -8,7 +8,7 @@ The same JSON format can also be generated from longer source material such as b
 
 * **Static Data Layer (`aws-quiz-app/data/`)**: Contains the bundled course modules, questions, options, and explanations as JSON.
 * **Front-End Interface (`aws-quiz-app/index.html` & `aws-quiz-app/js/app.js`)**: Built utilizing pure JavaScript, HTML5, and CSS without heavy framework overhead (avoiding React, opting for clean DOM management).
-* **AI Worker / Integration (`js/ai-worker.js` & `test_gemini.js`)**: Offloads background processing or handles dynamic generation of similar but different questions based on the context of the tutorial and static practice.
+* **AI Worker / Integration (`aws-quiz-app/js/ai-worker.js` & `aws-quiz-app/server.js`)**: The worker requests dynamic scenarios from the same-origin Node API; the Gemini API key remains in the server environment, not browser code.
 * **Book-to-Questions CLI (`book_to_questions.js`)**: Accepts a text book or chapter excerpt and generates the same `tutorialData` + `quizData` structure used by the web app.
 
 ### How It Works
@@ -16,7 +16,7 @@ The same JSON format can also be generated from longer source material such as b
 1. **Initialization**: The main application (`aws-quiz-app/js/app.js`) loads the bundled `Deployment-MLOps.json` course on startup. Use the course selector in the header to switch to another bundled module, or upload a custom module JSON file.
 2. **State Management**: The app saves the selected course, generated AI quiz (when applicable), answers, score, and question position in browser `localStorage`. Uploaded course JSON is stored locally in the same browser to allow resuming after a refresh.
 3. **Interactive Evaluation**: When a user selects an answer, the app immediately validates it against the schema, updates the UI score counters, and pulls contextual explanations.
-4. **AI Assistance**: Background workers or test modules interface asynchronously to generate similar but different questions based on the context of the tutorial and static practice. A separate CLI can also turn book text into the same learning format.
+4. **AI Assistance**: A background worker requests scenarios from the Node server, which calls Gemini using its server-side environment key. The separate CLI also uses an environment key to turn book text into the same learning format.
 
 ### Book Input Workflow
 
@@ -36,7 +36,7 @@ This keeps the whole system simple: the book becomes the source of truth, and th
 ### Prerequisites
 
 * A modern web browser (Chrome, Firefox, Edge, Safari).
-* A local development server (e.g., VS Code **Live Server** extension, Python `http.server`, or Node `http-server`) to prevent CORS issues when loading local JSON files.
+* Node.js 18 or later for the built-in server and its native `fetch` support.
 
 ### Running Locally
 
@@ -48,14 +48,12 @@ cd aws-quiz-app
 ```
 
 
-3. Start a local server. For example, using Python:
+3. Start the app server, optionally providing a Gemini key to enable AI question generation:
 ```bash
-python3 -m http.server 8000
-
+GEMINI_API_KEY="your-gemini-api-key" node server.js
 ```
 
-
-4. Open your browser and navigate to `http://localhost:8000`.
+4. Open `http://localhost:8000`. The server binds to `127.0.0.1` by default. Without `GEMINI_API_KEY`, course and quiz features still work, but AI generation returns a configuration error. Do not expose this unauthenticated server directly to the public internet; add authentication and deployment-specific abuse protections before public hosting.
 
 ---
 

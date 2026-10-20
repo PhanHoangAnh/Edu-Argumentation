@@ -10,6 +10,7 @@ let currentCoursePath = null;
 let answers = [];
 let persistenceError = '';
 let progressWarning = '';
+let activeAiWorker = null;
 
 const PROGRESS_STORAGE_KEY = 'edu-argumentation-progress-v1';
 
@@ -323,6 +324,7 @@ async function loadBundledCourse(coursePath) {
     const requestId = ++courseLoadRequest;
     if (!coursePath) return;
 
+    stopAIQuizWorker();
     dom.courseLoadStatus.textContent = 'Loading course...';
     try {
         const response = await fetch(coursePath);
@@ -354,6 +356,7 @@ function updateNavUI(activeTab) {
 }
 
 function showLandingDashboard() {
+    stopAIQuizWorker();
     dom.contentSection.classList.add('hidden-view');
     dom.landingDashboard.classList.remove('hidden-view');
     dom.servicesSection.classList.remove('hidden-view');
@@ -555,6 +558,7 @@ dom.customDataUpload.addEventListener('change', function(e) {
     const file = e.target.files[0];
     if (!file) return;
 
+    stopAIQuizWorker();
     const reader = new FileReader();
     reader.onload = function(e) {
         try {
@@ -827,9 +831,16 @@ function handleAnswerSelect(selectedIndex, restoring = false) {
     }, 400);
 }
 
+function stopAIQuizWorker() {
+    if (!activeAiWorker) return;
+    activeAiWorker.terminate();
+    activeAiWorker = null;
+}
+
 async function startAIQuizGenerator() {
     if (!tutorialData.title) return;
     
+    stopAIQuizWorker();
     dom.contentSection.classList.add('hidden-view');
     dom.landingDashboard.classList.remove('hidden-view');
     dom.emptyState.classList.add('hidden-view');
@@ -840,21 +851,16 @@ async function startAIQuizGenerator() {
     window.scrollTo({ top: 0, behavior: 'smooth' });
     updateNavUI('ai-quiz');
 
-    const API_KEY = config.GEMINI_API_KEY;
-    if (!API_KEY || API_KEY === 'YOUR_GEMINI_API_KEY_HERE') {
-        alert("Please insert your Gemini API key in config.js");
-        showLandingDashboard();
-        return;
-    }
-
     try {
         const aiWorker = new Worker('js/ai-worker.js');
-        aiWorker.postMessage({ apiKey: API_KEY, tutorialData: tutorialData, quizData: quizData });
+        activeAiWorker = aiWorker;
 
         aiWorker.onmessage = function(e) {
             if (e.data.type === 'progress') {
-                // update text if needed
+                dom.loadingScreen.querySelector('p').textContent = e.data.message;
             } else if (e.data.type === 'success') {
+                if (activeAiWorker !== aiWorker) return;
+                stopAIQuizWorker();
                 try {
                     cachedAiData = validateCourseModule({
                         tutorialData,
@@ -868,12 +874,24 @@ async function startAIQuizGenerator() {
                     showLandingDashboard();
                 }
             } else if (e.data.type === 'error') {
+                if (activeAiWorker !== aiWorker) return;
+                stopAIQuizWorker();
                 alert("Error: " + e.data.message);
                 showLandingDashboard();
             }
         };
+        aiWorker.onerror = event => {
+            if (activeAiWorker !== aiWorker) return;
+            stopAIQuizWorker();
+            console.error('AI worker error:', event.message);
+            alert(`AI quiz generation failed: ${event.message}`);
+            showLandingDashboard();
+        };
+        aiWorker.postMessage({ tutorialData, quizData });
     } catch (error) {
-        alert("Failed to initialize AI worker.");
+        stopAIQuizWorker();
+        console.error('AI worker initialization error:', error);
+        alert(`Failed to initialize AI worker: ${error.message}`);
         showLandingDashboard();
     }
 }
