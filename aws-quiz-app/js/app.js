@@ -5,6 +5,13 @@ let activeQuizData = [];
 let quizData = [];
 let tutorialData = {};
 let cachedAiData = null;
+let courseLoadRequest = 0;
+let currentCoursePath = null;
+let answers = [];
+let persistenceError = '';
+let progressWarning = '';
+
+const PROGRESS_STORAGE_KEY = 'edu-argumentation-progress-v1';
 
 const dom = {
     appContainer: document.getElementById('app-container'),
@@ -31,6 +38,8 @@ const dom = {
     navAiQuiz: document.getElementById('nav-ai-quiz'),
     startAiBtn: document.getElementById('start-ai-btn'),
     customDataUpload: document.getElementById('custom-data-upload'),
+    bundledCourseSelect: document.getElementById('bundled-course-select'),
+    courseLoadStatus: document.getElementById('course-load-status'),
     
     tutorialContent: document.getElementById('tutorial-content'),
     tutorialTitle: document.getElementById('tutorial-main-title'),
@@ -85,6 +94,251 @@ function setAppState(isReady, moduleName = null) {
         if (!btn) return;
         btn.disabled = !isReady;
     });
+}
+
+function validateCourseModule(data) {
+    const requireObject = (value, path) => {
+        if (!value || typeof value !== 'object' || Array.isArray(value)) {
+            throw new Error(`${path} must be an object.`);
+        }
+    };
+    const requireText = (value, path) => {
+        if (typeof value !== 'string' || !value.trim()) {
+            throw new Error(`${path} must be a non-empty string.`);
+        }
+    };
+    const validateTextArray = (value, path) => {
+        if (!Array.isArray(value) || value.some(item => typeof item !== 'string' || !item.trim())) {
+            throw new Error(`${path} must be an array of non-empty strings.`);
+        }
+    };
+
+    requireObject(data, 'Course data');
+    requireObject(data.tutorialData, 'tutorialData');
+    requireText(data.tutorialData.title, 'tutorialData.title');
+    if (data.tutorialData.lead !== undefined && typeof data.tutorialData.lead !== 'string') {
+        throw new Error('tutorialData.lead must be a string.');
+    }
+    if (!Array.isArray(data.tutorialData.sections) || data.tutorialData.sections.length === 0) {
+        throw new Error('tutorialData.sections must be a non-empty array.');
+    }
+
+    data.tutorialData.sections.forEach((section, sectionIndex) => {
+        const sectionPath = `tutorialData.sections[${sectionIndex}]`;
+        requireObject(section, sectionPath);
+        requireText(section.title, `${sectionPath}.title`);
+        if (section.note !== undefined && typeof section.note !== 'string') {
+            throw new Error(`${sectionPath}.note must be a string.`);
+        }
+        if (!Array.isArray(section.items) || section.items.length === 0) {
+            throw new Error(`${sectionPath}.items must be a non-empty array.`);
+        }
+
+        section.items.forEach((item, itemIndex) => {
+            const itemPath = `${sectionPath}.items[${itemIndex}]`;
+            if (typeof item === 'string') {
+                requireText(item, itemPath);
+                return;
+            }
+
+            requireObject(item, itemPath);
+            if (item.term !== undefined) requireText(item.term, `${itemPath}.term`);
+            if (!Array.isArray(item.blocks)) {
+                throw new Error(`${itemPath}.blocks must be an array.`);
+            }
+
+            item.blocks.forEach((block, blockIndex) => {
+                const blockPath = `${itemPath}.blocks[${blockIndex}]`;
+                requireObject(block, blockPath);
+                if (block.type === 'text') {
+                    requireText(block.content, `${blockPath}.content`);
+                } else if (block.type === 'media') {
+                    if (block.mediaType !== 'image') {
+                        throw new Error(`${blockPath}.mediaType must be "image".`);
+                    }
+                    requireText(block.src, `${blockPath}.src`);
+                    if (block.alt !== undefined && typeof block.alt !== 'string') {
+                        throw new Error(`${blockPath}.alt must be a string.`);
+                    }
+                } else if (block.type === 'card') {
+                    for (const field of ['title', 'intro', 'content']) {
+                        if (block[field] !== undefined) requireText(block[field], `${blockPath}.${field}`);
+                    }
+                    if (block.bullets !== undefined) {
+                        validateTextArray(block.bullets, `${blockPath}.bullets`);
+                    }
+                } else if (block.type === 'callout') {
+                    if (block.title !== undefined) requireText(block.title, `${blockPath}.title`);
+                    validateTextArray(block.items, `${blockPath}.items`);
+                } else {
+                    throw new Error(`${blockPath}.type must be text, media, card, or callout.`);
+                }
+            });
+
+            if (!item.term && item.blocks.length === 0) {
+                throw new Error(`${itemPath} must contain a term or at least one block.`);
+            }
+        });
+    });
+
+    if (!Array.isArray(data.quizData)) {
+        throw new Error('quizData must be an array.');
+    }
+    data.quizData.forEach((question, questionIndex) => {
+        const questionPath = `quizData[${questionIndex}]`;
+        requireObject(question, questionPath);
+        requireText(question.question, `${questionPath}.question`);
+        validateTextArray(question.options, `${questionPath}.options`);
+        if (question.options.length !== 4) {
+            throw new Error(`${questionPath}.options must contain exactly 4 answers.`);
+        }
+        if (!Number.isInteger(question.correct) || question.correct < 0 || question.correct >= 4) {
+            throw new Error(`${questionPath}.correct must be an integer from 0 to 3.`);
+        }
+        validateTextArray(question.explanations, `${questionPath}.explanations`);
+        if (question.explanations.length !== 4) {
+            throw new Error(`${questionPath}.explanations must contain exactly 4 explanations.`);
+        }
+    });
+
+    return data;
+}
+
+function saveProgress() {
+    try {
+        localStorage.setItem(PROGRESS_STORAGE_KEY, JSON.stringify({
+            version: 1,
+            coursePath: currentCoursePath,
+            courseData: { tutorialData, quizData },
+            quizType: activeQuizData === quizData ? 'static' : 'ai',
+            aiQuizData: activeQuizData === quizData ? null : activeQuizData,
+            currentQuestionIndex,
+            answers
+        }));
+        persistenceError = '';
+    } catch (error) {
+        console.error('Progress save error:', error);
+        persistenceError = `Progress could not be saved: ${error.message}`;
+        dom.courseLoadStatus.textContent = persistenceError;
+    }
+}
+
+function restoreSavedProgress() {
+    let serialized;
+    try {
+        serialized = localStorage.getItem(PROGRESS_STORAGE_KEY);
+    } catch (error) {
+        console.error('Progress read error:', error);
+        progressWarning = `Saved progress could not be read: ${error.message}`;
+        dom.courseLoadStatus.textContent = progressWarning;
+        return false;
+    }
+    if (!serialized) return false;
+
+    try {
+        const saved = JSON.parse(serialized);
+        if (!saved || saved.version !== 1) {
+            throw new Error('Unsupported saved progress format.');
+        }
+        validateCourseModule(saved.courseData);
+        if (saved.coursePath !== null && typeof saved.coursePath !== 'string') {
+            throw new Error('Saved course path is invalid.');
+        }
+        if (saved.quizType !== 'static' && saved.quizType !== 'ai') {
+            throw new Error('Saved quiz type is invalid.');
+        }
+
+        const restoredQuizData = saved.quizType === 'ai'
+            ? validateCourseModule({ tutorialData: saved.courseData.tutorialData, quizData: saved.aiQuizData }).quizData
+            : saved.courseData.quizData;
+        if (!Number.isInteger(saved.currentQuestionIndex)
+            || saved.currentQuestionIndex < 0
+            || saved.currentQuestionIndex > restoredQuizData.length) {
+            throw new Error('Saved question position is invalid.');
+        }
+        if (!Array.isArray(saved.answers)
+            || saved.answers.length !== restoredQuizData.length
+            || saved.answers.some(answer => answer !== null
+                && (!Number.isInteger(answer) || answer < 0 || answer > 3))) {
+            throw new Error('Saved answers are invalid.');
+        }
+        if (saved.currentQuestionIndex === restoredQuizData.length
+            && saved.answers.some(answer => answer === null)) {
+            throw new Error('Saved completed quiz contains unanswered questions.');
+        }
+
+        applyCourseData(saved.courseData, saved.coursePath, false);
+        if (saved.quizType === 'ai') {
+            cachedAiData = restoredQuizData;
+            activeQuizData = cachedAiData;
+        }
+        answers = saved.answers;
+        currentQuestionIndex = saved.currentQuestionIndex;
+        score = answers.reduce((total, answer, index) => (
+            total + (answer !== null && answer === activeQuizData[index].correct ? 1 : 0)
+        ), 0);
+        isAnswered = currentQuestionIndex < activeQuizData.length
+            && answers[currentQuestionIndex] !== null;
+
+        const bundledOption = Array.from(dom.bundledCourseSelect.options)
+            .some(option => option.value === saved.coursePath);
+        dom.bundledCourseSelect.value = bundledOption ? saved.coursePath : '';
+
+        if (currentQuestionIndex >= activeQuizData.length) {
+            showResults();
+        } else if (answers.some(answer => answer !== null)) {
+            startQuiz();
+        }
+        dom.courseLoadStatus.textContent = 'Saved progress restored.';
+        return true;
+    } catch (error) {
+        console.error('Progress restore error:', error);
+        progressWarning = `Saved progress could not be restored: ${error.message}`;
+        dom.courseLoadStatus.textContent = progressWarning;
+        return false;
+    }
+}
+
+function applyCourseData(parsedData, coursePath = null, persist = true) {
+    validateCourseModule(parsedData);
+
+    tutorialData = parsedData.tutorialData;
+    quizData = parsedData.quizData;
+    activeQuizData = quizData;
+    cachedAiData = null;
+    currentCoursePath = coursePath;
+
+    currentQuestionIndex = 0;
+    score = 0;
+    isAnswered = false;
+    answers = Array(quizData.length).fill(null);
+
+    renderTutorial();
+    setAppState(true, tutorialData.title || "Custom Course Module");
+    showLandingDashboard();
+    if (persist) saveProgress();
+}
+
+async function loadBundledCourse(coursePath) {
+    const requestId = ++courseLoadRequest;
+    if (!coursePath) return;
+
+    dom.courseLoadStatus.textContent = 'Loading course...';
+    try {
+        const response = await fetch(coursePath);
+        if (!response.ok) {
+            throw new Error(`Course request failed with status ${response.status}.`);
+        }
+
+        const parsedData = await response.json();
+        if (requestId !== courseLoadRequest) return;
+        applyCourseData(parsedData, coursePath);
+        dom.courseLoadStatus.textContent = persistenceError || progressWarning;
+    } catch (error) {
+        if (requestId !== courseLoadRequest) return;
+        console.error('Course loading error:', error);
+        dom.courseLoadStatus.textContent = `Unable to load course: ${error.message}`;
+    }
 }
 
 function updateNavUI(activeTab) {
@@ -142,9 +396,9 @@ function startQuiz() {
     dom.scoreTracker.textContent = score;
     updateNavUI(activeQuizData === quizData ? 'quiz' : 'ai-quiz');
     
-    if (!isAnswered && activeQuizData.length > 0) {
+    if (currentQuestionIndex < activeQuizData.length) {
         loadQuestion();
-    } else if (activeQuizData.length === 0) {
+    } else {
         showResults();
     }
     window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -222,21 +476,36 @@ function showResultsViewOnly() {
     updateNavUI(activeQuizData === quizData ? 'quiz' : 'ai-quiz');
 }
 
+function selectStaticQuiz() {
+    if (activeQuizData !== quizData || currentQuestionIndex >= quizData.length) {
+        activeQuizData = quizData;
+        currentQuestionIndex = 0;
+        score = 0;
+        isAnswered = false;
+        answers = Array(quizData.length).fill(null);
+    }
+    saveProgress();
+    startQuiz();
+}
+
 function restartQuiz() {
     currentQuestionIndex = 0;
     score = 0;
     isAnswered = false;
+    answers = Array(activeQuizData.length).fill(null);
+    saveProgress();
     startQuiz();
 }
 
 dom.navTutorial.addEventListener('click', showLandingDashboard); 
 
-dom.startBtn.addEventListener('click', () => { activeQuizData = quizData; startQuiz(); });
+dom.startBtn.addEventListener('click', selectStaticQuiz);
 dom.readTutorialBtn.addEventListener('click', showTutorial);
-dom.tutorialToQuizBtn.addEventListener('click', () => { activeQuizData = quizData; startQuiz(); });
+dom.tutorialToQuizBtn.addEventListener('click', selectStaticQuiz);
 
 dom.nextBtn.addEventListener('click', () => {
     currentQuestionIndex++;
+    saveProgress();
     if (currentQuestionIndex < activeQuizData.length) {
         loadQuestion();
     } else {
@@ -271,6 +540,8 @@ dom.navQuiz.addEventListener('click', () => {
         currentQuestionIndex = 0;
         score = 0;
         isAnswered = false;
+        answers = Array(quizData.length).fill(null);
+        saveProgress();
     }
     
     if (currentQuestionIndex >= activeQuizData.length) {
@@ -288,23 +559,10 @@ dom.customDataUpload.addEventListener('change', function(e) {
     reader.onload = function(e) {
         try {
             const parsedData = JSON.parse(e.target.result);
-            if (!parsedData.tutorialData || !parsedData.quizData || !Array.isArray(parsedData.quizData)) {
-                throw new Error("Invalid JSON schema. Must contain 'tutorialData' object and 'quizData' array.");
-            }
-
-            tutorialData = parsedData.tutorialData;
-            quizData = parsedData.quizData;
-            activeQuizData = quizData;
-            cachedAiData = null;
-            
-            currentQuestionIndex = 0;
-            score = 0;
-            isAnswered = false;
-
-            renderTutorial();
-            setAppState(true, tutorialData.title || "Custom Course Module");
-            showLandingDashboard();
-            
+            courseLoadRequest++;
+            applyCourseData(parsedData);
+            dom.bundledCourseSelect.value = '';
+            dom.courseLoadStatus.textContent = persistenceError || 'Custom course loaded.';
         } catch (error) {
             console.error("JSON error:", error);
             alert("Failed to load data: " + error.message);
@@ -312,6 +570,10 @@ dom.customDataUpload.addEventListener('change', function(e) {
         dom.customDataUpload.value = '';
     };
     reader.readAsText(file);
+});
+
+dom.bundledCourseSelect.addEventListener('change', event => {
+    loadBundledCourse(event.target.value);
 });
 
 // Helper Function that injects the WebComponent
@@ -453,6 +715,7 @@ function renderTutorial() {
 }
 
 function loadQuestion() {
+    const savedAnswer = answers[currentQuestionIndex];
     isAnswered = false;
     window.scrollTo({ top: 0, behavior: 'smooth' });
     const currentQ = activeQuizData[currentQuestionIndex];
@@ -482,22 +745,28 @@ function loadQuestion() {
         letterSpan.textContent = letter;
         textSpan.innerHTML = formatText(optionText);
         
-        btn.addEventListener('click', () => handleAnswerSelect(index, btn));
+        btn.addEventListener('click', () => handleAnswerSelect(index));
         dom.optionsContainer.appendChild(optionClone);
     });
+
+    if (savedAnswer !== null && savedAnswer !== undefined) {
+        handleAnswerSelect(savedAnswer, true);
+    }
 }
 
-function handleAnswerSelect(selectedIndex, selectedBtn) {
+function handleAnswerSelect(selectedIndex, restoring = false) {
     if (isAnswered) return;
     isAnswered = true;
 
     const currentQ = activeQuizData[currentQuestionIndex];
     const isCorrect = selectedIndex === currentQ.correct;
+    if (!restoring) answers[currentQuestionIndex] = selectedIndex;
 
-    if (isCorrect) {
+    if (isCorrect && !restoring) {
         score++;
-        dom.scoreTracker.textContent = score;
     }
+    dom.scoreTracker.textContent = score;
+    if (!restoring) saveProgress();
 
     const allCards = dom.optionsContainer.querySelectorAll('.option-card');
     
@@ -586,9 +855,18 @@ async function startAIQuizGenerator() {
             if (e.data.type === 'progress') {
                 // update text if needed
             } else if (e.data.type === 'success') {
-                activeQuizData = e.data.data;
-                cachedAiData = e.data.data;
-                restartQuiz();
+                try {
+                    cachedAiData = validateCourseModule({
+                        tutorialData,
+                        quizData: e.data.data
+                    }).quizData;
+                    activeQuizData = cachedAiData;
+                    restartQuiz();
+                } catch (error) {
+                    console.error('Generated quiz validation error:', error);
+                    alert(`Generated quiz is invalid: ${error.message}`);
+                    showLandingDashboard();
+                }
             } else if (e.data.type === 'error') {
                 alert("Error: " + e.data.message);
                 showLandingDashboard();
@@ -601,5 +879,9 @@ async function startAIQuizGenerator() {
 }
 
 document.addEventListener('DOMContentLoaded', () => {
-    setAppState(false); 
+    setAppState(false);
+    if (!restoreSavedProgress()) {
+        dom.bundledCourseSelect.value = 'data/Deployment-MLOps.json';
+        loadBundledCourse(dom.bundledCourseSelect.value);
+    }
 });

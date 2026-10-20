@@ -66,6 +66,18 @@
         </nav>
         
         <div class="flex items-center gap-4">
+            <label for="bundled-course-select" class="sr-only">Choose a course</label>
+            <select id="bundled-course-select" class="max-w-40 sm:max-w-56 rounded-lg border border-gray-600 bg-gray-800 px-3 py-2 text-sm text-white focus:border-brand-500 focus:outline-none">
+                <option value="">Choose course</option>
+                <option value="data/Deployment-MLOps.json">Deployment &amp; MLOps</option>
+                <option value="data/SageMaker_Clarify.json">SageMaker Clarify</option>
+                <option value="data/SageMakerClarifyBiasMastery.json">Clarify Bias Mastery</option>
+                <option value="data/UAT_Data/domain1.json">Domain 1: Data Engineering</option>
+                <option value="data/UAT_Data/domain2.json">Domain 2: EDA &amp; Statistics</option>
+                <option value="data/UAT_Data/domain3.json">Domain 3: Modeling &amp; Training</option>
+                <option value="data/UAT_Data/domain4.json">Domain 4: Deployment &amp; MLOps</option>
+            </select>
+            <span id="course-load-status" class="max-w-40 text-xs text-red-300" role="status" aria-live="polite"></span>
             <input type="file" id="custom-data-upload" accept=".json" class="hidden-view" />
             <label for="custom-data-upload" class="cursor-pointer text-gray-300 hover:text-white transition-colors" title="Load Course JSON">
                 <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"></path></svg>
