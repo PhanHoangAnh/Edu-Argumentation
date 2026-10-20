@@ -55,6 +55,8 @@ GEMINI_API_KEY="your-gemini-api-key" npm start
 
 4. Open `http://localhost:8000`. The server binds to `127.0.0.1` by default. Without `GEMINI_API_KEY`, course and quiz features still work, but AI generation returns a configuration error. Do not expose this unauthenticated server directly to the public internet; add authentication and deployment-specific abuse protections before public hosting.
 
+The Gemini model defaults to `gemini-3.5-flash`; set `GEMINI_MODEL` (for example `GEMINI_MODEL=gemini-3.8-flash`) if Google retires or renames it. A Gemini HTTP 404 usually means the model name is no longer available.
+
 Run local unit tests with `npm test`. To run the Gemini smoke test, start the server with `GEMINI_API_KEY` set, then run `npm run test:gemini` from `aws-quiz-app` in another terminal. This makes a real Gemini request and generates 20 questions.
 
 ---
