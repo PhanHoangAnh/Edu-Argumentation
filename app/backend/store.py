@@ -1382,3 +1382,69 @@ def exam_finish(account_id: int, run_id: str, now: datetime, rules: Any) -> tupl
         reason = "deadline" if rules.is_expired(row["deadline_at"], now) else "submit"
         return "finished", _exam_finish_locked(conn, row, now, reason, rules)
 # =========================================================================== /exam-recall-suite P3
+
+
+# =========================================================================== review by chapter (01-11-26)
+# The floating review reminder splits a large due pile by chapter (user: "the review would be very large,
+# so divide per chapter"). The server knows question keys, not chapters: it groups by BLOCK — the key
+# minus its "-qN" — and the client maps blocks to chapters with the book it already holds. A card whose
+# key is not a book key ("ai-…") is in the block "other". Reads only; no schema change.
+REVIEW_BOOK_KEY = r"^.+-b[0-9]+-q[0-9]+$"
+REVIEW_BLOCK_SQL = f"CASE WHEN question_key ~ '{REVIEW_BOOK_KEY}' THEN regexp_replace(question_key, '-q[0-9]+$', '') ELSE 'other' END"
+REVIEW_BLOCK = re.compile(r"^[A-Za-z0-9._-]{1,48}$")
+REVIEW_BLOCKS_MAX = 200
+
+
+def review_blocks(value: Any) -> list[str]:
+    """`blocks` query value "ch05-b01,ch05-b02" -> a validated, de-duplicated list (1..200)."""
+    blocks = list(dict.fromkeys(b.strip() for b in str(value or "").split(",") if b.strip()))
+    if not blocks or len(blocks) > REVIEW_BLOCKS_MAX or not all(REVIEW_BLOCK.match(b) for b in blocks):
+        raise ValueError("blocks must be 1-200 block ids such as ch05-b01, comma separated.")
+    return blocks
+
+
+def review_due_by_block(account_id: int, module: str) -> dict[str, Any]:
+    """{blocks: [{block, due}] (due > 0 only), dueCount, total} — one row per block, so a chapter is
+    counted once however many of its cards fell due, on whatever days."""
+    import db
+
+    rows = db.fetch_all(
+        f"SELECT {REVIEW_BLOCK_SQL} AS block, count(*) AS due FROM review_cards"
+        " WHERE account_id = %s AND module_id = %s AND due_at <= now() GROUP BY 1 ORDER BY 1",
+        (account_id, module),
+    )
+    total = db.fetch_one("SELECT count(*) AS total FROM review_cards WHERE account_id = %s AND module_id = %s",
+                         (account_id, module)) or {"total": 0}
+    blocks = [{"block": r["block"], "due": int(r["due"])} for r in rows]
+    return {"blocks": blocks, "dueCount": sum(b["due"] for b in blocks), "total": int(total["total"])}
+
+
+REVIEW_PICK_MAX = 500   # the reminder lets him type how many to review; a chapter never holds this many
+
+
+def review_due_in_blocks(account_id: int, module: str, blocks: list[str], limit: int = SESSION_SIZE_DEFAULT) -> dict[str, Any]:
+    """review_due_page limited to the cards of `blocks` (oldest due first). dueCount is for those blocks.
+    `limit` is his own number (1..500), not the 10-50 run size: "a chapter has 35, I write 99 -> 35"."""
+    import db
+
+    limit = max(1, min(int(limit), REVIEW_PICK_MAX))
+    rows = db.fetch_all(
+        "SELECT question_key, due_at, reps, lapses, body FROM review_cards"
+        f" WHERE account_id = %s AND module_id = %s AND due_at <= now() AND {REVIEW_BLOCK_SQL} = ANY(%s)"
+        " ORDER BY due_at LIMIT %s",
+        (account_id, module, blocks, limit),
+    )
+    count = db.fetch_one(
+        "SELECT count(*) AS due FROM review_cards"
+        f" WHERE account_id = %s AND module_id = %s AND due_at <= now() AND {REVIEW_BLOCK_SQL} = ANY(%s)",
+        (account_id, module, blocks),
+    ) or {"due": 0}
+    due = []
+    for r in rows:
+        item: dict[str, Any] = {"question": r["question_key"], "dueAt": _stamp(r["due_at"]), "reps": r["reps"],
+                                "lapses": r["lapses"], "leech": r["lapses"] >= LEECH_LAPSES}
+        if r["body"] is not None:
+            item["body"] = r["body"]
+        due.append(item)
+    return {"due": due, "dueCount": int(count["due"])}
+# =========================================================================== /review by chapter

@@ -22,6 +22,7 @@ import { useQuiz } from '../state/QuizProvider';
 import type { QuizQuestion, StoredQuestionBody } from '../data/types';
 import { NEW_PER_DAY, SESSION_SIZE, clampStep, useFlags, useMastery, usePrefs, useReviewDue } from '../data/queries';
 import type { MasteryArea } from '../data/types';
+import type { ReviewDue } from '../data/queries';
 import { NextUpRow } from '../account/MasteryBars';
 import { areaQuestions, drawForArea } from '../account/ProgressPanel';
 import { examPost, savePrefs } from '../data/writes';
@@ -90,6 +91,24 @@ function questionFromBody(key: string, body: StoredQuestionBody | null | undefin
     : Number.isInteger(correct) && correct >= 0 && correct < body.options.length;
   if (!valid) return null;
   return { question: body.question, options: body.options, correct, explanations: body.explanations ?? null, source: { question: key } };
+}
+
+/**
+ * The questions of a review run, oldest due first, at most `size`. Shared by "Review due (N)" here
+ * and the floating review reminder (quiz/ReviewReminder.tsx, 01-11-26).
+ * 22-10-26: an AI-written card has no bank entry — it is rebuilt from the body stored with it.
+ * Each run question is a COPY carrying the card's lapses, so the quiz can tag a leech (A5).
+ */
+export function reviewRunQuestions(bank: QuizQuestion[], due: ReviewDue['due'], size: number): QuizQuestion[] {
+  const byKey = new Map<string, QuizQuestion>();
+  for (const question of bank) if (question?.source?.question) byKey.set(question.source.question, question);
+  return due
+    .map((card): QuizQuestion | null => {
+      const question = byKey.get(card.question) ?? questionFromBody(card.question, card.body);
+      return question ? { ...question, reviewLapses: Number(card.lapses) || 0 } : null;
+    })
+    .filter((question): question is QuizQuestion => Boolean(question))
+    .slice(0, size);
 }
 
 const GHOST_BTN =
@@ -255,17 +274,7 @@ export function QuizSetupScreen({ mode, open, onStart, onCancel, actions }: Quiz
 
   /** Start a spaced-repetition run: the due cards that exist in this book's bank, oldest due first. */
   const startReview = () => {
-    const byKey = new Map<string, QuizQuestion>();
-    for (const question of quizBank) if (question?.source?.question) byKey.set(question.source.question, question);
-    // 22-10-26: an AI-written card has no bank entry — it is rebuilt from the body stored with it.
-    // Each run question is a COPY carrying the card's lapses, so the quiz can tag a leech (A5).
-    const questions = (review.data?.due ?? [])
-      .map((card): QuizQuestion | null => {
-        const question = byKey.get(card.question) ?? questionFromBody(card.question, card.body);
-        return question ? { ...question, reviewLapses: Number(card.lapses) || 0 } : null;
-      })
-      .filter((question): question is QuizQuestion => Boolean(question))
-      .slice(0, size);
+    const questions = reviewRunQuestions(quizBank, review.data?.due ?? [], size);
     if (!questions.length) return;
     dispatch({ type: 'run/reset', questions });
     dispatch({ type: 'scope/set', scope: 'review', label: 'Review', blockId: null });

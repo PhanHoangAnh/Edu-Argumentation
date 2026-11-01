@@ -114,6 +114,31 @@ export function useReviewDue(moduleId: string, enabled: boolean, limit: number =
   });
 }
 
+/** /api/review/due-blocks (01-11-26): cards due now per block; "other" = cards with no book key. */
+export interface ReviewDueBlocks {
+  blocks: { block: string; due: number }[];
+  dueCount: number;
+  total: number;
+}
+
+export function useReviewDueBlocks(moduleId: string, enabled: boolean, refetchMs?: number) {
+  return useQuery({
+    queryKey: ['review-due-blocks', moduleId] as const,
+    enabled: enabled && Boolean(moduleId),
+    staleTime: 0,
+    retry: 0,
+    refetchInterval: refetchMs,
+    queryFn: ({ signal }) => getJson<ReviewDueBlocks>(`/api/review/due-blocks?module=${encodeURIComponent(moduleId)}`, signal),
+  });
+}
+
+/** /api/review/due-in (01-11-26): the due cards of some blocks (one chapter), oldest first, at most
+ *  `limit` — the number he typed (1..500 on the server), not the 10-50 run size. */
+export function fetchReviewDueIn(moduleId: string, blocks: string[], limit: number): Promise<ReviewDue> {
+  const query = `module=${encodeURIComponent(moduleId)}&blocks=${encodeURIComponent(blocks.join(','))}&limit=${Math.max(1, Math.round(limit))}`;
+  return getJson<ReviewDue>(`/api/review/due-in?${query}`);
+}
+
 // ---------------------------------------------------------------- exam-recall-suite P1 (22-10-26)
 // Each read below is OPTIONAL to the screen that uses it: a failed call (or a server that predates
 // it) hides the panel — it never blocks Practice. retry: 0 for the same reason as useReviewDue.

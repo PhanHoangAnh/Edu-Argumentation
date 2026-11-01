@@ -51,6 +51,7 @@ import { ReaderScreen } from '../reader/ReaderScreen';
 import { QuizScreen } from '../quiz/QuizScreen';
 import { ResultScreen } from '../quiz/ResultScreen';
 import { QuizSetupScreen } from '../quiz/QuizSetupScreen';
+import { ReviewReminder } from '../quiz/ReviewReminder';
 import { SettingsScreen } from '../settings/SettingsScreen';
 import { AskPanel } from '../ask/AskPanel';
 import { useStudyActions } from './useStudyActions';
@@ -621,6 +622,12 @@ export function AppShell() {
            the second half of that legacy listener.
       */}
       <AskPanel reading={screen === 'tutorial'} />
+
+      {/* 01-11-26: floating spaced-repetition reminder — hidden while a quiz, the picker or the AI spinner is up. */}
+      <ReviewReminder
+        visible={screen !== 'quiz' && screen !== 'quiz-setup' && screen !== 'loading'}
+        onStart={() => showQuizFor('other')}
+      />
     </>
   );
 }

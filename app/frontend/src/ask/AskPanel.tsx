@@ -384,8 +384,12 @@ export function AskPanel({ reading }: AskPanelProps) {
         className={`${reading && !side ? '' : 'hidden-view '}fixed bottom-6 right-6 z-40 h-14 w-14 rounded-full bg-brand-600 text-white shadow-xl flex items-center justify-center transition-transform hover:scale-105 active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white`}
         onClick={() => setOpen((on) => !on)}
       >
-        <svg className="w-6 h-6" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24" aria-hidden="true">
-          <path strokeLinecap="round" strokeLinejoin="round" d="M8 10h8M8 14h5M21 12a8 8 0 0 1-8 8H7l-4 3v-6.5A8 8 0 1 1 21 12z" />
+        {/* 01-11-26 (user: "new chat glyph, align exactly middle all around"): lucide message-square-text.
+            Its box is exactly 3..21 on both axes, so it centres in the circle; `block` drops the inline
+            baseline gap. */}
+        <svg className="block w-7 h-7" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24" aria-hidden="true">
+          <path strokeLinecap="round" strokeLinejoin="round" d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
+          <path strokeLinecap="round" strokeLinejoin="round" d="M8 8h8M8 12h8" />
         </svg>
       </button>
 

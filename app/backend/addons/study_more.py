@@ -3,6 +3,8 @@
   GET  /api/review/stats?module=     -> {dueNow, dueToday, next7[{day,count}], next7Total, total, leeches,
                                          leechKeys[], newToday, newPerDay, sessionSize, retention|null,
                                          reviews30, retentionDays}
+  GET  /api/review/due-blocks?module=            -> {blocks[{block, due}], dueCount, total}   (01-11-26)
+  GET  /api/review/due-in?module=&blocks=&limit= -> {due[...], dueCount}  /api/review/due for some blocks
   GET  /api/study/prefs?module=      -> {module, newPerDay, sessionSize}             (defaults 20 / 20)
   POST /api/study/prefs  {module, newPerDay?, sessionSize?}     -> same shape   (0-200 · 10-50 step 5)
   GET  /api/flags?module=            -> {module, flags[{question, flaggedAt, body?}], count}
@@ -73,6 +75,26 @@ def study_review_stats(request: Request, module: str = Query(default="")) -> Res
     try:
         return core._json(HTTPStatus.OK, store.review_stats(core._account(request).id, store.module_key(module)))
     except db.StoreUnavailable as error:
+        return _store_error(error)
+
+
+@router.get("/api/review/due-blocks")
+def study_review_due_blocks(request: Request, module: str = Query(default="")) -> Response:
+    """01-11-26 review reminder: cards due now per block (the client groups blocks into chapters)."""
+    try:
+        return core._json(HTTPStatus.OK, store.review_due_by_block(core._account(request).id, store.module_key(module)))
+    except db.StoreUnavailable as error:
+        return _store_error(error)
+
+
+@router.get("/api/review/due-in")
+def study_review_due_in(request: Request, module: str = Query(default=""), blocks: str = Query(default=""),
+                        limit: int = Query(default=store.SESSION_SIZE_DEFAULT)) -> Response:
+    """01-11-26 review reminder: the due cards of one chapter's blocks — /api/review/due's shape."""
+    try:
+        return core._json(HTTPStatus.OK, store.review_due_in_blocks(
+            core._account(request).id, store.module_key(module), store.review_blocks(blocks), limit))
+    except _BAD as error:
         return _store_error(error)
 
 

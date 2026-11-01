@@ -182,7 +182,7 @@ export function QuizScreen({ isVisible, onFinish, onNewQuiz }: QuizScreenProps) 
   const scopeCaption = state.carriedTotal
     ? `${state.scopeLabel || bookTitle || 'Assessment'} · retrying ${activeCount} of ${state.carriedTotal} · ${state.carriedCorrect} already correct`
     : state.scope === 'review'
-      ? `Review · ${activeCount} due`
+      ? `${state.scopeLabel || 'Review'} · ${activeCount} due`   // 01-11-26: "Review · Chapter 5: …" from the reminder
     : state.scope === 'module'
       ? `Whole module · ${activeCount} questions`
       : state.scope === 'block' || state.scope === 'selection'
