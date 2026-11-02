@@ -1,0 +1,692 @@
+{
+ "chapter": 5,
+ "flow": [
+  "Get the data",
+  "Set aside a test set",
+  "Explore",
+  "Prepare the data",
+  "Train",
+  "Evaluate",
+  "Fine-tune",
+  "Launch"
+ ],
+ "generated_by": "ml/study/geron-lab/ch05-notes/build_ch05.py",
+ "known_from": "ch02-term-registry.json (terms defined there count as known in every chapter)",
+ "terms": [
+  {
+   "term": "class",
+   "match": [
+    "\\bclass(es)?\\b"
+   ],
+   "exclude": [],
+   "definition": "one of the categories a classifier chooses between, e.g. \"virginica\" or \"not virginica\". Careful: Python also says \"class\" for a blueprint objects are made from (each Scikit-Learn model type is one); this chapter uses both, and the sentence always shows which.",
+   "lesson": 1
+  },
+  {
+   "term": "classifier",
+   "match": [
+    "\\bclassifiers?\\b"
+   ],
+   "exclude": [
+    "\\bLinearSVC\\b",
+    "\\bSGDClassifier\\b"
+   ],
+   "definition": "a model that predicts a class (a category) rather than a number.",
+   "lesson": 1
+  },
+  {
+   "term": "iris dataset",
+   "match": [
+    "\\biris\\b"
+   ],
+   "exclude": [],
+   "definition": "a small, famous table of 150 flowers: 4 measurements per flower (petal and sepal length and width, in cm) plus the flower's species. It ships inside Scikit-Learn.",
+   "lesson": 1
+  },
+  {
+   "term": "petal",
+   "match": [
+    "\\bpetals?\\b"
+   ],
+   "exclude": [],
+   "definition": "the coloured leaf-like parts of a flower. The iris data measures each flower's petal length and width in centimetres.",
+   "lesson": 1
+  },
+  {
+   "term": "species",
+   "match": [
+    "\\bspecies\\b",
+    "\\bsetosa\\b",
+    "\\bversicolor\\b",
+    "\\bvirginica\\b"
+   ],
+   "exclude": [],
+   "definition": "the kind of iris a flower is: setosa, versicolor or virginica.",
+   "lesson": 1
+  },
+  {
+   "term": "decision boundary",
+   "match": [
+    "\\bdecision boundar(y|ies)\\b",
+    "\\bboundar(y|ies)\\b"
+   ],
+   "exclude": [],
+   "definition": "the line where the model's answer changes from one class to the other.",
+   "lesson": 1
+  },
+  {
+   "term": "margin",
+   "match": [
+    "\\bmargins?\\b"
+   ],
+   "exclude": [
+    "\\bmargin violations?\\b",
+    "\\bhard margin\\b",
+    "\\bsoft margin\\b",
+    "\\blarge margin\\b"
+   ],
+   "definition": "the width of the empty band (the \"street\") between the decision boundary and the nearest training rows on each side.",
+   "lesson": 1
+  },
+  {
+   "term": "street",
+   "match": [
+    "\\bstreets?\\b"
+   ],
+   "exclude": [],
+   "definition": "the book's picture of the margin: the boundary is the centre line, the margin is the street's width, and the training rows should stay off the street.",
+   "lesson": 1
+  },
+  {
+   "term": "large margin classification",
+   "match": [
+    "\\blarge[- ]margin\\b"
+   ],
+   "exclude": [],
+   "definition": "choosing the boundary with the widest possible street, not just any line that separates the classes.",
+   "lesson": 1
+  },
+  {
+   "term": "generalize",
+   "match": [
+    "\\bgenerali[sz](e|es|ed|ing|ation)\\b"
+   ],
+   "exclude": [
+    "\\bgeneralization error\\b"
+   ],
+   "definition": "to work well on new rows the model has never seen, not only on its training rows.",
+   "lesson": 1
+  },
+  {
+   "term": "support vector",
+   "match": [
+    "\\bsupport vectors?\\b(?! machine)",
+    "\\bsupport_vectors_\\b",
+    "\\bn_support_\\b"
+   ],
+   "exclude": [],
+   "definition": "a training row that sits on the edge of the street (or on it, or on the wrong side). Only these rows decide where the boundary goes.",
+   "lesson": 1
+  },
+  {
+   "term": "hard margin classification",
+   "match": [
+    "\\bhard[- ]margin\\b"
+   ],
+   "exclude": [],
+   "definition": "insisting that every training row stays off the street and on its correct side, with no exceptions.",
+   "lesson": 2
+  },
+  {
+   "term": "soft margin classification",
+   "match": [
+    "\\bsoft[- ]margin\\b"
+   ],
+   "exclude": [],
+   "definition": "allowing some rows onto the street (or even across it), in exchange for a wider street.",
+   "lesson": 2
+  },
+  {
+   "term": "margin violation",
+   "match": [
+    "\\bmargin violations?\\b",
+    "\\bviolations?\\b"
+   ],
+   "exclude": [],
+   "definition": "a training row that lands on the street or on the wrong side of the boundary.",
+   "lesson": 2
+  },
+  {
+   "term": "linearly separable",
+   "match": [
+    "\\blinearly[- ]separable\\b",
+    "\\blinear separability\\b"
+   ],
+   "exclude": [],
+   "definition": "two classes that one straight line (or flat plane) can separate completely.",
+   "lesson": 2
+  },
+  {
+   "term": "C (SVM hyperparameter)",
+   "match": [
+    "\\bC\\s?=",
+    "\\bC\\b(?! libraries)(?![+#])"
+   ],
+   "exclude": [
+    "\\bChapter C\\b",
+    "\\| C \\| −1",
+    "\\bC gives\\b"
+   ],
+   "definition": "the SVM setting that sets how strict the street is: a small C allows many rows on the street (wider street, more regularization); a large C allows few (narrower street, less regularization).",
+   "lesson": 2
+  },
+  {
+   "term": "LinearSVC",
+   "match": [
+    "\\bLinearSVC\\b"
+   ],
+   "exclude": [],
+   "definition": "Scikit-Learn's fast SVM classifier for a straight-line boundary.",
+   "lesson": 2
+  },
+  {
+   "term": "decision function",
+   "match": [
+    "\\bdecision[_ ]function\\b",
+    "\\bdecision score\\b"
+   ],
+   "exclude": [],
+   "definition": "the score an SVM computes for a row before it decides: positive means the positive class, negative the other, and the size says how far from the boundary the row sits. At the street's edges it is exactly +1 or −1.",
+   "lesson": 3
+  },
+  {
+   "term": "signed distance",
+   "match": [
+    "\\bsigned distance\\b"
+   ],
+   "exclude": [],
+   "definition": "a distance with a plus or minus sign attached; the sign says which side of the boundary the row is on.",
+   "lesson": 3
+  },
+  {
+   "term": "probability",
+   "match": [
+    "\\bprobabilit(y|ies)\\b",
+    "\\bpredict_proba\\b"
+   ],
+   "exclude": [],
+   "definition": "a number from 0 to 1 (0% to 100%) for how likely something is.",
+   "lesson": 3
+  },
+  {
+   "term": "logistic regression",
+   "match": [
+    "\\blogistic regression\\b",
+    "\\bLogisticRegression\\b"
+   ],
+   "exclude": [],
+   "definition": "a model for classification (despite its name) that outputs a probability for each class; the book's Chapter 4 covers it.",
+   "lesson": 3
+  },
+  {
+   "term": "SVC",
+   "match": [
+    "\\bSVC\\b"
+   ],
+   "exclude": [
+    "\\bLinearSVC\\b"
+   ],
+   "definition": "Scikit-Learn's general SVM classifier: slower than LinearSVC, but it supports kernels.",
+   "lesson": 2
+  },
+  {
+   "term": "calibrated",
+   "match": [
+    "\\bcalibrat(ed|ion|e)\\b"
+   ],
+   "exclude": [],
+   "definition": "said of probabilities that can be taken at face value: among rows given 80%, about 80% really are that class.",
+   "lesson": 3
+  },
+  {
+   "term": "binary classification",
+   "match": [
+    "\\bbinary problem\\b",
+    "\\bbinary classif\\w+\\b"
+   ],
+   "exclude": [],
+   "definition": "classification with only two classes, e.g. virginica or not.",
+   "lesson": 3
+  },
+  {
+   "term": "polynomial features",
+   "match": [
+    "\\bpolynomial features\\b",
+    "\\bPolynomialFeatures\\b"
+   ],
+   "exclude": [],
+   "definition": "extra columns made from the existing ones by squaring, cubing and multiplying them together (x1², x1·x2, x2³, ...).",
+   "lesson": 4
+  },
+  {
+   "term": "degree",
+   "match": [
+    "\\bdegrees?\\b"
+   ],
+   "exclude": [
+    "\\b45 degrees\\b"
+   ],
+   "definition": "the highest power used when making polynomial features: degree 3 goes up to cubes like x1³ and x1²·x2.",
+   "lesson": 4
+  },
+  {
+   "term": "moons dataset",
+   "match": [
+    "\\bmoons\\b",
+    "\\bmake_moons\\b"
+   ],
+   "exclude": [],
+   "definition": "a made-up two-feature dataset from Scikit-Learn's `make_moons()`: two interlocking crescent shapes, one per class, with some random scatter (noise).",
+   "lesson": 4
+  },
+  {
+   "term": "kernel trick",
+   "match": [
+    "\\bkernel trick\\b"
+   ],
+   "exclude": [],
+   "definition": "a way to get exactly the model you would get by adding many extra features, without ever building those features. b09 shows why it works.",
+   "lesson": 4
+  },
+  {
+   "term": "polynomial kernel",
+   "match": [
+    "\\bpolynomial kernel\\b",
+    "\\bkernel=.poly.\\b"
+   ],
+   "exclude": [],
+   "definition": "an SVM kernel that behaves as if polynomial features up to a chosen degree had been added.",
+   "lesson": 4
+  },
+  {
+   "term": "coef0",
+   "match": [
+    "\\bcoef0\\b"
+   ],
+   "exclude": [],
+   "definition": "a setting of the polynomial kernel: how much the high-degree terms count compared with the low-degree ones.",
+   "lesson": 4
+  },
+  {
+   "term": "combinatorial explosion",
+   "match": [
+    "\\bcombinatorial explosion\\b",
+    "\\bexplodes\\b"
+   ],
+   "exclude": [],
+   "definition": "the number of combinations growing so fast that it quickly becomes unmanageable.",
+   "lesson": 4
+  },
+  {
+   "term": "landmark",
+   "match": [
+    "\\blandmarks?\\b"
+   ],
+   "exclude": [],
+   "definition": "a chosen reference point; each row gets a new feature saying how similar it is to that point.",
+   "lesson": 5
+  },
+  {
+   "term": "similarity function",
+   "match": [
+    "\\bsimilarity function\\b",
+    "\\bsimilarity\\b"
+   ],
+   "exclude": [],
+   "definition": "a formula that turns \"how far is this row from that point\" into a score, highest when they coincide.",
+   "lesson": 4
+  },
+  {
+   "term": "gamma",
+   "match": [
+    "\\bgamma\\b",
+    "γ"
+   ],
+   "exclude": [],
+   "definition": "the setting of the Gaussian RBF (and other kernels) that sets how quickly similarity falls off with distance: large gamma = a narrow bell, each row's influence stays close to it.",
+   "lesson": 4
+  },
+  {
+   "term": "liblinear and libsvm",
+   "match": [
+    "\\bliblinear\\b",
+    "\\blibsvm\\b"
+   ],
+   "exclude": [],
+   "definition": "two free programming libraries written in C: LinearSVC runs on liblinear, SVC on libsvm.",
+   "lesson": 6
+  },
+  {
+   "term": "computational complexity",
+   "match": [
+    "\\bcomplexity\\b",
+    "\\bO\\("
+   ],
+   "exclude": [
+    "\\bcontrol complexity\\b"
+   ],
+   "definition": "how the training time grows as the data grows. \"O(m × n)\" reads \"roughly proportional to m times n\", where m is the number of rows and n the number of features.",
+   "lesson": 6
+  },
+  {
+   "term": "SGDClassifier",
+   "match": [
+    "\\bSGDClassifier\\b",
+    "\\bSGD\\b"
+   ],
+   "exclude": [],
+   "definition": "Scikit-Learn's classifier trained by stochastic gradient descent; with the right settings it behaves like a linear SVM.",
+   "lesson": 6
+  },
+  {
+   "term": "stochastic gradient descent",
+   "match": [
+    "\\bstochastic gradient descent\\b",
+    "\\bgradient descent\\b"
+   ],
+   "exclude": [],
+   "definition": "training by many small steps, each one nudging the model's numbers to lower the error on one small batch of rows (\"stochastic\" = the batches are picked at random).",
+   "lesson": 6
+  },
+  {
+   "term": "mini-batch",
+   "match": [
+    "\\bmini-?batch(es)?\\b"
+   ],
+   "exclude": [],
+   "definition": "a small group of rows used for one training step.",
+   "lesson": 6
+  },
+  {
+   "term": "out-of-core learning",
+   "match": [
+    "\\bout-of-core\\b"
+   ],
+   "exclude": [],
+   "definition": "training on data too big for memory, by reading and learning from it one chunk at a time.",
+   "lesson": 6
+  },
+  {
+   "term": "sparse",
+   "match": [
+    "\\bsparse\\b"
+   ],
+   "exclude": [],
+   "definition": "mostly zeros: a sparse row has only a few non-zero values.",
+   "lesson": 6
+  },
+  {
+   "term": "SVM regression",
+   "match": [
+    "\\bSVM regression\\b",
+    "\\bSVR\\b",
+    "\\bLinearSVR\\b"
+   ],
+   "exclude": [],
+   "definition": "using the SVM street for regression: fit as many rows as possible INSIDE a street of fixed width, and predict the centre line. LinearSVR and SVR are the Scikit-Learn classes.",
+   "lesson": 7
+  },
+  {
+   "term": "epsilon",
+   "match": [
+    "\\bepsilon\\b",
+    "ε"
+   ],
+   "exclude": [
+    "\\bepsilon-insensitiv\\w+"
+   ],
+   "definition": "the SVM-regression setting that fixes the street's half-width: rows closer than epsilon to the prediction count as no error at all.",
+   "lesson": 7
+  },
+  {
+   "term": "epsilon-insensitive",
+   "match": [
+    "\\bepsilon-insensitiv\\w+"
+   ],
+   "exclude": [],
+   "definition": "an SVM-regression property: rows already inside the street have no effect at all on the fitted model.",
+   "lesson": 7
+  },
+  {
+   "term": "weight vector",
+   "match": [
+    "\\bweight vector\\b"
+   ],
+   "exclude": [],
+   "definition": "w: one number per feature that the model multiplies each feature by before adding them up.",
+   "lesson": 8
+  },
+  {
+   "term": "bias term",
+   "match": [
+    "\\bbias\\b"
+   ],
+   "exclude": [],
+   "definition": "b: one extra number added after the weighted sum. It shifts the boundary without tilting it. (In later chapters \"bias\" also names a kind of error; here it is only this number.)",
+   "lesson": 8
+  },
+  {
+   "term": "objective",
+   "match": [
+    "\\bobjectives?\\b"
+   ],
+   "exclude": [],
+   "definition": "what training is told to make as small (or as large) as possible.",
+   "lesson": 1
+  },
+  {
+   "term": "constraint",
+   "match": [
+    "\\bconstraints?\\b",
+    "\\bsubject to\\b"
+   ],
+   "exclude": [],
+   "definition": "a condition every answer must satisfy, written after \"subject to\" in an optimization problem.",
+   "lesson": 2
+  },
+  {
+   "term": "differentiable",
+   "match": [
+    "\\bdifferentiable\\b",
+    "\\bderivatives?\\b"
+   ],
+   "exclude": [],
+   "definition": "a function is differentiable where it has a clear slope (its derivative); solvers follow the slope downhill.",
+   "lesson": 8
+  },
+  {
+   "term": "slack variable",
+   "match": [
+    "\\bslack\\b"
+   ],
+   "exclude": [],
+   "definition": "ζ (zeta), one per training row: how far that row is allowed onto the street or past it.",
+   "lesson": 8
+  },
+  {
+   "term": "quadratic programming",
+   "match": [
+    "\\bquadratic programm\\w+\\b",
+    "\\bQP\\b"
+   ],
+   "exclude": [],
+   "definition": "a standard kind of optimization problem (a squared objective with straight-line constraints) that off-the-shelf solvers can solve exactly.",
+   "lesson": 8
+  },
+  {
+   "term": "convex",
+   "match": [
+    "\\bconvex\\b"
+   ],
+   "exclude": [],
+   "definition": "bowl-shaped: the function has a single lowest point, so going downhill always reaches it.",
+   "lesson": 8
+  },
+  {
+   "term": "hinge loss",
+   "match": [
+    "\\bhinge\\b"
+   ],
+   "exclude": [],
+   "definition": "the SVM's error for one row: 0 when the row is on its correct side and off the street, growing in a straight line the further it strays.",
+   "lesson": 8
+  },
+  {
+   "term": "loss",
+   "match": [
+    "\\bloss\\b"
+   ],
+   "exclude": [
+    "\\bhinge loss\\b"
+   ],
+   "definition": "the error score training adds up over the rows and tries to make small.",
+   "lesson": 7
+  },
+  {
+   "term": "primal problem",
+   "match": [
+    "\\bprimal\\b"
+   ],
+   "exclude": [],
+   "definition": "the training problem written in terms of w and b (one number per feature, plus one).",
+   "lesson": 9
+  },
+  {
+   "term": "dual problem",
+   "match": [
+    "\\bdual\\b"
+   ],
+   "exclude": [
+    "\\bDual Coordinate\\b"
+   ],
+   "definition": "the same training problem rewritten with one number α (alpha) per training row; it touches the rows only through dot products between pairs of rows.",
+   "lesson": 9
+  },
+  {
+   "term": "dot product",
+   "match": [
+    "\\bdot products?\\b"
+   ],
+   "exclude": [],
+   "definition": "multiply two rows column by column and add the results: (3, 2)·(1, 4) = 3×1 + 2×4 = 11.",
+   "lesson": 4
+  },
+  {
+   "term": "transpose",
+   "match": [
+    "ᵀ",
+    "\\btranspose\\b",
+    "\\\\intercal"
+   ],
+   "exclude": [],
+   "definition": "the little ᵀ in wᵀx: it turns a column of numbers into a row, so wᵀx is just the dot product of w and x.",
+   "lesson": 8
+  },
+  {
+   "term": "phi (mapping)",
+   "match": [
+    "\\bphi\\b",
+    "φ"
+   ],
+   "exclude": [],
+   "definition": "φ(x): the transformation that turns a row into its bigger version with extra features, e.g. (x1, x2) → (x1², √2·x1·x2, x2²).",
+   "lesson": 9
+  },
+  {
+   "term": "Mercer's theorem",
+   "match": [
+    "\\bMercer"
+   ],
+   "exclude": [],
+   "definition": "a mathematics result: if a kernel K meets a few conditions (such as K(a, b) = K(b, a)), a matching transformation φ is guaranteed to exist.",
+   "lesson": 9
+  },
+  {
+   "term": "sigmoid kernel",
+   "match": [
+    "\\bsigmoid\\b"
+   ],
+   "exclude": [],
+   "definition": "a kernel built from an S-shaped curve; rarely useful.",
+   "lesson": 9
+  },
+  {
+   "term": "infinite-dimensional",
+   "match": [
+    "\\binfinite[- ]dimensional\\b"
+   ],
+   "exclude": [],
+   "definition": "having infinitely many columns; the Gaussian RBF's φ turns each row into such a vector, which is why it can never be built.",
+   "lesson": 9
+  },
+  {
+   "term": "alpha (regularization strength)",
+   "match": [
+    "\\balpha\\b"
+   ],
+   "exclude": [],
+   "definition": "the strength setting of several regularized models from the book's Chapter 4: a bigger alpha means MORE regularization, the opposite direction to C.",
+   "lesson": 3
+  },
+  {
+   "term": "α (dual variable)",
+   "match": [
+    "α"
+   ],
+   "exclude": [],
+   "definition": "(alpha) the number the dual problem learns for each training row: 0 for most rows, positive only for the support vectors. Not the same thing as the regularization setting alpha.",
+   "lesson": 9
+  },
+  {
+   "term": "ridge and lasso",
+   "match": [
+    "\\bridge\\b",
+    "\\blasso\\b"
+   ],
+   "exclude": [],
+   "definition": "two regularized versions of linear regression from the book's Chapter 4; their strength setting is also called alpha.",
+   "lesson": 9
+  },
+  {
+   "term": "incremental learning",
+   "match": [
+    "\\bincremental\\b"
+   ],
+   "exclude": [
+    "\\bincremental pipelines\\b",
+    "\\bworks incrementally\\b"
+   ],
+   "definition": "updating a trained model with new rows without retraining it from scratch.",
+   "lesson": 9
+  },
+  {
+   "term": "one-versus-all",
+   "match": [
+    "\\bone-versus-all\\b",
+    "\\bone-vs-(all|rest)\\b"
+   ],
+   "exclude": [],
+   "definition": "turning a problem with several classes into several yes/no problems (\"this class, or not?\"), one model each, and picking the most confident.",
+   "lesson": 10
+  },
+  {
+   "term": "wine dataset",
+   "match": [
+    "\\bwine\\b"
+   ],
+   "exclude": [],
+   "definition": "a small table in Scikit-Learn: chemical measurements of 178 wines from 3 growers.",
+   "lesson": 10
+  }
+ ]
+}

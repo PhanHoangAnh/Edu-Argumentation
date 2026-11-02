@@ -1,0 +1,4 @@
+/* Tailwind BUILD entry (ruling R8 — never the CDN). Same three layers as app/frontend. */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;

@@ -3,8 +3,42 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Edu-Argumentation Platform</title>
-    <script src="https://cdn.tailwindcss.com?plugins=typography"></script>
+    <title>Platform</title>
+    <link rel="icon" type="image/svg+xml" href="favicon.svg">
+    <link rel="mask-icon" href="favicon.svg" color="#ef5b5b">
+    <!-- ==================================================================
+         TAILWIND: BUILT, NOT CDN.  edu-replatform Phase 03 slice C (ruling R8).
+
+         This <style> block is GENERATED. Do not hand-edit it. Regenerate with:
+
+           cd ml/study/Edu-Argumentation/aws-quiz-app
+           ../tools/tailwind/node_modules/.bin/tailwindcss \
+             -c ./tailwind.config.js -i ../tools/tailwind/input.css \
+             -o ../tools/tailwind/out/app.css --minify
+           # then re-inline it here (the app-specific <style> below is hand-written)
+
+         WHY IT IS INLINE RATHER THAN A LINKED FILE: the carve-out from the
+         aws-quiz-app/** freeze is EXACTLY THREE FILES (index.html, js/app.js,
+         tailwind.config.js). A linked css/app.css would be a fourth path in a frozen
+         tree and a generated artifact sitting in the deploy tree with no generator
+         beside it. Inlining keeps the change to one file and removes a request.
+
+         WHY IT SITS EXACTLY HERE: the CDN <script> occupied this line, so its runtime
+         styles entered the cascade at this point. The hand-written <style> further down
+         overrides Tailwind base on purpose (body background, scrollbar, .hero-bg, the
+         @media print block). Moving this block below that one silently reverses those
+         overrides.
+
+         The brand-* palette that used to live in the inline tailwind.config <script>
+         immediately below is now in aws-quiz-app/tailwind.config.js.
+
+         KaTeX and marked.js REMAIN on the CDN in Phase 03 — only Tailwind drops.
+         Offline KaTeX is a Phase 05 item.
+         ================================================================== -->
+    <style>
+*,:after,:before{--tw-border-spacing-x:0;--tw-border-spacing-y:0;--tw-translate-x:0;--tw-translate-y:0;--tw-rotate:0;--tw-skew-x:0;--tw-skew-y:0;--tw-scale-x:1;--tw-scale-y:1;--tw-pan-x: ;--tw-pan-y: ;--tw-pinch-zoom: ;--tw-scroll-snap-strictness:proximity;--tw-gradient-from-position: ;--tw-gradient-via-position: ;--tw-gradient-to-position: ;--tw-ordinal: ;--tw-slashed-zero: ;--tw-numeric-figure: ;--tw-numeric-spacing: ;--tw-numeric-fraction: ;--tw-ring-inset: ;--tw-ring-offset-width:0px;--tw-ring-offset-color:#fff;--tw-ring-color:rgba(59,130,246,.5);--tw-ring-offset-shadow:0 0 #0000;--tw-ring-shadow:0 0 #0000;--tw-shadow:0 0 #0000;--tw-shadow-colored:0 0 #0000;--tw-blur: ;--tw-brightness: ;--tw-contrast: ;--tw-grayscale: ;--tw-hue-rotate: ;--tw-invert: ;--tw-saturate: ;--tw-sepia: ;--tw-drop-shadow: ;--tw-backdrop-blur: ;--tw-backdrop-brightness: ;--tw-backdrop-contrast: ;--tw-backdrop-grayscale: ;--tw-backdrop-hue-rotate: ;--tw-backdrop-invert: ;--tw-backdrop-opacity: ;--tw-backdrop-saturate: ;--tw-backdrop-sepia: ;--tw-contain-size: ;--tw-contain-layout: ;--tw-contain-paint: ;--tw-contain-style: }::backdrop{--tw-border-spacing-x:0;--tw-border-spacing-y:0;--tw-translate-x:0;--tw-translate-y:0;--tw-rotate:0;--tw-skew-x:0;--tw-skew-y:0;--tw-scale-x:1;--tw-scale-y:1;--tw-pan-x: ;--tw-pan-y: ;--tw-pinch-zoom: ;--tw-scroll-snap-strictness:proximity;--tw-gradient-from-position: ;--tw-gradient-via-position: ;--tw-gradient-to-position: ;--tw-ordinal: ;--tw-slashed-zero: ;--tw-numeric-figure: ;--tw-numeric-spacing: ;--tw-numeric-fraction: ;--tw-ring-inset: ;--tw-ring-offset-width:0px;--tw-ring-offset-color:#fff;--tw-ring-color:rgba(59,130,246,.5);--tw-ring-offset-shadow:0 0 #0000;--tw-ring-shadow:0 0 #0000;--tw-shadow:0 0 #0000;--tw-shadow-colored:0 0 #0000;--tw-blur: ;--tw-brightness: ;--tw-contrast: ;--tw-grayscale: ;--tw-hue-rotate: ;--tw-invert: ;--tw-saturate: ;--tw-sepia: ;--tw-drop-shadow: ;--tw-backdrop-blur: ;--tw-backdrop-brightness: ;--tw-backdrop-contrast: ;--tw-backdrop-grayscale: ;--tw-backdrop-hue-rotate: ;--tw-backdrop-invert: ;--tw-backdrop-opacity: ;--tw-backdrop-saturate: ;--tw-backdrop-sepia: ;--tw-contain-size: ;--tw-contain-layout: ;--tw-contain-paint: ;--tw-contain-style: }
+/*! tailwindcss v3.4.19 | MIT License | https://tailwindcss.com*/*,:after,:before{box-sizing:border-box;border:0 solid #e5e7eb}:after,:before{--tw-content:""}:host,html{line-height:1.5;-webkit-text-size-adjust:100%;-moz-tab-size:4;-o-tab-size:4;tab-size:4;font-family:Plus Jakarta Sans,sans-serif;font-feature-settings:normal;font-variation-settings:normal;-webkit-tap-highlight-color:transparent}body{margin:0;line-height:inherit}hr{height:0;color:inherit;border-top-width:1px}abbr:where([title]){-webkit-text-decoration:underline dotted;text-decoration:underline dotted}h1,h2,h3,h4,h5,h6{font-size:inherit;font-weight:inherit}a{color:inherit;text-decoration:inherit}b,strong{font-weight:bolder}code,kbd,pre,samp{font-family:ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,Liberation Mono,Courier New,monospace;font-feature-settings:normal;font-variation-settings:normal;font-size:1em}small{font-size:80%}sub,sup{font-size:75%;line-height:0;position:relative;vertical-align:baseline}sub{bottom:-.25em}sup{top:-.5em}table{text-indent:0;border-color:inherit;border-collapse:collapse}button,input,optgroup,select,textarea{font-family:inherit;font-feature-settings:inherit;font-variation-settings:inherit;font-size:100%;font-weight:inherit;line-height:inherit;letter-spacing:inherit;color:inherit;margin:0;padding:0}button,select{text-transform:none}button,input:where([type=button]),input:where([type=reset]),input:where([type=submit]){-webkit-appearance:button;background-color:transparent;background-image:none}:-moz-focusring{outline:auto}:-moz-ui-invalid{box-shadow:none}progress{vertical-align:baseline}::-webkit-inner-spin-button,::-webkit-outer-spin-button{height:auto}[type=search]{-webkit-appearance:textfield;outline-offset:-2px}::-webkit-search-decoration{-webkit-appearance:none}::-webkit-file-upload-button{-webkit-appearance:button;font:inherit}summary{display:list-item}blockquote,dd,dl,figure,h1,h2,h3,h4,h5,h6,hr,p,pre{margin:0}fieldset{margin:0}fieldset,legend{padding:0}menu,ol,ul{list-style:none;margin:0;padding:0}dialog{padding:0}textarea{resize:vertical}input::-moz-placeholder,textarea::-moz-placeholder{opacity:1;color:#9ca3af}input::placeholder,textarea::placeholder{opacity:1;color:#9ca3af}[role=button],button{cursor:pointer}:disabled{cursor:default}audio,canvas,embed,iframe,img,object,svg,video{display:block;vertical-align:middle}img,video{max-width:100%;height:auto}[hidden]:where(:not([hidden=until-found])){display:none}.container{width:100%}@media (min-width:640px){.container{max-width:640px}}@media (min-width:768px){.container{max-width:768px}}@media (min-width:1024px){.container{max-width:1024px}}@media (min-width:1280px){.container{max-width:1280px}}@media (min-width:1536px){.container{max-width:1536px}}.prose{color:var(--tw-prose-body);max-width:65ch}.prose :where(p):not(:where([class~=not-prose],[class~=not-prose] *)){margin-top:1.25em;margin-bottom:1.25em}.prose :where([class~=lead]):not(:where([class~=not-prose],[class~=not-prose] *)){color:var(--tw-prose-lead);font-size:1.25em;line-height:1.6;margin-top:1.2em;margin-bottom:1.2em}.prose :where(a):not(:where([class~=not-prose],[class~=not-prose] *)){color:var(--tw-prose-links);text-decoration:underline;font-weight:500}.prose :where(strong):not(:where([class~=not-prose],[class~=not-prose] *)){color:var(--tw-prose-bold);font-weight:600}.prose :where(a strong):not(:where([class~=not-prose],[class~=not-prose] *)){color:inherit}.prose :where(blockquote strong):not(:where([class~=not-prose],[class~=not-prose] *)){color:inherit}.prose :where(thead th strong):not(:where([class~=not-prose],[class~=not-prose] *)){color:inherit}.prose :where(ol):not(:where([class~=not-prose],[class~=not-prose] *)){list-style-type:decimal;margin-top:1.25em;margin-bottom:1.25em;padding-inline-start:1.625em}.prose :where(ol[type=A]):not(:where([class~=not-prose],[class~=not-prose] *)){list-style-type:upper-alpha}.prose :where(ol[type=a]):not(:where([class~=not-prose],[class~=not-prose] *)){list-style-type:lower-alpha}.prose :where(ol[type=A s]):not(:where([class~=not-prose],[class~=not-prose] *)){list-style-type:upper-alpha}.prose :where(ol[type=a s]):not(:where([class~=not-prose],[class~=not-prose] *)){list-style-type:lower-alpha}.prose :where(ol[type=I]):not(:where([class~=not-prose],[class~=not-prose] *)){list-style-type:upper-roman}.prose :where(ol[type=i]):not(:where([class~=not-prose],[class~=not-prose] *)){list-style-type:lower-roman}.prose :where(ol[type=I s]):not(:where([class~=not-prose],[class~=not-prose] *)){list-style-type:upper-roman}.prose :where(ol[type=i s]):not(:where([class~=not-prose],[class~=not-prose] *)){list-style-type:lower-roman}.prose :where(ol[type="1"]):not(:where([class~=not-prose],[class~=not-prose] *)){list-style-type:decimal}.prose :where(ul):not(:where([class~=not-prose],[class~=not-prose] *)){list-style-type:disc;margin-top:1.25em;margin-bottom:1.25em;padding-inline-start:1.625em}.prose :where(ol>li):not(:where([class~=not-prose],[class~=not-prose] *))::marker{font-weight:400;color:var(--tw-prose-counters)}.prose :where(ul>li):not(:where([class~=not-prose],[class~=not-prose] *))::marker{color:var(--tw-prose-bullets)}.prose :where(dt):not(:where([class~=not-prose],[class~=not-prose] *)){color:var(--tw-prose-headings);font-weight:600;margin-top:1.25em}.prose :where(hr):not(:where([class~=not-prose],[class~=not-prose] *)){border-color:var(--tw-prose-hr);border-top-width:1px;margin-top:3em;margin-bottom:3em}.prose :where(blockquote):not(:where([class~=not-prose],[class~=not-prose] *)){font-weight:500;font-style:italic;color:var(--tw-prose-quotes);border-inline-start-width:.25rem;border-inline-start-color:var(--tw-prose-quote-borders);quotes:"\201C""\201D""\2018""\2019";margin-top:1.6em;margin-bottom:1.6em;padding-inline-start:1em}.prose :where(blockquote p:first-of-type):not(:where([class~=not-prose],[class~=not-prose] *)):before{content:open-quote}.prose :where(blockquote p:last-of-type):not(:where([class~=not-prose],[class~=not-prose] *)):after{content:close-quote}.prose :where(h1):not(:where([class~=not-prose],[class~=not-prose] *)){color:var(--tw-prose-headings);font-weight:800;font-size:2.25em;margin-top:0;margin-bottom:.8888889em;line-height:1.1111111}.prose :where(h1 strong):not(:where([class~=not-prose],[class~=not-prose] *)){font-weight:900;color:inherit}.prose :where(h2):not(:where([class~=not-prose],[class~=not-prose] *)){color:var(--tw-prose-headings);font-weight:700;font-size:1.5em;margin-top:2em;margin-bottom:1em;line-height:1.3333333}.prose :where(h2 strong):not(:where([class~=not-prose],[class~=not-prose] *)){font-weight:800;color:inherit}.prose :where(h3):not(:where([class~=not-prose],[class~=not-prose] *)){color:var(--tw-prose-headings);font-weight:600;font-size:1.25em;margin-top:1.6em;margin-bottom:.6em;line-height:1.6}.prose :where(h3 strong):not(:where([class~=not-prose],[class~=not-prose] *)){font-weight:700;color:inherit}.prose :where(h4):not(:where([class~=not-prose],[class~=not-prose] *)){color:var(--tw-prose-headings);font-weight:600;margin-top:1.5em;margin-bottom:.5em;line-height:1.5}.prose :where(h4 strong):not(:where([class~=not-prose],[class~=not-prose] *)){font-weight:700;color:inherit}.prose :where(img):not(:where([class~=not-prose],[class~=not-prose] *)){margin-top:2em;margin-bottom:2em}.prose :where(picture):not(:where([class~=not-prose],[class~=not-prose] *)){display:block;margin-top:2em;margin-bottom:2em}.prose :where(video):not(:where([class~=not-prose],[class~=not-prose] *)){margin-top:2em;margin-bottom:2em}.prose :where(kbd):not(:where([class~=not-prose],[class~=not-prose] *)){font-weight:500;font-family:inherit;color:var(--tw-prose-kbd);box-shadow:0 0 0 1px var(--tw-prose-kbd-shadows),0 3px 0 var(--tw-prose-kbd-shadows);font-size:.875em;border-radius:.3125rem;padding-top:.1875em;padding-inline-end:.375em;padding-bottom:.1875em;padding-inline-start:.375em}.prose :where(code):not(:where([class~=not-prose],[class~=not-prose] *)){color:var(--tw-prose-code);font-weight:600;font-size:.875em}.prose :where(code):not(:where([class~=not-prose],[class~=not-prose] *)):before{content:"`"}.prose :where(code):not(:where([class~=not-prose],[class~=not-prose] *)):after{content:"`"}.prose :where(a code):not(:where([class~=not-prose],[class~=not-prose] *)){color:inherit}.prose :where(h1 code):not(:where([class~=not-prose],[class~=not-prose] *)){color:inherit}.prose :where(h2 code):not(:where([class~=not-prose],[class~=not-prose] *)){color:inherit;font-size:.875em}.prose :where(h3 code):not(:where([class~=not-prose],[class~=not-prose] *)){color:inherit;font-size:.9em}.prose :where(h4 code):not(:where([class~=not-prose],[class~=not-prose] *)){color:inherit}.prose :where(blockquote code):not(:where([class~=not-prose],[class~=not-prose] *)){color:inherit}.prose :where(thead th code):not(:where([class~=not-prose],[class~=not-prose] *)){color:inherit}.prose :where(pre):not(:where([class~=not-prose],[class~=not-prose] *)){color:var(--tw-prose-pre-code);background-color:var(--tw-prose-pre-bg);overflow-x:auto;font-weight:400;font-size:.875em;line-height:1.7142857;margin-top:1.7142857em;margin-bottom:1.7142857em;border-radius:.375rem;padding-top:.8571429em;padding-inline-end:1.1428571em;padding-bottom:.8571429em;padding-inline-start:1.1428571em}.prose :where(pre code):not(:where([class~=not-prose],[class~=not-prose] *)){background-color:transparent;border-width:0;border-radius:0;padding:0;font-weight:inherit;color:inherit;font-size:inherit;font-family:inherit;line-height:inherit}.prose :where(pre code):not(:where([class~=not-prose],[class~=not-prose] *)):before{content:none}.prose :where(pre code):not(:where([class~=not-prose],[class~=not-prose] *)):after{content:none}.prose :where(table):not(:where([class~=not-prose],[class~=not-prose] *)){width:100%;table-layout:auto;margin-top:2em;margin-bottom:2em;font-size:.875em;line-height:1.7142857}.prose :where(thead):not(:where([class~=not-prose],[class~=not-prose] *)){border-bottom-width:1px;border-bottom-color:var(--tw-prose-th-borders)}.prose :where(thead th):not(:where([class~=not-prose],[class~=not-prose] *)){color:var(--tw-prose-headings);font-weight:600;vertical-align:bottom;padding-inline-end:.5714286em;padding-bottom:.5714286em;padding-inline-start:.5714286em}.prose :where(tbody tr):not(:where([class~=not-prose],[class~=not-prose] *)){border-bottom-width:1px;border-bottom-color:var(--tw-prose-td-borders)}.prose :where(tbody tr:last-child):not(:where([class~=not-prose],[class~=not-prose] *)){border-bottom-width:0}.prose :where(tbody td):not(:where([class~=not-prose],[class~=not-prose] *)){vertical-align:baseline}.prose :where(tfoot):not(:where([class~=not-prose],[class~=not-prose] *)){border-top-width:1px;border-top-color:var(--tw-prose-th-borders)}.prose :where(tfoot td):not(:where([class~=not-prose],[class~=not-prose] *)){vertical-align:top}.prose :where(th,td):not(:where([class~=not-prose],[class~=not-prose] *)){text-align:start}.prose :where(figure>*):not(:where([class~=not-prose],[class~=not-prose] *)){margin-top:0;margin-bottom:0}.prose :where(figcaption):not(:where([class~=not-prose],[class~=not-prose] *)){color:var(--tw-prose-captions);font-size:.875em;line-height:1.4285714;margin-top:.8571429em}.prose{--tw-prose-body:#374151;--tw-prose-headings:#111827;--tw-prose-lead:#4b5563;--tw-prose-links:#111827;--tw-prose-bold:#111827;--tw-prose-counters:#6b7280;--tw-prose-bullets:#d1d5db;--tw-prose-hr:#e5e7eb;--tw-prose-quotes:#111827;--tw-prose-quote-borders:#e5e7eb;--tw-prose-captions:#6b7280;--tw-prose-kbd:#111827;--tw-prose-kbd-shadows:rgba(17,24,39,.1);--tw-prose-code:#111827;--tw-prose-pre-code:#e5e7eb;--tw-prose-pre-bg:#1f2937;--tw-prose-th-borders:#d1d5db;--tw-prose-td-borders:#e5e7eb;--tw-prose-invert-body:#d1d5db;--tw-prose-invert-headings:#fff;--tw-prose-invert-lead:#9ca3af;--tw-prose-invert-links:#fff;--tw-prose-invert-bold:#fff;--tw-prose-invert-counters:#9ca3af;--tw-prose-invert-bullets:#4b5563;--tw-prose-invert-hr:#374151;--tw-prose-invert-quotes:#f3f4f6;--tw-prose-invert-quote-borders:#374151;--tw-prose-invert-captions:#9ca3af;--tw-prose-invert-kbd:#fff;--tw-prose-invert-kbd-shadows:hsla(0,0%,100%,.1);--tw-prose-invert-code:#fff;--tw-prose-invert-pre-code:#d1d5db;--tw-prose-invert-pre-bg:rgba(0,0,0,.5);--tw-prose-invert-th-borders:#4b5563;--tw-prose-invert-td-borders:#374151;font-size:1rem;line-height:1.75}.prose :where(picture>img):not(:where([class~=not-prose],[class~=not-prose] *)){margin-top:0;margin-bottom:0}.prose :where(li):not(:where([class~=not-prose],[class~=not-prose] *)){margin-top:.5em;margin-bottom:.5em}.prose :where(ol>li):not(:where([class~=not-prose],[class~=not-prose] *)){padding-inline-start:.375em}.prose :where(ul>li):not(:where([class~=not-prose],[class~=not-prose] *)){padding-inline-start:.375em}.prose :where(.prose>ul>li p):not(:where([class~=not-prose],[class~=not-prose] *)){margin-top:.75em;margin-bottom:.75em}.prose :where(.prose>ul>li>p:first-child):not(:where([class~=not-prose],[class~=not-prose] *)){margin-top:1.25em}.prose :where(.prose>ul>li>p:last-child):not(:where([class~=not-prose],[class~=not-prose] *)){margin-bottom:1.25em}.prose :where(.prose>ol>li>p:first-child):not(:where([class~=not-prose],[class~=not-prose] *)){margin-top:1.25em}.prose :where(.prose>ol>li>p:last-child):not(:where([class~=not-prose],[class~=not-prose] *)){margin-bottom:1.25em}.prose :where(ul ul,ul ol,ol ul,ol ol):not(:where([class~=not-prose],[class~=not-prose] *)){margin-top:.75em;margin-bottom:.75em}.prose :where(dl):not(:where([class~=not-prose],[class~=not-prose] *)){margin-top:1.25em;margin-bottom:1.25em}.prose :where(dd):not(:where([class~=not-prose],[class~=not-prose] *)){margin-top:.5em;padding-inline-start:1.625em}.prose :where(hr+*):not(:where([class~=not-prose],[class~=not-prose] *)){margin-top:0}.prose :where(h2+*):not(:where([class~=not-prose],[class~=not-prose] *)){margin-top:0}.prose :where(h3+*):not(:where([class~=not-prose],[class~=not-prose] *)){margin-top:0}.prose :where(h4+*):not(:where([class~=not-prose],[class~=not-prose] *)){margin-top:0}.prose :where(thead th:first-child):not(:where([class~=not-prose],[class~=not-prose] *)){padding-inline-start:0}.prose :where(thead th:last-child):not(:where([class~=not-prose],[class~=not-prose] *)){padding-inline-end:0}.prose :where(tbody td,tfoot td):not(:where([class~=not-prose],[class~=not-prose] *)){padding-top:.5714286em;padding-inline-end:.5714286em;padding-bottom:.5714286em;padding-inline-start:.5714286em}.prose :where(tbody td:first-child,tfoot td:first-child):not(:where([class~=not-prose],[class~=not-prose] *)){padding-inline-start:0}.prose :where(tbody td:last-child,tfoot td:last-child):not(:where([class~=not-prose],[class~=not-prose] *)){padding-inline-end:0}.prose :where(figure):not(:where([class~=not-prose],[class~=not-prose] *)){margin-top:2em;margin-bottom:2em}.prose :where(.prose>:first-child):not(:where([class~=not-prose],[class~=not-prose] *)){margin-top:0}.prose :where(.prose>:last-child):not(:where([class~=not-prose],[class~=not-prose] *)){margin-bottom:0}.prose-invert{--tw-prose-body:var(--tw-prose-invert-body);--tw-prose-headings:var(--tw-prose-invert-headings);--tw-prose-lead:var(--tw-prose-invert-lead);--tw-prose-links:var(--tw-prose-invert-links);--tw-prose-bold:var(--tw-prose-invert-bold);--tw-prose-counters:var(--tw-prose-invert-counters);--tw-prose-bullets:var(--tw-prose-invert-bullets);--tw-prose-hr:var(--tw-prose-invert-hr);--tw-prose-quotes:var(--tw-prose-invert-quotes);--tw-prose-quote-borders:var(--tw-prose-invert-quote-borders);--tw-prose-captions:var(--tw-prose-invert-captions);--tw-prose-kbd:var(--tw-prose-invert-kbd);--tw-prose-kbd-shadows:var(--tw-prose-invert-kbd-shadows);--tw-prose-code:var(--tw-prose-invert-code);--tw-prose-pre-code:var(--tw-prose-invert-pre-code);--tw-prose-pre-bg:var(--tw-prose-invert-pre-bg);--tw-prose-th-borders:var(--tw-prose-invert-th-borders);--tw-prose-td-borders:var(--tw-prose-invert-td-borders)}.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border-width:0}.visible{visibility:visible}.collapse{visibility:collapse}.static{position:static}.fixed{position:fixed}.absolute{position:absolute}.relative{position:relative}.sticky{position:sticky}.inset-0{inset:0}.inset-x-0{left:0;right:0}.inset-y-0{top:0;bottom:0}.bottom-0{bottom:0}.bottom-1{bottom:.25rem}.bottom-1\.5{bottom:.375rem}.bottom-24{bottom:6rem}.bottom-6{bottom:1.5rem}.left-0{left:0}.right-0{right:0}.right-4{right:1rem}.right-6{right:1.5rem}.top-0{top:0}.top-full{top:100%}.z-10{z-index:10}.z-40{z-index:40}.z-50{z-index:50}.z-\[60\]{z-index:60}.m-0{margin:0}.mx-auto{margin-left:auto;margin-right:auto}.my-6{margin-top:1.5rem;margin-bottom:1.5rem}.my-8{margin-top:2rem;margin-bottom:2rem}.-mr-2{margin-right:-.5rem}.-mt-1{margin-top:-.25rem}.mb-1{margin-bottom:.25rem}.mb-10{margin-bottom:2.5rem}.mb-12{margin-bottom:3rem}.mb-2{margin-bottom:.5rem}.mb-3{margin-bottom:.75rem}.mb-4{margin-bottom:1rem}.mb-5{margin-bottom:1.25rem}.mb-6{margin-bottom:1.5rem}.mb-8{margin-bottom:2rem}.ml-auto{margin-left:auto}.mt-1{margin-top:.25rem}.mt-10{margin-top:2.5rem}.mt-2{margin-top:.5rem}.mt-2\.5{margin-top:.625rem}.mt-3{margin-top:.75rem}.mt-4{margin-top:1rem}.mt-5{margin-top:1.25rem}.mt-6{margin-top:1.5rem}.line-clamp-2{overflow:hidden;display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:2}.\!block{display:block!important}.block{display:block}.inline-block{display:inline-block}.inline{display:inline}.flex{display:flex}.inline-flex{display:inline-flex}.table{display:table}.grid{display:grid}.contents{display:contents}.hidden{display:none}.h-1{height:.25rem}.h-1\.5{height:.375rem}.h-10{height:2.5rem}.h-14{height:3.5rem}.h-16{height:4rem}.h-2{height:.5rem}.h-4{height:1rem}.h-5{height:1.25rem}.h-6{height:1.5rem}.h-8{height:2rem}.h-\[80vh\]{height:80vh}.h-auto{height:auto}.h-full{height:100%}.max-h-32{max-height:8rem}.max-h-\[55vh\]{max-height:55vh}.max-h-\[calc\(100vh-8rem\)\]{max-height:calc(100vh - 8rem)}.min-h-0{min-height:0}.min-h-\[1\.25rem\]{min-height:1.25rem}.min-h-\[36px\]{min-height:36px}.min-h-\[44px\]{min-height:44px}.min-h-full{min-height:100%}.min-h-screen{min-height:100vh}.w-0{width:0}.w-1{width:.25rem}.w-1\.5{width:.375rem}.w-10{width:2.5rem}.w-14{width:3.5rem}.w-16{width:4rem}.w-4{width:1rem}.w-5{width:1.25rem}.w-6{width:1.5rem}.w-8{width:2rem}.w-80{width:20rem}.w-\[44rem\]{width:44rem}.w-full{width:100%}.min-w-0{min-width:0}.min-w-\[13rem\]{min-width:13rem}.min-w-\[44px\]{min-width:44px}.min-w-full{min-width:100%}.max-w-3xl{max-width:48rem}.max-w-5xl{max-width:64rem}.max-w-7xl{max-width:80rem}.max-w-\[85\%\]{max-width:85%}.max-w-\[85vw\]{max-width:85vw}.max-w-\[calc\(100vw-3rem\)\]{max-width:calc(100vw - 3rem)}.max-w-full{max-width:100%}.max-w-none{max-width:none}.flex-1{flex:1 1 0%}.shrink{flex-shrink:1}.shrink-0{flex-shrink:0}.flex-grow,.grow{flex-grow:1}.border-collapse{border-collapse:collapse}.rotate-90{--tw-rotate:90deg}.rotate-90,.transform{transform:translate(var(--tw-translate-x),var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y))}@keyframes spin{to{transform:rotate(1turn)}}.animate-spin{animation:spin 1s linear infinite}.cursor-default{cursor:default}.cursor-not-allowed{cursor:not-allowed}.cursor-pointer{cursor:pointer}.select-none{-webkit-user-select:none;-moz-user-select:none;user-select:none}.resize-none{resize:none}.resize-y{resize:vertical}.resize{resize:both}.grid-cols-1{grid-template-columns:repeat(1,minmax(0,1fr))}.grid-cols-2{grid-template-columns:repeat(2,minmax(0,1fr))}.flex-col{flex-direction:column}.flex-wrap{flex-wrap:wrap}.items-start{align-items:flex-start}.items-end{align-items:flex-end}.items-center{align-items:center}.items-baseline{align-items:baseline}.items-stretch{align-items:stretch}.justify-end{justify-content:flex-end}.justify-center{justify-content:center}.justify-between{justify-content:space-between}.gap-1{gap:.25rem}.gap-1\.5{gap:.375rem}.gap-2{gap:.5rem}.gap-3{gap:.75rem}.gap-4{gap:1rem}.gap-5{gap:1.25rem}.space-y-1>:not([hidden])~:not([hidden]){--tw-space-y-reverse:0;margin-top:calc(.25rem*(1 - var(--tw-space-y-reverse)));margin-bottom:calc(.25rem*var(--tw-space-y-reverse))}.space-y-3>:not([hidden])~:not([hidden]){--tw-space-y-reverse:0;margin-top:calc(.75rem*(1 - var(--tw-space-y-reverse)));margin-bottom:calc(.75rem*var(--tw-space-y-reverse))}.space-y-4>:not([hidden])~:not([hidden]){--tw-space-y-reverse:0;margin-top:calc(1rem*(1 - var(--tw-space-y-reverse)));margin-bottom:calc(1rem*var(--tw-space-y-reverse))}.space-y-5>:not([hidden])~:not([hidden]){--tw-space-y-reverse:0;margin-top:calc(1.25rem*(1 - var(--tw-space-y-reverse)));margin-bottom:calc(1.25rem*var(--tw-space-y-reverse))}.space-y-6>:not([hidden])~:not([hidden]){--tw-space-y-reverse:0;margin-top:calc(1.5rem*(1 - var(--tw-space-y-reverse)));margin-bottom:calc(1.5rem*var(--tw-space-y-reverse))}.divide-y>:not([hidden])~:not([hidden]){--tw-divide-y-reverse:0;border-top-width:calc(1px*(1 - var(--tw-divide-y-reverse)));border-bottom-width:calc(1px*var(--tw-divide-y-reverse))}.divide-gray-700>:not([hidden])~:not([hidden]){--tw-divide-opacity:1;border-color:rgb(55 65 81/var(--tw-divide-opacity,1))}.divide-gray-700\/70>:not([hidden])~:not([hidden]){border-color:rgba(55,65,81,.7)}.overflow-hidden{overflow:hidden}.overflow-x-auto{overflow-x:auto}.overflow-y-auto{overflow-y:auto}.overscroll-contain{overscroll-behavior:contain}.truncate{overflow:hidden;text-overflow:ellipsis}.truncate,.whitespace-nowrap{white-space:nowrap}.whitespace-pre{white-space:pre}.break-words{overflow-wrap:break-word}.rounded{border-radius:.25rem}.rounded-2xl{border-radius:1rem}.rounded-full{border-radius:9999px}.rounded-lg{border-radius:.5rem}.rounded-md{border-radius:.375rem}.rounded-xl{border-radius:.75rem}.border{border-width:1px}.border-0{border-width:0}.border-2{border-width:2px}.border-4{border-width:4px}.border-b{border-bottom-width:1px}.border-b-2{border-bottom-width:2px}.border-l-2{border-left-width:2px}.border-t{border-top-width:1px}.border-dashed{border-style:dashed}.border-amber-500{--tw-border-opacity:1;border-color:rgb(245 158 11/var(--tw-border-opacity,1))}.border-amber-500\/30{border-color:rgba(245,158,11,.3)}.border-amber-500\/50{border-color:rgba(245,158,11,.5)}.border-blue-500{--tw-border-opacity:1;border-color:rgb(59 130 246/var(--tw-border-opacity,1))}.border-blue-500\/30{border-color:rgba(59,130,246,.3)}.border-brand-500{--tw-border-opacity:1;border-color:rgb(239 68 68/var(--tw-border-opacity,1))}.border-brand-600{--tw-border-opacity:1;border-color:rgb(239 91 91/var(--tw-border-opacity,1))}.border-brand-600\/40{border-color:rgba(239,91,91,.4)}.border-gray-500{--tw-border-opacity:1;border-color:rgb(107 114 128/var(--tw-border-opacity,1))}.border-gray-600{--tw-border-opacity:1;border-color:rgb(75 85 99/var(--tw-border-opacity,1))}.border-gray-700{--tw-border-opacity:1;border-color:rgb(55 65 81/var(--tw-border-opacity,1))}.border-gray-700\/60{border-color:rgba(55,65,81,.6)}.border-green-500{--tw-border-opacity:1;border-color:rgb(34 197 94/var(--tw-border-opacity,1))}.border-green-500\/30{border-color:rgba(34,197,94,.3)}.border-green-500\/50{border-color:rgba(34,197,94,.5)}.border-red-500{--tw-border-opacity:1;border-color:rgb(239 68 68/var(--tw-border-opacity,1))}.border-red-500\/50{border-color:rgba(239,68,68,.5)}.border-transparent{border-color:transparent}.border-t-transparent{border-top-color:transparent}.bg-amber-500{--tw-bg-opacity:1;background-color:rgb(245 158 11/var(--tw-bg-opacity,1))}.bg-amber-500\/10{background-color:rgba(245,158,11,.1)}.bg-amber-500\/15{background-color:rgba(245,158,11,.15)}.bg-black{--tw-bg-opacity:1;background-color:rgb(0 0 0/var(--tw-bg-opacity,1))}.bg-black\/60{background-color:rgba(0,0,0,.6)}.bg-black\/70{background-color:rgba(0,0,0,.7)}.bg-blue-500{--tw-bg-opacity:1;background-color:rgb(59 130 246/var(--tw-bg-opacity,1))}.bg-blue-500\/15{background-color:rgba(59,130,246,.15)}.bg-brand-600{--tw-bg-opacity:1;background-color:rgb(239 91 91/var(--tw-bg-opacity,1))}.bg-brand-600\/15{background-color:rgba(239,91,91,.15)}.bg-brand-600\/5{background-color:rgba(239,91,91,.05)}.bg-gray-700{--tw-bg-opacity:1;background-color:rgb(55 65 81/var(--tw-bg-opacity,1))}.bg-gray-800{--tw-bg-opacity:1;background-color:rgb(31 41 55/var(--tw-bg-opacity,1))}.bg-gray-800\/60{background-color:rgba(31,41,55,.6)}.bg-gray-900{--tw-bg-opacity:1;background-color:rgb(17 24 39/var(--tw-bg-opacity,1))}.bg-gray-900\/50{background-color:rgba(17,24,39,.5)}.bg-gray-900\/60{background-color:rgba(17,24,39,.6)}.bg-gray-900\/70{background-color:rgba(17,24,39,.7)}.bg-green-500{--tw-bg-opacity:1;background-color:rgb(34 197 94/var(--tw-bg-opacity,1))}.bg-green-500\/10{background-color:rgba(34,197,94,.1)}.bg-green-500\/15{background-color:rgba(34,197,94,.15)}.bg-red-500{--tw-bg-opacity:1;background-color:rgb(239 68 68/var(--tw-bg-opacity,1))}.bg-red-500\/10{background-color:rgba(239,68,68,.1)}.bg-transparent{background-color:transparent}.bg-white{--tw-bg-opacity:1;background-color:rgb(255 255 255/var(--tw-bg-opacity,1))}.p-0{padding:0}.p-2{padding:.5rem}.p-3{padding:.75rem}.p-4{padding:1rem}.p-5{padding:1.25rem}.p-6{padding:1.5rem}.p-8{padding:2rem}.px-1{padding-left:.25rem;padding-right:.25rem}.px-1\.5{padding-left:.375rem;padding-right:.375rem}.px-2{padding-left:.5rem;padding-right:.5rem}.px-2\.5{padding-left:.625rem;padding-right:.625rem}.px-3{padding-left:.75rem;padding-right:.75rem}.px-4{padding-left:1rem;padding-right:1rem}.px-5{padding-left:1.25rem;padding-right:1.25rem}.px-6{padding-left:1.5rem;padding-right:1.5rem}.px-8{padding-left:2rem;padding-right:2rem}.py-0{padding-top:0;padding-bottom:0}.py-0\.5{padding-top:.125rem;padding-bottom:.125rem}.py-1{padding-top:.25rem;padding-bottom:.25rem}.py-12{padding-top:3rem;padding-bottom:3rem}.py-2{padding-top:.5rem;padding-bottom:.5rem}.py-24{padding-top:6rem;padding-bottom:6rem}.py-3{padding-top:.75rem;padding-bottom:.75rem}.py-4{padding-top:1rem;padding-bottom:1rem}.py-5{padding-top:1.25rem;padding-bottom:1.25rem}.py-6{padding-top:1.5rem;padding-bottom:1.5rem}.pb-0{padding-bottom:0}.pb-1{padding-bottom:.25rem}.pb-2{padding-bottom:.5rem}.pb-20{padding-bottom:5rem}.pb-32{padding-bottom:8rem}.pb-4{padding-bottom:1rem}.pb-6{padding-bottom:1.5rem}.pl-14{padding-left:3.5rem}.pl-2{padding-left:.5rem}.pr-2{padding-right:.5rem}.pr-3{padding-right:.75rem}.pt-1{padding-top:.25rem}.pt-1\.5{padding-top:.375rem}.pt-4{padding-top:1rem}.pt-5{padding-top:1.25rem}.pt-6{padding-top:1.5rem}.text-left{text-align:left}.text-center{text-align:center}.font-mono{font-family:ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,Liberation Mono,Courier New,monospace}.text-2xl{font-size:1.5rem;line-height:2rem}.text-3xl{font-size:1.875rem;line-height:2.25rem}.text-4xl{font-size:2.25rem;line-height:2.5rem}.text-7xl{font-size:4.5rem;line-height:1}.text-\[0\.65rem\]{font-size:.65rem}.text-\[0\.75rem\]{font-size:.75rem}.text-\[0\.7rem\]{font-size:.7rem}.text-\[1\.15em\]{font-size:1.15em}.text-\[1\.875rem\]{font-size:1.875rem}.text-base{font-size:1rem;line-height:1.5rem}.text-lg{font-size:1.125rem;line-height:1.75rem}.text-sm{font-size:.875rem;line-height:1.25rem}.text-xl{font-size:1.25rem;line-height:1.75rem}.text-xs{font-size:.75rem;line-height:1rem}.font-bold{font-weight:700}.font-light{font-weight:300}.font-medium{font-weight:500}.font-normal{font-weight:400}.font-semibold{font-weight:600}.uppercase{text-transform:uppercase}.normal-case{text-transform:none}.italic{font-style:italic}.ordinal{--tw-ordinal:ordinal}.ordinal,.tabular-nums{font-variant-numeric:var(--tw-ordinal) var(--tw-slashed-zero) var(--tw-numeric-figure) var(--tw-numeric-spacing) var(--tw-numeric-fraction)}.tabular-nums{--tw-numeric-spacing:tabular-nums}.leading-5{line-height:1.25rem}.leading-6{line-height:1.5rem}.leading-relaxed{line-height:1.625}.leading-snug{line-height:1.375}.leading-tight{line-height:1.25}.tracking-normal{letter-spacing:0}.tracking-wider{letter-spacing:.05em}.tracking-widest{letter-spacing:.1em}.text-amber-300{--tw-text-opacity:1;color:rgb(252 211 77/var(--tw-text-opacity,1))}.text-amber-400{--tw-text-opacity:1;color:rgb(251 191 36/var(--tw-text-opacity,1))}.text-amber-500{--tw-text-opacity:1;color:rgb(245 158 11/var(--tw-text-opacity,1))}.text-blue-300{--tw-text-opacity:1;color:rgb(147 197 253/var(--tw-text-opacity,1))}.text-blue-500{--tw-text-opacity:1;color:rgb(59 130 246/var(--tw-text-opacity,1))}.text-brand-400{--tw-text-opacity:1;color:rgb(248 113 113/var(--tw-text-opacity,1))}.text-brand-500{--tw-text-opacity:1;color:rgb(239 68 68/var(--tw-text-opacity,1))}.text-brand-600{--tw-text-opacity:1;color:rgb(239 91 91/var(--tw-text-opacity,1))}.text-emerald-400{--tw-text-opacity:1;color:rgb(52 211 153/var(--tw-text-opacity,1))}.text-emerald-500{--tw-text-opacity:1;color:rgb(16 185 129/var(--tw-text-opacity,1))}.text-gray-100{--tw-text-opacity:1;color:rgb(243 244 246/var(--tw-text-opacity,1))}.text-gray-200{--tw-text-opacity:1;color:rgb(229 231 235/var(--tw-text-opacity,1))}.text-gray-300{--tw-text-opacity:1;color:rgb(209 213 219/var(--tw-text-opacity,1))}.text-gray-400{--tw-text-opacity:1;color:rgb(156 163 175/var(--tw-text-opacity,1))}.text-gray-500{--tw-text-opacity:1;color:rgb(107 114 128/var(--tw-text-opacity,1))}.text-green-300{--tw-text-opacity:1;color:rgb(134 239 172/var(--tw-text-opacity,1))}.text-green-400{--tw-text-opacity:1;color:rgb(74 222 128/var(--tw-text-opacity,1))}.text-indigo-500{--tw-text-opacity:1;color:rgb(99 102 241/var(--tw-text-opacity,1))}.text-purple-500{--tw-text-opacity:1;color:rgb(168 85 247/var(--tw-text-opacity,1))}.text-red-300{--tw-text-opacity:1;color:rgb(252 165 165/var(--tw-text-opacity,1))}.text-red-400{--tw-text-opacity:1;color:rgb(248 113 113/var(--tw-text-opacity,1))}.text-rose-500{--tw-text-opacity:1;color:rgb(244 63 94/var(--tw-text-opacity,1))}.text-sky-500{--tw-text-opacity:1;color:rgb(14 165 233/var(--tw-text-opacity,1))}.text-teal-500{--tw-text-opacity:1;color:rgb(20 184 166/var(--tw-text-opacity,1))}.text-violet-500{--tw-text-opacity:1;color:rgb(139 92 246/var(--tw-text-opacity,1))}.text-white{--tw-text-opacity:1;color:rgb(255 255 255/var(--tw-text-opacity,1))}.underline{text-decoration-line:underline}.antialiased{-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale}.placeholder-gray-500::-moz-placeholder{--tw-placeholder-opacity:1;color:rgb(107 114 128/var(--tw-placeholder-opacity,1))}.placeholder-gray-500::placeholder{--tw-placeholder-opacity:1;color:rgb(107 114 128/var(--tw-placeholder-opacity,1))}.accent-brand-600{accent-color:#ef5b5b}.opacity-40{opacity:.4}.opacity-50{opacity:.5}.opacity-60{opacity:.6}.shadow{--tw-shadow:0 1px 3px 0 rgba(0,0,0,.1),0 1px 2px -1px rgba(0,0,0,.1);--tw-shadow-colored:0 1px 3px 0 var(--tw-shadow-color),0 1px 2px -1px var(--tw-shadow-color)}.shadow,.shadow-2xl{box-shadow:var(--tw-ring-offset-shadow,0 0 #0000),var(--tw-ring-shadow,0 0 #0000),var(--tw-shadow)}.shadow-2xl{--tw-shadow:0 25px 50px -12px rgba(0,0,0,.25);--tw-shadow-colored:0 25px 50px -12px var(--tw-shadow-color)}.shadow-xl{--tw-shadow:0 20px 25px -5px rgba(0,0,0,.1),0 8px 10px -6px rgba(0,0,0,.1);--tw-shadow-colored:0 20px 25px -5px var(--tw-shadow-color),0 8px 10px -6px var(--tw-shadow-color);box-shadow:var(--tw-ring-offset-shadow,0 0 #0000),var(--tw-ring-shadow,0 0 #0000),var(--tw-shadow)}.outline-none{outline:2px solid transparent;outline-offset:2px}.ring{--tw-ring-offset-shadow:var(--tw-ring-inset) 0 0 0 var(--tw-ring-offset-width) var(--tw-ring-offset-color);--tw-ring-shadow:var(--tw-ring-inset) 0 0 0 calc(3px + var(--tw-ring-offset-width)) var(--tw-ring-color);box-shadow:var(--tw-ring-offset-shadow),var(--tw-ring-shadow),var(--tw-shadow,0 0 #0000)}.blur{--tw-blur:blur(8px)}.blur,.filter{filter:var(--tw-blur) var(--tw-brightness) var(--tw-contrast) var(--tw-grayscale) var(--tw-hue-rotate) var(--tw-invert) var(--tw-saturate) var(--tw-sepia) var(--tw-drop-shadow)}.backdrop-filter{-webkit-backdrop-filter:var(--tw-backdrop-blur) var(--tw-backdrop-brightness) var(--tw-backdrop-contrast) var(--tw-backdrop-grayscale) var(--tw-backdrop-hue-rotate) var(--tw-backdrop-invert) var(--tw-backdrop-opacity) var(--tw-backdrop-saturate) var(--tw-backdrop-sepia);backdrop-filter:var(--tw-backdrop-blur) var(--tw-backdrop-brightness) var(--tw-backdrop-contrast) var(--tw-backdrop-grayscale) var(--tw-backdrop-hue-rotate) var(--tw-backdrop-invert) var(--tw-backdrop-opacity) var(--tw-backdrop-saturate) var(--tw-backdrop-sepia)}.transition{transition-property:color,background-color,border-color,text-decoration-color,fill,stroke,opacity,box-shadow,transform,filter,-webkit-backdrop-filter;transition-property:color,background-color,border-color,text-decoration-color,fill,stroke,opacity,box-shadow,transform,filter,backdrop-filter;transition-property:color,background-color,border-color,text-decoration-color,fill,stroke,opacity,box-shadow,transform,filter,backdrop-filter,-webkit-backdrop-filter;transition-timing-function:cubic-bezier(.4,0,.2,1);transition-duration:.15s}.transition-all{transition-property:all;transition-timing-function:cubic-bezier(.4,0,.2,1);transition-duration:.15s}.transition-colors{transition-property:color,background-color,border-color,text-decoration-color,fill,stroke;transition-timing-function:cubic-bezier(.4,0,.2,1);transition-duration:.15s}.transition-transform{transition-property:transform;transition-timing-function:cubic-bezier(.4,0,.2,1);transition-duration:.15s}.duration-300{transition-duration:.3s}.duration-500{transition-duration:.5s}.ease-out{transition-timing-function:cubic-bezier(0,0,.2,1)}.\[overflow-wrap\:anywhere\]{overflow-wrap:anywhere}.first\:border-t-0:first-child{border-top-width:0}.first\:pt-0:first-child{padding-top:0}.last\:border-0:last-child{border-width:0}.hover\:scale-105:hover{--tw-scale-x:1.05;--tw-scale-y:1.05;transform:translate(var(--tw-translate-x),var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y))}.hover\:border-brand-600:hover{--tw-border-opacity:1;border-color:rgb(239 91 91/var(--tw-border-opacity,1))}.hover\:border-gray-400:hover{--tw-border-opacity:1;border-color:rgb(156 163 175/var(--tw-border-opacity,1))}.hover\:border-gray-500:hover{--tw-border-opacity:1;border-color:rgb(107 114 128/var(--tw-border-opacity,1))}.hover\:bg-brand-500:hover{--tw-bg-opacity:1;background-color:rgb(239 68 68/var(--tw-bg-opacity,1))}.hover\:bg-brand-600:hover{--tw-bg-opacity:1;background-color:rgb(239 91 91/var(--tw-bg-opacity,1))}.hover\:bg-brand-900:hover{--tw-bg-opacity:1;background-color:rgb(34 34 34/var(--tw-bg-opacity,1))}.hover\:bg-gray-700:hover{--tw-bg-opacity:1;background-color:rgb(55 65 81/var(--tw-bg-opacity,1))}.hover\:bg-gray-800:hover{--tw-bg-opacity:1;background-color:rgb(31 41 55/var(--tw-bg-opacity,1))}.hover\:bg-gray-800\/60:hover{background-color:rgba(31,41,55,.6)}.hover\:text-brand-400:hover{--tw-text-opacity:1;color:rgb(248 113 113/var(--tw-text-opacity,1))}.hover\:text-brand-600:hover{--tw-text-opacity:1;color:rgb(239 91 91/var(--tw-text-opacity,1))}.hover\:text-white:hover{--tw-text-opacity:1;color:rgb(255 255 255/var(--tw-text-opacity,1))}.focus\:border-brand-600:focus{--tw-border-opacity:1;border-color:rgb(239 91 91/var(--tw-border-opacity,1))}.focus\:outline-none:focus{outline:2px solid transparent;outline-offset:2px}.focus\:ring-brand-600:focus{--tw-ring-opacity:1;--tw-ring-color:rgb(239 91 91/var(--tw-ring-opacity,1))}.focus-visible\:outline-none:focus-visible{outline:2px solid transparent;outline-offset:2px}.focus-visible\:ring-2:focus-visible{--tw-ring-offset-shadow:var(--tw-ring-inset) 0 0 0 var(--tw-ring-offset-width) var(--tw-ring-offset-color);--tw-ring-shadow:var(--tw-ring-inset) 0 0 0 calc(2px + var(--tw-ring-offset-width)) var(--tw-ring-color);box-shadow:var(--tw-ring-offset-shadow),var(--tw-ring-shadow),var(--tw-shadow,0 0 #0000)}.focus-visible\:ring-inset:focus-visible{--tw-ring-inset:inset}.focus-visible\:ring-brand-600:focus-visible{--tw-ring-opacity:1;--tw-ring-color:rgb(239 91 91/var(--tw-ring-opacity,1))}.focus-visible\:ring-white:focus-visible{--tw-ring-opacity:1;--tw-ring-color:rgb(255 255 255/var(--tw-ring-opacity,1))}.active\:scale-95:active{--tw-scale-x:.95;--tw-scale-y:.95;transform:translate(var(--tw-translate-x),var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y))}.disabled\:cursor-not-allowed:disabled{cursor:not-allowed}.disabled\:opacity-40:disabled{opacity:.4}.disabled\:opacity-50:disabled{opacity:.5}.group[open] .group-open\:rotate-90{--tw-rotate:90deg;transform:translate(var(--tw-translate-x),var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y))}@media (min-width:640px){.sm\:grid-cols-2{grid-template-columns:repeat(2,minmax(0,1fr))}.sm\:flex-row{flex-direction:row}.sm\:flex-wrap{flex-wrap:wrap}.sm\:items-center{align-items:center}.sm\:gap-6{gap:1.5rem}.sm\:p-10{padding:2.5rem}.sm\:p-8{padding:2rem}.sm\:px-12{padding-left:3rem;padding-right:3rem}.sm\:pt-10{padding-top:2.5rem}.sm\:text-4xl{font-size:2.25rem;line-height:2.5rem}}@media (min-width:768px){.md\:static{position:static}.md\:right-auto{right:auto}.md\:mt-0{margin-top:0}.md\:hidden{display:none}.md\:min-w-0{min-width:0}.md\:grid-cols-4{grid-template-columns:repeat(4,minmax(0,1fr))}.md\:flex-row{flex-direction:row}.md\:items-center{align-items:center}.md\:gap-8{gap:2rem}.md\:rounded-none{border-radius:0}.md\:border-0{border-width:0}.md\:bg-transparent{background-color:transparent}.md\:p-0{padding:0}.md\:p-16{padding:4rem}.md\:px-0{padding-left:0;padding-right:0}.md\:pb-1{padding-bottom:.25rem}.md\:text-center{text-align:center}.md\:shadow-none{--tw-shadow:0 0 #0000;--tw-shadow-colored:0 0 #0000;box-shadow:var(--tw-ring-offset-shadow,0 0 #0000),var(--tw-ring-shadow,0 0 #0000),var(--tw-shadow)}}@media (min-width:1024px){.lg\:static{position:static}.lg\:hidden{display:none}.lg\:h-full{height:100%}.lg\:w-72{width:18rem}.lg\:max-w-none{max-width:none}.lg\:grid-cols-2{grid-template-columns:repeat(2,minmax(0,1fr))}.lg\:grid-cols-3{grid-template-columns:repeat(3,minmax(0,1fr))}.lg\:flex-row{flex-direction:row}.lg\:p-10{padding:2.5rem}}@media (min-width:1280px){.xl\:w-80{width:20rem}.xl\:grid-cols-4{grid-template-columns:repeat(4,minmax(0,1fr))}}.\[\&\:\:-webkit-details-marker\]\:hidden::-webkit-details-marker{display:none}.\[\&\>svg\]\:h-auto>svg{height:auto}.\[\&\>svg\]\:max-w-full>svg{max-width:100%}
+    </style>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     
     <!-- Marked.js for Markdown -->
@@ -15,19 +49,6 @@
     <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
     <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js"></script>
 
-    <script>
-        tailwind.config = {
-            darkMode: 'class',
-            theme: {
-                extend: {
-                    fontFamily: { sans: ['"Plus Jakarta Sans"', 'sans-serif'] },
-                    colors: {
-                        brand: { 50: '#fef2f2', 100: '#fee2e2', 400: '#f87171', 500: '#ef4444', 600: '#ef5b5b', 900: '#222222', 950: '#111111' }
-                    }
-                }
-            }
-        }
-    </script>
     <style>
         body { background-color: #111827; color: #cbd5e1; -webkit-font-smoothing: antialiased; }
         .hero-bg { 
@@ -45,6 +66,103 @@
         .service-card:hover:not(:disabled) .icon-circle { border-color: #ef5b5b; color: #ef5b5b; }
         
         .hidden-view { display: none !important; }
+
+        /* --- Quiz action bar -------------------------------------------------
+           Next used to sit at the end of the question. Picking an answer expands
+           an explanation under EVERY option, which pushed it hundreds of pixels
+           below the fold, so advancing meant scrolling down on every single
+           question (user, 2026-09-20). It is pinned now, mirroring .glass-header
+           at the opposite edge so the two read as one system.
+
+           Two rules travel with any pinned control, and both are load-bearing
+           rather than decoration:
+             - reserve its height, or it covers the last option and shifts the
+               page when it appears (#quiz-screen carries pb-32);
+             - offset scrolling, or a keyboard focus ring can land underneath it
+               (WCAG 2.2 AA, Focus Not Obscured). */
+        .glass-bar { background: rgba(17, 24, 39, 0.92); backdrop-filter: blur(12px); border-top: 1px solid rgba(255,255,255,0.06); }
+        html { scroll-padding-bottom: 7rem; }
+        @media (prefers-reduced-motion: no-preference) {
+            #action-container:not(.hidden-view) .action-bar-inner { animation: actionBarIn 200ms ease-out; }
+        }
+        @keyframes actionBarIn { from { opacity: 0; transform: translateY(0.5rem); } to { opacity: 1; transform: none; } }
+
+        /* --- Reading scale -------------------------------------------------
+           One knob for the whole reading surface. The default 16px is fine for
+           chrome and far too small for sustained reading, which is what this
+           page is for. Everything below is relative to it, so nothing drifts
+           out of proportion when it changes. */
+        :root { --reading-size: 1.1875rem; --reading-leading: 1.8; }
+        @media (min-width: 1280px) { :root { --reading-size: 1.25rem; } }
+
+        #tutorial-content { font-size: var(--reading-size); line-height: var(--reading-leading); }
+        #tutorial-content rich-text-viewer { font-size: inherit; line-height: inherit; }
+        #tutorial-content li { line-height: var(--reading-leading); }
+        #tutorial-content h2, #tutorial-content h3 { font-size: 1.15em; line-height: 1.35; }
+        /* Prose sets its own 1rem; an ID beats it without !important. */
+        #tutorial-content.prose :where(p, ul, ol, li, blockquote) { font-size: inherit; line-height: inherit; }
+
+        /* Figures. A diagram SVG carries explicit width/height attributes so its
+           aspect ratio is known; these two rules are what let it scale down on a
+           phone. Written as plain CSS on purpose -- relying on a Tailwind
+           arbitrary variant here would put the mobile layout at the mercy of the
+           CDN build. The figure's own overflow-x-auto stays as the last resort. */
+        #tutorial-content figure svg { max-width: 100%; height: auto; display: block; }
+        #tutorial-content figure img { max-width: 100%; height: auto; }
+        /* The reading measure is capped per text block, but a figure caption and
+           the figure itself are allowed the full column. */
+        #tutorial-content figure { font-size: 1rem; line-height: 1.5; }
+
+        #toc-nav button { font-size: 0.95rem; line-height: 1.45; }
+        #question-text { font-size: 1.4rem; line-height: 1.5; }
+        .option-text { font-size: 1.0625rem; line-height: 1.55; }
+        .explanation-text { font-size: 0.975rem; line-height: 1.6; }
+
+        /* --- Print ----------------------------------------------------------
+           The reader is a fixed-height two-pane shell with its own scrollbars,
+           which prints as one clipped page. Printing has to unpick that: drop
+           the height cap, release the overflow, and let the text flow. */
+        @media print {
+            :root { --reading-size: 11.5pt; --reading-leading: 1.55; }
+            body { background: #fff !important; color: #000 !important; }
+            header, #toc-panel, #toc-backdrop, #progress-container,
+            #prev-block-btn, #next-block-btn, #toc-toggle-btn,
+            #tutorial-to-quiz-btn, #block-ai-quiz-btn, #ai-block-status { display: none !important; }
+            #tutorial-screen { display: block !important; height: auto !important; max-width: none !important; }
+            #tutorial-screen article { height: auto !important; border: 0 !important; box-shadow: none !important;
+                                       background: #fff !important; padding: 0 !important; }
+            #tutorial-article { overflow: visible !important; height: auto !important; max-height: none !important; }
+            #tutorial-screen article > div { overflow: visible !important; height: auto !important; padding: 0 !important; }
+            body.reader-mode { height: auto !important; overflow: visible !important; }
+            #content-section, #content-section.reader-mode { padding: 0 !important; display: block !important; }
+            #tutorial-main-title, #tutorial-content, #tutorial-content * { color: #000 !important; }
+            #tutorial-content section { border: 1px solid #bbb !important; background: #f6f6f6 !important;
+                                        break-inside: avoid; page-break-inside: avoid; }
+            @page { margin: 16mm; }
+        }
+        /* --- Reader shell ---------------------------------------------------
+           The reader is the one screen that fills the box below the header
+           instead of sitting in a padded column: two square panes with a gap,
+           each scrolling on its own (user, 21-09-26). Every other screen keeps
+           the shell's padding, so adding one cannot forget it. */
+        /* ⚠ The cap has to start at <body>. It is min-h-screen, so every flex
+           child below it inherits min-height:auto and grows with its content --
+           measured: the article rendered 3367px tall inside a 824px parent and the
+           PAGE scrolled, not the pane. Only the reader takes this; every other
+           screen keeps normal page scrolling. */
+        body.reader-mode { height: 100vh; height: 100dvh; overflow: hidden; }
+        body.reader-mode #app-container { min-height: 0; }
+        #content-section.reader-mode { padding: 6px; min-height: 0; }
+
+        /* ⛔ KaTeX stretchy radicals. Something in the cascade overrides the
+           height KaTeX sets inline on its own <svg>, so the sqrt bar rendered
+           1.9px tall over a 70.3px radicand -- 21 equations in geron-homl3 showed
+           the fraction OUTSIDE the root. `height: inherit` is KaTeX's OWN
+           declaration; this restores it. `!important` is required to win, and the
+           rule MUST stay .katex-scoped -- an unscoped svg{} rule relayouts the
+           brand logo, the nav icons and every injected book figure. */
+        .katex svg { height: inherit !important; }
+
         .explanation-text { display: grid; grid-template-rows: 0fr; transition: grid-template-rows 0.4s; }
         .explanation-text.expanded { grid-template-rows: 1fr; }
         .explanation-inner { overflow: hidden; }
@@ -53,19 +171,32 @@
 <body class="min-h-screen flex flex-col">
     
     <!-- Dark Transparent Header -->
-    <header class="glass-header fixed top-0 left-0 right-0 z-50 px-6 sm:px-12 py-5 flex justify-between items-center text-white">
-        <div class="flex items-center gap-3">
-            <div class="w-8 h-8 flex items-center justify-center border-2 border-white font-bold text-xl leading-none rounded-md">E</div>
+    <header class="glass-header fixed top-0 left-0 right-0 z-50 px-6 sm:px-12 py-5 flex justify-between items-center text-white relative">
+        <button id="brand-home" class="flex items-center gap-3 min-h-[44px] rounded-lg pr-2 text-white transition-colors hover:text-brand-400 active:scale-95" aria-label="Back to the main menu">
+            <svg class="w-8 h-8 shrink-0" viewBox="0 0 40 40" aria-hidden="true">
+                <rect x="2" y="2" width="36" height="36" rx="9" fill="none" stroke="currentColor" stroke-width="2.5"/>
+                <g fill="currentColor">
+                    <rect x="13" y="11" width="4.5" height="18" rx="1"/>
+                    <rect x="13" y="11" width="14" height="4.5" rx="1"/>
+                    <rect x="13" y="24.5" width="14" height="4.5" rx="1"/>
+                </g>
+                <rect x="13" y="17.75" width="10" height="4.5" rx="1" fill="#ef5b5b"/>
+            </svg>
             <h1 class="text-2xl font-bold tracking-widest uppercase">Edu-Arg</h1>
-        </div>
+        </button>
         
-        <nav class="hidden md:flex gap-8 text-sm font-semibold tracking-wider">
-            <button id="nav-tutorial" class="pb-1 border-b-2 border-brand-600 text-white transition-colors hover:text-brand-400">HOME</button>
-            <button id="nav-quiz" class="pb-1 border-b-2 border-transparent text-gray-400 transition-colors hover:text-white">PRACTICE</button>
-            <button id="nav-ai-quiz" class="pb-1 border-b-2 border-transparent text-gray-400 transition-colors hover:text-white">AI QUIZ</button>
+        <nav id="primary-nav" class="absolute md:static top-full right-4 md:right-auto mt-2 md:mt-0 flex flex-col md:flex-row items-stretch md:items-center gap-1 md:gap-8 text-sm font-semibold tracking-wider bg-gray-800 md:bg-transparent border md:border-0 border-gray-700 rounded-xl md:rounded-none p-2 md:p-0 shadow-2xl md:shadow-none min-w-[13rem] md:min-w-0 z-50">
+            <button id="nav-tutorial" class="min-h-[44px] px-3 md:px-0 text-left md:text-center rounded-lg md:rounded-none pb-0 md:pb-1 border-b-2 border-brand-600 text-white transition-colors hover:text-brand-400">HOME</button>
+            <button id="nav-learn" class="min-h-[44px] px-3 md:px-0 text-left md:text-center rounded-lg md:rounded-none pb-0 md:pb-1 border-b-2 border-transparent text-gray-400 transition-colors hover:text-white">LEARN</button>
+            <button id="nav-quiz" class="min-h-[44px] px-3 md:px-0 text-left md:text-center rounded-lg md:rounded-none pb-0 md:pb-1 border-b-2 border-transparent text-gray-400 transition-colors hover:text-white">PRACTICE</button>
+            <button id="nav-generated-quiz" class="min-h-[44px] px-3 md:px-0 text-left md:text-center rounded-lg md:rounded-none pb-0 md:pb-1 border-b-2 border-transparent text-gray-400 transition-colors hover:text-white">GENERATE QUIZ</button>
+            <button id="nav-settings" class="min-h-[44px] px-3 md:px-0 text-left md:text-center rounded-lg md:rounded-none pb-0 md:pb-1 border-b-2 border-transparent text-gray-400 transition-colors hover:text-white">SETTINGS</button>
         </nav>
         
         <div class="flex items-center gap-4">
+            <button id="menu-btn" class="md:hidden min-h-[44px] min-w-[44px] rounded-lg text-gray-300 hover:text-white hover:bg-gray-700 transition-colors active:scale-95" aria-controls="primary-nav" aria-expanded="false" aria-label="Open menu">
+                <svg class="w-6 h-6 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/></svg>
+            </button>
             <input type="file" id="custom-data-upload" accept=".json" class="hidden-view" />
             <label for="custom-data-upload" class="cursor-pointer text-gray-300 hover:text-white transition-colors" title="Load Course JSON">
                 <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"></path></svg>
@@ -80,85 +211,96 @@
         <!-- 1. LANDING DASHBOARD    -->
         <!-- ======================= -->
         <div id="landing-dashboard" class="flex flex-col w-full">
-            
-            <!-- Hero Section -->
-            <div class="hero-bg w-full min-h-[65vh] flex flex-col items-center justify-center text-center px-4 pt-24 pb-16">
-                
-                <!-- Empty State Content -->
-                <div id="empty-state" class="animate-fade-in w-full max-w-3xl">
-                    <h2 class="text-5xl md:text-7xl font-light text-white mb-4">Welcome To <span class="font-bold">Edu-Arg</span></h2>
-                    <p class="text-brand-600 text-lg md:text-xl uppercase tracking-widest font-semibold mb-6">Education is the movement from darkness to light</p>
-                    <p class="text-gray-300 max-w-2xl mx-auto mb-10 text-sm md:text-base leading-relaxed">
-                        Currently, no course module is loaded into the platform. Please upload your custom JSON module to unlock the tutorials and practice quizzes.
-                    </p>
-                    <label for="custom-data-upload" class="cursor-pointer inline-block bg-transparent border-2 border-white text-white hover:bg-white hover:text-gray-900 font-bold uppercase tracking-wider py-3 px-10 transition-colors rounded-lg">
-                        Load Module
-                    </label>
-                </div>
+            <!-- Home: the current book first, then the library to pick another (17-09-26) -->
+            <div class="w-full bg-gray-900 px-4 pt-6 sm:pt-10 pb-20">
+                <!-- No space-y here: the hidden loading section would still push the panel down -->
+                <div class="max-w-7xl mx-auto">
 
-                <!-- Welcome Content -->
-                <div id="welcome-screen" class="hidden-view animate-fade-in w-full max-w-4xl">
-                    <h2 id="welcome-title" class="text-5xl md:text-7xl font-light text-white mb-4">Module <span class="font-bold">Loaded</span></h2>
-                    <p id="app-sub-title" class="text-brand-600 text-lg md:text-xl uppercase tracking-widest font-semibold mb-6">Ready to begin your journey</p>
-                    <p class="text-gray-300 max-w-2xl mx-auto mb-10 text-sm md:text-base leading-relaxed">
-                        Your learning materials have been successfully parsed. Select a service below to start exploring the context, testing your knowledge, or generating dynamic AI scenarios.
-                    </p>
-                </div>
-
-                <!-- Loading Content -->
-                <div id="loading-screen" class="hidden-view flex-col items-center justify-center animate-fade-in w-full max-w-3xl">
-                    <div class="relative w-16 h-16 mb-6 mx-auto">
-                        <div class="absolute inset-0 border-4 border-gray-700 rounded-full"></div>
-                        <div class="absolute inset-0 border-4 border-brand-600 rounded-full border-t-transparent animate-spin"></div>
-                    </div>
-                    <h2 class="text-3xl text-white font-light mb-2">Architecting <span class="font-bold">Scenarios...</span></h2>
-                    <p class="text-brand-600 uppercase tracking-widest text-sm font-semibold">Gemini AI is crafting your quiz</p>
-                </div>
-            </div>
-
-            <!-- Red Divider Strip -->
-            <div class="w-full bg-brand-600 py-3 flex justify-center">
-                <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
-            </div>
-
-            <!-- Services / Action Cards Section -->
-            <div id="services-section" class="w-full bg-gray-900 py-20 px-4 flex flex-col items-center">
-                <h2 class="text-4xl text-white font-light mb-2">Our <span class="text-brand-600">Platform</span> Services</h2>
-                <p class="text-brand-600 uppercase tracking-widest text-sm mb-6 font-semibold">The best tools for your learning</p>
-                <p class="text-gray-400 text-center max-w-2xl mb-16 text-sm">
-                    Select one of the learning paths below to interact with the loaded module. You can read the materials, take a standard quiz, or generate dynamic content.
-                </p>
-                
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-5xl w-full">
-                    <!-- Tutorial Card -->
-                    <button id="read-tutorial-btn" class="service-card p-10 flex flex-col items-center text-center group disabled:opacity-50 disabled:cursor-not-allowed outline-none rounded-xl">
-                        <div class="icon-circle w-20 h-20 rounded-full border-2 border-gray-600 flex items-center justify-center text-gray-400 transition-colors mb-6">
-                            <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path></svg>
+                    <!-- Writing an AI quiz -->
+                    <section id="loading-screen" class="hidden-view flex flex-col items-center justify-center text-center py-24 animate-fade-in">
+                        <div class="relative w-16 h-16 mb-6 mx-auto">
+                            <div class="absolute inset-0 border-4 border-gray-700 rounded-full"></div>
+                            <div class="absolute inset-0 border-4 border-brand-600 rounded-full border-t-transparent animate-spin"></div>
                         </div>
-                        <h3 class="text-xl text-white font-semibold mb-4">Read Tutorial</h3>
-                        <p class="text-gray-400 text-sm mb-6 leading-relaxed">Dive deep into the structured materials and technical documentation provided in this module.</p>
-                        <span class="text-gray-500 italic text-sm border-b border-gray-600 group-hover:text-brand-600 group-hover:border-brand-600 pb-0.5 transition-colors">Start Reading</span>
-                    </button>
-                    
-                    <!-- Static Quiz Card -->
-                    <button id="start-btn" class="service-card p-10 flex flex-col items-center text-center group disabled:opacity-50 disabled:cursor-not-allowed outline-none rounded-xl">
-                        <div class="icon-circle w-20 h-20 rounded-full border-2 border-gray-600 flex items-center justify-center text-gray-400 transition-colors mb-6">
-                            <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"></path></svg>
+                        <h2 class="text-3xl text-white font-light mb-2">Writing a <span class="font-bold">fresh quiz</span></h2>
+                        <p id="loading-scope" class="text-brand-600 uppercase tracking-widest text-sm font-semibold">AI is reading random book sections · up to a minute</p>
+                        <p id="loading-model" class="mt-2 text-gray-500 text-xs"></p>
+                    </section>
+
+                    <!-- Current book -->
+                    <section id="welcome-screen" class="animate-fade-in bg-gray-800 border border-gray-700 rounded-2xl p-6 sm:p-8">
+                        <p class="text-xs font-semibold uppercase tracking-widest text-brand-600">Current book</p>
+                        <!-- Shown when no book is selected. The panel itself stays put so the
+                             home page does not reflow when a book is closed (user, 21-09-26). -->
+                        <p id="welcome-empty" class="hidden-view mt-3 text-gray-400">No book selected. Pick one from the library below.</p>
+                        <div id="welcome-body">
+                        <h1 id="welcome-title" class="mt-2 text-3xl sm:text-4xl font-light text-white leading-tight"></h1>
+                        <p id="current-meta" class="mt-2 text-sm text-gray-400"></p>
+                        <div class="mt-6">
+                            <div class="flex items-baseline justify-between gap-3 text-sm">
+                                <span id="current-progress-label" class="text-gray-300"></span>
+                                <span id="current-progress-percent" class="font-semibold text-white tabular-nums"></span>
+                            </div>
+                            <div id="current-progress-track" class="mt-2 h-2 rounded-full bg-gray-700 overflow-hidden" role="progressbar" aria-label="Lessons done" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
+                                <div id="current-progress-bar" class="h-full rounded-full bg-brand-600 transition-all duration-300" style="width: 0%"></div>
+                            </div>
+                            <p id="current-next" class="mt-3 text-sm text-gray-400 truncate"></p>
                         </div>
-                        <h3 class="text-xl text-white font-semibold mb-4">Practice Quiz</h3>
-                        <p class="text-gray-400 text-sm mb-6 leading-relaxed">Test your fundamental knowledge with the curated set of static questions attached to this module.</p>
-                        <span class="text-gray-500 italic text-sm border-b border-gray-600 group-hover:text-brand-600 group-hover:border-brand-600 pb-0.5 transition-colors">Take Quiz</span>
-                    </button>
-                    
-                    <!-- AI Quiz Card -->
-                    <button id="start-ai-btn" class="service-card p-10 flex flex-col items-center text-center group disabled:opacity-50 disabled:cursor-not-allowed outline-none rounded-xl">
-                        <div class="icon-circle w-20 h-20 rounded-full border-2 border-gray-600 flex items-center justify-center text-gray-400 transition-colors mb-6">
-                            <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
+                        <div class="mt-6 flex flex-wrap gap-3">
+                            <button id="read-tutorial-btn" type="button" class="min-h-[44px] px-6 rounded-lg bg-brand-600 hover:bg-brand-900 text-white font-bold uppercase tracking-wider text-sm transition-colors active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white disabled:opacity-50 disabled:cursor-not-allowed">Continue reading</button>
+                            <button id="start-btn" type="button" class="inline-flex items-center justify-center min-h-[44px] px-5 rounded-lg border border-gray-600 text-gray-200 hover:border-brand-600 hover:text-white font-semibold uppercase tracking-wider text-sm transition-colors active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-600 disabled:opacity-50 disabled:cursor-not-allowed">Practice</button>
+                            <button id="start-generated-btn" type="button" class="inline-flex items-center justify-center min-h-[44px] px-5 rounded-lg border border-gray-600 text-gray-200 hover:border-brand-600 hover:text-white font-semibold uppercase tracking-wider text-sm transition-colors active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-600 disabled:opacity-50 disabled:cursor-not-allowed">Generate quiz</button>
                         </div>
-                        <h3 class="text-xl text-white font-semibold mb-4">AI Scenarios</h3>
-                        <p class="text-gray-400 text-sm mb-6 leading-relaxed">Challenge yourself with dynamic, scenario-based questions generated instantly by Google Gemini.</p>
-                        <span class="text-gray-500 italic text-sm border-b border-gray-600 group-hover:text-brand-600 group-hover:border-brand-600 pb-0.5 transition-colors">Generate Now</span>
-                    </button>
+                        </div>
+                    </section>
+
+                    <!-- Across-the-library totals, shown only when no book is open, so the
+                         home page says something useful instead of going straight to a grid. -->
+                    <section id="home-kpis" class="hidden-view mt-10" aria-labelledby="home-kpis-heading">
+                        <h2 id="home-kpis-heading" class="text-2xl text-white font-light mb-4">Your progress</h2>
+                        <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                            <div class="rounded-2xl border border-gray-700 bg-gray-800 px-5 py-4">
+                                <p class="text-xs uppercase tracking-wider text-gray-400">Lessons done</p>
+                                <p id="kpi-lessons" class="mt-1 text-3xl text-white font-bold tabular-nums">—</p>
+                                <div class="mt-3 h-1.5 w-full rounded-full bg-gray-700 overflow-hidden">
+                                    <div id="kpi-lessons-bar" class="h-full rounded-full bg-brand-600" style="width:0%"></div>
+                                </div>
+                                <p id="kpi-lessons-sub" class="mt-2 text-xs text-gray-400 tabular-nums"></p>
+                            </div>
+                            <div class="rounded-2xl border border-gray-700 bg-gray-800 px-5 py-4">
+                                <p class="text-xs uppercase tracking-wider text-gray-400">Books</p>
+                                <p id="kpi-books" class="mt-1 text-3xl text-white font-bold tabular-nums">—</p>
+                                <p id="kpi-books-sub" class="mt-2 text-xs text-gray-400 tabular-nums"></p>
+                            </div>
+                            <div class="rounded-2xl border border-gray-700 bg-gray-800 px-5 py-4">
+                                <p class="text-xs uppercase tracking-wider text-gray-400">Chapters</p>
+                                <p id="kpi-chapters" class="mt-1 text-3xl text-white font-bold tabular-nums">—</p>
+                                <p class="mt-2 text-xs text-gray-400">across the library</p>
+                            </div>
+                            <div class="rounded-2xl border border-gray-700 bg-gray-800 px-5 py-4">
+                                <p class="text-xs uppercase tracking-wider text-gray-400">Questions</p>
+                                <p id="kpi-questions" class="mt-1 text-3xl text-white font-bold tabular-nums">—</p>
+                                <p class="mt-2 text-xs text-gray-400">available to practise</p>
+                            </div>
+                        </div>
+                        <p id="kpi-furthest" class="mt-4 text-sm text-gray-400"></p>
+                    </section>
+
+                    <!-- Library -->
+                    <section id="services-section" class="mt-10" aria-labelledby="library-heading">
+                        <div class="flex flex-wrap items-center justify-between gap-3 mb-4">
+                            <h2 id="library-heading" class="text-2xl text-white font-light">Library</h2>
+                            <div class="flex flex-wrap gap-2">
+                                <a id="import-book-link" href="#" target="_blank" rel="noopener" class="inline-flex items-center justify-center min-h-[44px] px-5 rounded-lg border border-gray-600 text-gray-200 hover:border-brand-600 hover:text-white font-semibold uppercase tracking-wider text-sm transition-colors active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-600">Import</a>
+                            </div>
+                        </div>
+                        <div id="library-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4"></div>
+                        <div id="empty-state" class="hidden-view rounded-2xl border border-dashed border-gray-700 px-6 py-12 text-center">
+                            <p class="text-white text-lg">No books yet</p>
+                            <p class="mt-1 text-sm text-gray-400">Import a PDF or upload a module.</p>
+                        </div>
+                    </section>
+
                 </div>
             </div>
         </div>
@@ -166,42 +308,186 @@
         <!-- ======================= -->
         <!-- 2. CONTENT VIEWS        -->
         <!-- ======================= -->
-        <div id="content-section" class="w-full bg-gray-900 flex-grow flex-col items-center py-24 px-4 hidden-view">
+        <div id="content-section" class="w-full bg-gray-900 flex-grow flex flex-col min-h-0 px-4 py-6 hidden-view">
             
             <!-- Tutorial View -->
-            <div id="tutorial-screen" class="hidden-view w-full max-w-4xl bg-gray-800 p-8 md:p-12 border border-gray-700 shadow-xl rounded-2xl mx-auto">
-                <h2 id="tutorial-main-title" class="text-3xl text-white font-light mb-2"></h2>
-                <p id="tutorial-lead" class="text-brand-600 uppercase tracking-widest text-sm mb-8 font-semibold"></p>
-                <div id="tutorial-content" class="text-gray-300 prose prose-invert max-w-none"></div>
-                <div class="mt-12 text-center pt-8 border-t border-gray-700">
-                    <button id="tutorial-to-quiz-btn" class="bg-brand-600 hover:bg-brand-900 text-white font-bold uppercase tracking-wider py-4 px-10 transition-colors rounded-lg">
-                        Begin Assessment
-                    </button>
+            <div id="tutorial-screen" class="hidden-view w-full flex-1 min-h-0 flex flex-col lg:flex-row gap-2">
+
+                <!-- Backdrop: mobile drawer only; lg:hidden keeps it out of the desktop layout -->
+                <div id="toc-backdrop" class="hidden-view fixed inset-0 z-40 bg-black/60 lg:hidden"></div>
+
+                <!-- Table of contents. Overlay drawer below lg, static column at lg+. -->
+                <aside id="toc-panel" class="fixed lg:static inset-y-0 left-0 z-50 w-80 max-w-[85vw] lg:w-72 xl:w-80 lg:max-w-none shrink-0 flex flex-col min-h-0 bg-gray-800 border border-gray-700 rounded-xl lg:h-full" aria-label="Table of contents">
+                    <div class="px-5 py-4 border-b border-gray-700 flex items-start justify-between gap-3 shrink-0">
+                        <div>
+                            <p class="text-white font-semibold text-sm uppercase tracking-widest">Contents</p>
+                            <p id="toc-summary" class="text-xs text-gray-400 mt-1"></p>
+                        </div>
+                        <button id="toc-close-btn" class="min-h-[44px] min-w-[44px] -mr-2 rounded-lg text-gray-400 hover:text-white hover:bg-gray-700 transition-colors active:scale-95" aria-label="Hide contents">
+                            <svg class="w-5 h-5 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+                        </button>
+                    </div>
+                    <nav id="toc-nav" class="p-2 flex-1 overflow-y-auto"></nav>
+                </aside>
+
+                <!-- One theory block at a time -->
+                <article id="tutorial-article" class="min-w-0 flex-1 min-h-0 overflow-y-auto flex flex-col bg-gray-800 border border-gray-700 rounded-xl">
+                    <div class="flex-1 w-full p-6 sm:p-8 lg:p-10">
+                        <div class="flex items-center gap-3 mb-4">
+                            <button id="toc-toggle-btn" class="min-h-[44px] min-w-[44px] rounded-lg border border-gray-600 text-gray-300 hover:text-white hover:border-brand-600 transition-colors active:scale-95 flex items-center justify-center shrink-0" aria-controls="toc-panel" aria-expanded="true" aria-label="Contents" title="Contents">
+                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/></svg>
+                            </button>
+                        </div>
+
+                        <h2 id="tutorial-main-title" class="text-[1.875rem] sm:text-4xl text-white font-light mb-8"></h2>
+                        <div id="tutorial-content" class="text-gray-300 prose prose-invert max-w-none"></div>
+
+                        <!-- One row, one button size. These four were two stacked rows at two
+                             different sizes; moving between blocks and starting the assessment
+                             are peers and now read as peers (user, 21-09-26). flex-wrap is what
+                             carries it down to a phone -- no separate mobile layout. -->
+                        <div class="mt-10 pt-6 border-t border-gray-700 flex flex-wrap items-center gap-3">
+                            <button id="prev-block-btn" class="min-h-[44px] px-5 rounded-lg border border-gray-600 text-gray-200 font-semibold uppercase tracking-wider text-sm transition-colors hover:bg-gray-700 active:scale-95 disabled:opacity-40 disabled:cursor-not-allowed">Previous</button>
+                            <button id="tutorial-to-quiz-btn" class="min-h-[44px] px-5 rounded-lg border border-brand-600 text-brand-400 hover:bg-brand-600 hover:text-white font-semibold uppercase tracking-wider text-sm transition-colors active:scale-95">
+                                <span id="tutorial-to-quiz-label">Begin Assessment</span>
+                            </button>
+                            <button id="block-ai-quiz-btn" class="min-h-[44px] px-5 rounded-lg border border-gray-600 text-gray-300 hover:border-brand-600 hover:text-white font-semibold uppercase tracking-wider text-sm transition-colors active:scale-95 disabled:opacity-40 disabled:cursor-not-allowed">
+                                AI quiz
+                            </button>
+                            <button id="next-block-btn" class="min-h-[44px] px-5 rounded-lg bg-brand-600 hover:bg-brand-900 text-white font-semibold uppercase tracking-wider text-sm transition-colors active:scale-95 disabled:opacity-40 disabled:cursor-not-allowed ml-auto">Next</button>
+                        </div>
+                        <p id="ai-block-status" class="mt-3 text-xs text-gray-500" role="status"></p>
+                    </div>
+                </article>
+            </div>
+
+            <!-- Settings View -->
+            <div id="settings-screen" class="hidden-view w-full max-w-5xl mx-auto space-y-6">
+
+                <div class="bg-gray-800 border border-gray-700 rounded-2xl p-6 sm:p-8">
+                    <h2 class="text-3xl text-white font-light mb-2">Settings</h2>
+                    <p class="text-brand-600 uppercase tracking-widest text-sm font-semibold">Connect an AI model to generate quizzes</p>
+                    <p id="settings-lock-status" class="mt-4 text-sm text-gray-400" role="status"></p>
+                </div>
+
+                <!-- Only shown when someone has deliberately set EDU_ADMIN_TOKEN on the server. -->
+                <div id="settings-lock-card" class="hidden-view bg-gray-800 border border-gray-700 rounded-2xl p-6 sm:p-8">
+                    <label for="admin-token" class="block text-sm font-semibold text-gray-200 mb-2">Admin token</label>
+                    <input id="admin-token" type="password" autocomplete="off" class="w-full min-h-[44px] rounded-lg border border-gray-600 bg-gray-900 px-3 py-2 text-white placeholder-gray-500 focus:border-brand-600 focus:outline-none transition-colors" placeholder="This server has settings locked">
+                    <button id="settings-unlock-btn" class="mt-4 min-h-[44px] px-6 rounded-lg bg-brand-600 hover:bg-brand-900 text-white font-bold uppercase tracking-wider text-sm transition-colors active:scale-95">Unlock</button>
+                </div>
+
+                <div id="settings-form" class="hidden-view space-y-6">
+
+                    <div class="bg-gray-800 border border-gray-700 rounded-2xl p-6 sm:p-8">
+                        <h3 class="text-xl text-white font-semibold mb-1">AI model connection</h3>
+                        <p class="text-sm text-gray-400 mb-6">Any OpenAI-compatible Chat Completions endpoint. Credentials are stored on the server; the browser never receives the key back.</p>
+
+                        <div class="space-y-5">
+                            <div>
+                                <label for="set-api-url" class="block text-sm font-semibold text-gray-200 mb-2">Endpoint URL</label>
+                                <input id="set-api-url" type="url" spellcheck="false" class="w-full min-h-[44px] rounded-lg border border-gray-600 bg-gray-900 px-3 py-2 text-white placeholder-gray-500 focus:border-brand-600 focus:outline-none transition-colors" placeholder="https://api.openai.com/v1/chat/completions">
+                                <p class="mt-2 text-xs leading-5 text-gray-500">Must be https://, or http:// on localhost for a model running on this box.</p>
+                            </div>
+                            <div>
+                                <label for="set-api-key" class="block text-sm font-semibold text-gray-200 mb-2">API key</label>
+                                <input id="set-api-key" type="password" autocomplete="off" spellcheck="false" class="w-full min-h-[44px] rounded-lg border border-gray-600 bg-gray-900 px-3 py-2 text-white placeholder-gray-500 focus:border-brand-600 focus:outline-none transition-colors">
+                                <p id="api-key-state" class="mt-2 text-xs leading-5 text-gray-500"></p>
+                            </div>
+                            <div>
+                                <label for="set-model" class="block text-sm font-semibold text-gray-200 mb-2">Model</label>
+                                <input id="set-model" type="text" spellcheck="false" class="w-full min-h-[44px] rounded-lg border border-gray-600 bg-gray-900 px-3 py-2 text-white placeholder-gray-500 focus:border-brand-600 focus:outline-none transition-colors" placeholder="gpt-4o-mini">
+                            </div>
+                            <label class="flex items-start gap-3 cursor-pointer">
+                                <input id="set-json-mode" type="checkbox" class="mt-1 h-5 w-5 rounded border-gray-600 bg-gray-900 text-brand-600 focus:ring-brand-600">
+                                <span class="text-sm text-gray-300">Ask the model for strict JSON<span class="block text-xs text-gray-500 mt-1">Turn off only if your provider rejects response_format.</span></span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <details class="bg-gray-800 border border-gray-700 rounded-2xl p-6 sm:p-8">
+                        <summary class="cursor-pointer text-xl text-white font-semibold">Restrict who can generate <span class="block text-sm font-normal text-gray-400 mt-1">Optional. Leave closed unless you share this page with other people.</span></summary>
+                        <div class="mt-6">
+                            <label for="set-access-token" class="block text-sm font-semibold text-gray-200 mb-2">Learner access token</label>
+                            <input id="set-access-token" type="password" autocomplete="off" class="w-full min-h-[44px] rounded-lg border border-gray-600 bg-gray-900 px-3 py-2 text-white placeholder-gray-500 focus:border-brand-600 focus:outline-none transition-colors" placeholder="Leave blank for no gate">
+                            <p id="access-token-state" class="mt-2 text-xs leading-5 text-gray-500"></p>
+                            <label class="flex items-start gap-3 cursor-pointer mt-5">
+                                <input id="set-require-token" type="checkbox" class="mt-1 h-5 w-5 rounded border-gray-600 bg-gray-900 text-brand-600 focus:ring-brand-600">
+                                <span class="text-sm text-gray-300">Ask for this token before generating<span class="block text-xs text-gray-500 mt-1">Off means anyone who can open this page can spend your provider credit.</span></span>
+                            </label>
+                        </div>
+                    </details>
+
+                    <div class="bg-gray-800 border border-gray-700 rounded-2xl p-6 sm:p-8">
+                        <h3 class="text-xl text-white font-semibold mb-6">Study preferences</h3>
+                        <div class="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+                            <div>
+                                <label for="set-ai-count" class="block text-sm font-semibold text-gray-200 mb-2">Questions per AI quiz</label>
+                                <input id="set-ai-count" type="number" min="3" max="10" class="w-full min-h-[44px] rounded-lg border border-gray-600 bg-gray-900 px-3 py-2 text-white placeholder-gray-500 focus:border-brand-600 focus:outline-none transition-colors">
+                                <p class="mt-2 text-xs leading-5 text-gray-500">Between 3 and 10.</p>
+                            </div>
+                            <div>
+                                <label for="set-fresh-size" class="block text-sm font-semibold text-gray-200 mb-2">Questions per fresh AI quiz</label>
+                                <input id="set-fresh-size" type="number" min="5" max="30" class="w-full min-h-[44px] rounded-lg border border-gray-600 bg-gray-900 px-3 py-2 text-white placeholder-gray-500 focus:border-brand-600 focus:outline-none transition-colors">
+                                <p class="mt-2 text-xs leading-5 text-gray-500">Between 5 and 30. About 5 per book section.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="bg-gray-800 border border-gray-700 rounded-2xl p-6 sm:p-8 flex flex-col sm:flex-row sm:items-center gap-4">
+                        <button id="settings-save-btn" class="min-h-[44px] px-8 rounded-lg bg-brand-600 hover:bg-brand-900 text-white font-bold uppercase tracking-wider text-sm transition-colors active:scale-95 shrink-0">Save settings</button>
+                        <p id="settings-status" class="text-sm text-gray-400" role="status"></p>
+                    </div>
                 </div>
             </div>
 
-            <!-- Quiz View -->
-            <div id="quiz-screen" class="hidden-view w-full max-w-3xl mx-auto">
+            <!-- pb-32 is not padding for looks: it reserves the pinned action bar's
+                 height so the bar can never sit on top of the last option. -->
+            <div id="quiz-screen" class="hidden-view w-full pb-32">
                 <div class="flex justify-between items-center mb-8 border-b border-gray-700 pb-4">
-                    <div class="text-xl text-white font-light">Question <span class="font-bold text-brand-600" id="question-number-badge">1</span></div>
-                    <div class="flex items-center gap-6">
-                        <button id="retake-btn-header" class="text-sm font-semibold text-gray-500 hover:text-brand-600 transition-colors uppercase tracking-wider">Restart</button>
-                        <div class="text-sm font-semibold text-gray-400 uppercase tracking-wider">Score: <span id="score-tracker" class="text-brand-600 text-lg font-bold">0</span></div>
+                    <div class="min-w-0">
+                        <div class="text-xl text-white font-light">Question <span class="font-bold text-brand-600" id="question-number-badge">1</span></div>
+                        <p id="quiz-scope-label" class="mt-1 text-[0.75rem] uppercase tracking-widest text-gray-500 truncate"></p>
+                    </div>
+                    <div class="flex shrink-0 items-center gap-3 sm:gap-6">
+                        <button id="quiz-new-btn" type="button" class="min-h-[44px] text-sm font-semibold text-gray-500 hover:text-brand-600 transition-colors uppercase tracking-wider">New</button>
+                        <button id="retake-btn-header" class="min-h-[44px] text-sm font-semibold text-gray-500 hover:text-brand-600 transition-colors uppercase tracking-wider">Restart</button>
+                        <div class="whitespace-nowrap text-sm font-semibold text-gray-400 uppercase tracking-wider">Score: <span id="score-tracker" class="text-brand-600 text-lg font-bold">0</span></div>
                     </div>
                 </div>
                 
+                <div id="question-asset"></div>
                 <h3 id="question-text" class="text-xl text-white mb-8 leading-relaxed font-medium"></h3>
-                <div id="options-container" class="space-y-4 mb-8"></div>
+                <!-- Two options per row from lg up, one below it. A grid (not space-y) so the
+                     four answers use the width the question now has; grid's default
+                     align-items:stretch is what keeps a short answer level with a long
+                     one, so a row never reads ragged (user, 21-09-26). -->
+                <div id="options-container" class="grid grid-cols-1 lg:grid-cols-2 gap-4 mb-8"></div>
                 
-                <div id="action-container" class="mt-8 hidden-view flex justify-end">
-                    <button id="next-btn" class="bg-brand-600 hover:bg-brand-900 text-white font-bold uppercase tracking-wider py-3 px-8 transition-colors rounded-lg">
-                        <span id="next-btn-text">Next</span>
-                    </button>
+                <!-- Pinned above the progress line (bottom-1.5 clears its 6px), aligned to
+                     the same column as the question so it reads as part of it: no width cap
+                     on either, and this bar's px-4 mirrors #content-section's px-4, so its
+                     content box lands exactly on #quiz-screen's box. Cap one without the
+                     other and Next visibly detaches from the answers.
+                     The left label exists because pinning costs the reader the header's
+                     "Question N", which scrolls away; the bar gives it back.
+                     ⚠ It stays INSIDE #quiz-screen on purpose. position:fixed escapes the
+                     layout but not display:none, so leaving the quiz still hides the bar.
+                     Hoisted out, it would linger over the result screen and the reader.
+                     Same trick #toc-backdrop already uses inside #tutorial-screen. -->
+                <div id="action-container" class="hidden-view glass-bar fixed inset-x-0 bottom-1.5 z-40">
+                    <div class="action-bar-inner mx-auto flex w-full items-center justify-between gap-4 px-4 py-3"
+                         style="padding-bottom: calc(0.75rem + env(safe-area-inset-bottom));">
+                        <p id="next-hint" class="min-w-0 truncate text-xs font-semibold uppercase tracking-widest text-gray-500"></p>
+                        <button id="next-btn" class="min-h-[44px] shrink-0 bg-brand-600 hover:bg-brand-900 text-white font-bold uppercase tracking-wider py-3 px-8 transition-colors rounded-lg">
+                            <span id="next-btn-text">Next</span>
+                        </button>
+                    </div>
                 </div>
             </div>
 
             <!-- Result Screen -->
-            <div id="result-screen" class="hidden-view w-full max-w-3xl mx-auto bg-gray-800 p-10 md:p-16 border border-gray-700 text-center shadow-xl rounded-2xl">
+            <div id="result-screen" class="hidden-view w-full max-w-5xl mx-auto bg-gray-800 p-8 sm:p-10 md:p-16 border border-gray-700 text-center shadow-xl rounded-2xl">
                 <h2 class="text-4xl font-light text-white mb-2">Assessment <span class="font-bold text-brand-600">Complete</span></h2>
                 <p class="text-gray-500 uppercase tracking-widest text-sm font-semibold mb-12">Final Results</p>
                 
@@ -210,17 +496,97 @@
                 
                 <div id="result-message" class="text-lg text-gray-300 mb-12 leading-relaxed"></div>
                 
-                <div class="flex flex-col sm:flex-row gap-4 justify-center">
-                    <button id="restart-btn" class="bg-transparent border-2 border-gray-500 text-gray-300 hover:bg-gray-700 hover:text-white hover:border-gray-400 font-bold uppercase tracking-wider py-4 px-8 transition-colors rounded-lg">
+                <!-- Order and emphasis are set per result by renderResultNav(): pass a
+                     block and "Next block" leads; miss and "Back to block" leads. -->
+                <div id="result-actions" class="flex flex-col sm:flex-row sm:flex-wrap gap-4 justify-center">
+                    <button id="result-back-btn" class="min-h-[44px] bg-transparent border-2 border-gray-500 text-gray-300 hover:bg-gray-700 hover:text-white hover:border-gray-400 font-bold uppercase tracking-wider py-4 px-8 transition-colors rounded-lg">
+                        <span id="result-back-label">Back to block</span>
+                    </button>
+                    <!-- Only the ones you got wrong. A 20-question assessment failed on one
+                         question should not cost 20 answers again (user, 20-09-26). Hidden
+                         when nothing was wrong; "Retry Quiz" beside it still redoes all. -->
+                    <button id="result-retry-wrong-btn" type="button" class="hidden-view min-h-[44px] bg-transparent border-2 border-gray-500 text-gray-300 hover:bg-gray-700 hover:text-white hover:border-gray-400 font-bold uppercase tracking-wider py-4 px-8 transition-colors rounded-lg">
+                        <span id="result-retry-wrong-label">Retry the wrong ones</span>
+                    </button>
+                    <button id="restart-btn" class="min-h-[44px] bg-transparent border-2 border-gray-500 text-gray-300 hover:bg-gray-700 hover:text-white hover:border-gray-400 font-bold uppercase tracking-wider py-4 px-8 transition-colors rounded-lg">
                         Retry Quiz
                     </button>
-                    <button id="generate-new-ai-btn" class="bg-brand-600 hover:bg-brand-900 text-white font-bold uppercase tracking-wider py-4 px-8 transition-colors hidden-view rounded-lg">
-                        New AI Scenarios
+                    <button id="result-new-btn" type="button" class="min-h-[44px] bg-transparent border-2 border-gray-500 text-gray-300 hover:bg-gray-700 hover:text-white hover:border-gray-400 font-bold uppercase tracking-wider py-4 px-8 transition-colors rounded-lg">
+                        New Quiz
+                    </button>
+                    <button id="generate-new-btn" class="min-h-[44px] bg-brand-600 hover:bg-brand-900 text-white font-bold uppercase tracking-wider py-4 px-8 transition-colors hidden-view rounded-lg">
+                        Generate Another Quiz
+                    </button>
+                    <button id="result-next-btn" class="hidden-view min-h-[44px] max-w-full font-bold uppercase tracking-wider py-4 px-8 transition-colors rounded-lg">
+                        <span id="result-next-label" class="block truncate">Next block</span>
                     </button>
                 </div>
             </div>
         </div>
     </div>
+
+    <!-- Quiz setup: PRACTICE and GENERATE QUIZ pick any mix of chapters and blocks first.
+         ⚠ It is a DIALOG, not a screen, and it lives at body level on purpose. As a child
+         of #content-section it could not open over the home page (a fixed element inside a
+         display:none parent does not render), and as a screen it REPLACED a quiz in
+         progress with no way back -- pressing New mid-run was a one-way door (user,
+         21-09-26). Opening it now hides nothing, so Cancel is simply "close". -->
+    <div id="quiz-setup-screen" class="hidden-view fixed inset-0 z-[60] overflow-y-auto">
+        <div id="setup-backdrop" class="fixed inset-0 bg-black/70"></div>
+        <div class="relative min-h-full flex items-start sm:items-center justify-center p-4">
+            <div role="dialog" aria-modal="true" aria-labelledby="setup-title" class="w-full max-w-3xl bg-gray-800 border border-gray-700 rounded-2xl p-6 sm:p-8 shadow-2xl">
+                    <div class="flex flex-wrap items-center justify-between gap-3 mb-4">
+                        <h2 id="setup-title" class="text-3xl text-white font-light">Practice</h2>
+                        <div class="flex gap-2">
+                            <button id="setup-all-btn" type="button" class="min-h-[44px] px-4 rounded-lg border border-gray-600 text-gray-200 hover:border-brand-600 hover:text-white text-sm font-semibold uppercase tracking-wider transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-600">All</button>
+                            <button id="setup-none-btn" type="button" class="min-h-[44px] px-4 rounded-lg border border-gray-600 text-gray-200 hover:border-brand-600 hover:text-white text-sm font-semibold uppercase tracking-wider transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-600">None</button>
+                        </div>
+                    </div>
+                    <!-- min-w-0: a fieldset will not shrink below its widest line by default, and long chapter titles scrolled the page sideways on phones -->
+                    <fieldset class="min-w-0">
+                        <legend class="sr-only">Chapters and blocks</legend>
+                        <div id="setup-tree" class="max-h-[55vh] overflow-y-auto overscroll-contain rounded-xl border border-gray-700 bg-gray-900/60 divide-y divide-gray-700/70"></div>
+                    </fieldset>
+                    <p id="setup-count" class="mt-4 text-sm text-gray-400" role="status" aria-live="polite"></p>
+                    <div class="mt-6 flex flex-wrap items-center gap-3">
+                        <button id="setup-start-btn" type="button" class="min-h-[44px] px-8 rounded-lg bg-brand-600 hover:bg-brand-900 text-white font-bold uppercase tracking-wider text-sm transition-colors active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white disabled:opacity-50 disabled:cursor-not-allowed">Start</button>
+                        <button id="setup-resume-btn" type="button" class="hidden-view min-h-[44px] px-6 rounded-lg border border-gray-600 text-gray-200 hover:border-brand-600 hover:text-white text-sm font-semibold uppercase tracking-wider transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-600">Resume</button>
+                        <button id="setup-cancel-btn" type="button" class="min-h-[44px] px-6 rounded-lg text-sm font-semibold uppercase tracking-wider text-gray-400 hover:text-white transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-600 ml-auto">Cancel</button>
+                    </div>
+                </div>
+        </div>
+    </div>
+
+
+    <!-- Ask about this lesson: a tutor that reads what you are reading. -->
+    <button id="ask-fab" type="button" aria-label="Ask about this lesson" aria-expanded="false" aria-controls="ask-panel"
+            class="hidden-view fixed bottom-6 right-6 z-40 h-14 w-14 rounded-full bg-brand-600 text-white shadow-xl flex items-center justify-center transition-transform hover:scale-105 active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white">
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M8 10h8M8 14h5M21 12a8 8 0 0 1-8 8H7l-4 3v-6.5A8 8 0 1 1 21 12z"/>
+        </svg>
+    </button>
+
+    <section id="ask-panel" aria-label="Ask about this lesson" class="hidden-view fixed bottom-24 right-6 z-40 flex flex-col w-[44rem] max-w-[calc(100vw-3rem)] h-[80vh] max-h-[calc(100vh-8rem)] rounded-2xl border border-gray-700 bg-gray-800 shadow-2xl">
+        <header class="flex items-start justify-between gap-3 px-4 py-3 border-b border-gray-700 shrink-0">
+            <div class="min-w-0">
+                <p class="text-white font-semibold text-sm">Ask about this lesson</p>
+                <p id="ask-context" class="text-xs text-gray-400 truncate"></p>
+            </div>
+            <div class="flex items-center gap-1 shrink-0">
+                <button id="ask-new" type="button" title="Start a new conversation and delete this one"
+                        class="min-h-[36px] px-3 rounded-lg border border-gray-600 text-gray-300 text-xs font-semibold uppercase tracking-wider hover:text-white hover:bg-gray-700 transition-colors">New</button>
+                <button id="ask-close" type="button" aria-label="Close" class="min-h-[44px] min-w-[44px] -mr-2 -mt-1 rounded-lg text-gray-400 hover:text-white hover:bg-gray-700 transition-colors">
+                    <svg class="w-5 h-5 mx-auto" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg>
+                </button>
+            </div>
+        </header>
+        <div id="ask-log" class="flex-1 overflow-y-auto px-4 py-3 space-y-3 text-sm [overflow-wrap:anywhere]"></div>
+        <form id="ask-form" class="shrink-0 border-t border-gray-700 p-3 flex items-end gap-2">
+            <label class="sr-only" for="ask-input">Your question</label>
+            <textarea id="ask-input" rows="1" maxlength="600" placeholder="What don't you get?" class="flex-1 resize-none rounded-lg bg-gray-900 border border-gray-600 px-3 py-2 text-gray-100 placeholder-gray-500 focus:outline-none focus:border-brand-600 max-h-32"></textarea>
+            <button id="ask-send" type="submit" class="min-h-[44px] px-4 rounded-lg bg-brand-600 text-white text-sm font-semibold hover:bg-brand-500 disabled:opacity-50 disabled:cursor-not-allowed transition-colors">Ask</button>
+        </form>
+    </section>
 
     <!-- Progress Bar -->
     <div id="progress-container" class="fixed bottom-0 left-0 w-full h-1.5 bg-gray-800 hidden-view z-50">
@@ -256,7 +622,6 @@
     </template>
 
     <script src="js/rich-text-viewer.js"></script>
-    <script src="js/config.js"></script>
     <script src="js/app.js"></script>
 </body>
 </html>

@@ -1,0 +1,1098 @@
+{
+ "chapter": 1,
+ "flow": [
+  "Get the data",
+  "Set aside a test set",
+  "Explore",
+  "Prepare the data",
+  "Train",
+  "Evaluate",
+  "Fine-tune",
+  "Launch"
+ ],
+ "known": [
+  "ch02-term-registry.json"
+ ],
+ "generated_by": "ml/study/geron-lab/chapter-build/build_chapter.py --chapter 1",
+ "terms": [
+  {
+   "term": "machine learning",
+   "match": [
+    "\\bmachine learning\\b",
+    "\\bML\\b"
+   ],
+   "exclude": [],
+   "definition": "writing programs that learn how to do a task from examples in data, instead of a person writing every rule.",
+   "lesson": 1
+  },
+  {
+   "term": "model",
+   "match": [
+    "\\bmodel(s|led|ling)?\\b"
+   ],
+   "exclude": [],
+   "definition": "what training produces: a rule, often a formula, that takes an input (such as a country's GDP per capita) and outputs an answer (such as a life-satisfaction score).",
+   "lesson": 1
+  },
+  {
+   "term": "train",
+   "match": [
+    "\\btrain(s|ed|ing)?\\b"
+   ],
+   "exclude": [
+    "\\btrain-dev\\b"
+   ],
+   "definition": "let the computer study examples whose answers are known and adjust the model until its answers come close to them.",
+   "lesson": 1
+  },
+  {
+   "term": "algorithm",
+   "match": [
+    "\\balgorithms?\\b"
+   ],
+   "exclude": [],
+   "definition": "a recipe a computer follows. A learning algorithm is the method that builds a model from data.",
+   "lesson": 2
+  },
+  {
+   "term": "prediction",
+   "match": [
+    "\\bpredict(s|ed|ing|ion|ions)?\\b"
+   ],
+   "exclude": [],
+   "definition": "the model's answer for one input, e.g. a guessed life-satisfaction score for one country.",
+   "lesson": 1
+  },
+  {
+   "term": "test set",
+   "match": [
+    "\\btest sets?\\b"
+   ],
+   "exclude": [],
+   "definition": "examples kept back from training and used once, at the very end, to check the finished model on data it never saw.",
+   "lesson": 1
+  },
+  {
+   "term": "explore",
+   "match": [
+    "\\bexplor(e|es|ed|ing|ation)\\b"
+   ],
+   "exclude": [],
+   "definition": "look at the data (tables, charts) to understand it before changing anything.",
+   "lesson": 1
+  },
+  {
+   "term": "evaluate",
+   "match": [
+    "\\bevaluat(e|es|ed|ing|ion)\\b"
+   ],
+   "exclude": [],
+   "definition": "measure how good or bad a model's answers are, as a number.",
+   "lesson": 1
+  },
+  {
+   "term": "fine-tune",
+   "match": [
+    "\\bfine-?tun(e|es|ed|ing)\\b"
+   ],
+   "exclude": [],
+   "definition": "two meanings in this book. (1) On the map: try other settings for the model and keep the ones that score best. (2) In lesson b05: train an already-trained model a little more on the task you really care about.",
+   "lesson": 1
+  },
+  {
+   "term": "launch",
+   "match": [
+    "\\blaunch(es|ed|ing)?\\b"
+   ],
+   "exclude": [],
+   "definition": "put the finished model into real use, so other systems or people get its answers.",
+   "lesson": 1
+  },
+  {
+   "term": "training set",
+   "match": [
+    "\\btraining (set|sets|data|examples?|instances?)\\b"
+   ],
+   "exclude": [],
+   "definition": "the examples a model learns from.",
+   "lesson": 1
+  },
+  {
+   "term": "instance",
+   "match": [
+    "\\binstances?\\b"
+   ],
+   "exclude": [],
+   "definition": "one example, one row of the data: one email, or one country.",
+   "lesson": 1
+  },
+  {
+   "term": "spam",
+   "match": [
+    "\\bspam\\b"
+   ],
+   "exclude": [],
+   "definition": "unwanted bulk email. Its opposite, a normal wanted email, is called ham.",
+   "lesson": 1
+  },
+  {
+   "term": "performance measure",
+   "match": [
+    "\\bperformance measures?\\b"
+   ],
+   "exclude": [],
+   "definition": "the number you judge a program by, such as the share of emails it classifies correctly.",
+   "lesson": 1
+  },
+  {
+   "term": "accuracy",
+   "match": [
+    "\\baccura(cy|te)\\b"
+   ],
+   "exclude": [],
+   "definition": "the share of answers that are right, e.g. 95 out of 100 emails classified correctly = 95% accuracy.",
+   "lesson": 1
+  },
+  {
+   "term": "error rate",
+   "match": [
+    "\\berror rates?\\b"
+   ],
+   "exclude": [],
+   "definition": "the share of answers that are wrong.",
+   "lesson": 1
+  },
+  {
+   "term": "GDP per capita",
+   "match": [
+    "\\bGDP\\b"
+   ],
+   "exclude": [],
+   "definition": "the value of everything a country produces in a year, divided by its number of people: roughly the average income per person, here in US dollars.",
+   "lesson": 1
+  },
+  {
+   "term": "life satisfaction",
+   "match": [
+    "\\blife[- ]satisfaction\\b"
+   ],
+   "exclude": [],
+   "definition": "a country's average answer, on a scale from 0 to 10, to a survey question about how satisfied people are with their lives (the book takes it from the OECD Better Life Index).",
+   "lesson": 1
+  },
+  {
+   "term": "data mining",
+   "match": [
+    "\\bdata mining\\b"
+   ],
+   "exclude": [],
+   "definition": "digging through large amounts of data to find patterns nobody knew were there.",
+   "lesson": 2
+  },
+  {
+   "term": "correlated",
+   "match": [
+    "\\bcorrelat(ed|ion|ions)\\b"
+   ],
+   "exclude": [],
+   "definition": "two columns are correlated when they tend to move together: when one goes up, the other tends to go up (or down) too.",
+   "lesson": 2
+  },
+  {
+   "term": "noise",
+   "match": [
+    "\\bnoise\\b"
+   ],
+   "exclude": [],
+   "definition": "random variation in the data that follows no pattern, so no model can predict it.",
+   "lesson": 2
+  },
+  {
+   "term": "label",
+   "match": [
+    "\\blabel(s|led|ling)?\\b",
+    "\\blabeled\\b"
+   ],
+   "exclude": [],
+   "definition": "the known correct answer stored with an example, e.g. \"spam\", or a country's life-satisfaction score.",
+   "lesson": 1
+  },
+  {
+   "term": "supervised learning",
+   "match": [
+    "(?<!un)(?<!semi-)(?<!self-)\\bsupervised\\b",
+    "\\bsupervision\\b"
+   ],
+   "exclude": [],
+   "definition": "learning from examples that come with their labels.",
+   "lesson": 3
+  },
+  {
+   "term": "classification",
+   "match": [
+    "\\bclassif(y|ies|ied|ying|ication|ications|ier|iers)\\b"
+   ],
+   "exclude": [],
+   "definition": "predicting a class: one answer out of a fixed list, such as spam or not spam.",
+   "lesson": 1
+  },
+  {
+   "term": "class",
+   "match": [
+    "\\bclass(es)?\\b"
+   ],
+   "exclude": [],
+   "definition": "one of the fixed answers a classification model chooses between, e.g. spam or ham. (Python code also has classes; lesson b08 explains that second meaning where it appears.)",
+   "lesson": 1
+  },
+  {
+   "term": "regression",
+   "match": [
+    "\\bregression\\b"
+   ],
+   "exclude": [
+    "\\blogistic regression\\b",
+    "\\blinear regression\\b"
+   ],
+   "definition": "predicting a number, such as a car's price or a country's score.",
+   "lesson": 3
+  },
+  {
+   "term": "target",
+   "match": [
+    "\\btargets?\\b"
+   ],
+   "exclude": [
+    "\\bit is the target\\b"
+   ],
+   "definition": "another name for the label; the book uses it more when the answer is a number.",
+   "lesson": 3
+  },
+  {
+   "term": "feature",
+   "match": [
+    "\\bfeatures?\\b"
+   ],
+   "exclude": [
+    "\\bfeature extraction\\b",
+    "\\bfeature engineering\\b"
+   ],
+   "definition": "an input column the model uses, such as a car's mileage or a country's GDP per capita. Also called an attribute or a predictor.",
+   "lesson": 2
+  },
+  {
+   "term": "attribute",
+   "match": [
+    "\\battributes?\\b"
+   ],
+   "exclude": [],
+   "definition": "another name for a feature: an input column.",
+   "lesson": 2
+  },
+  {
+   "term": "predictor",
+   "match": [
+    "\\bpredictors?\\b"
+   ],
+   "exclude": [],
+   "definition": "another name for a feature: an input column. (A spam filter's \"best predictors\" are the words that tell spam apart best.)",
+   "lesson": 2
+  },
+  {
+   "term": "logistic regression",
+   "match": [
+    "\\blogistic regression\\b"
+   ],
+   "exclude": [],
+   "definition": "a model used for classification, despite its name: it outputs the probability that an example belongs to a class.",
+   "lesson": 3
+  },
+  {
+   "term": "decision boundary",
+   "match": [
+    "\\bdecision boundar(y|ies)\\b"
+   ],
+   "exclude": [],
+   "definition": "the line where a classification model's answer changes from one class to the other: points on one side get one class, points on the other side get the other.",
+   "lesson": 3
+  },
+  {
+   "term": "probability",
+   "match": [
+    "\\bprobabilit(y|ies)\\b"
+   ],
+   "exclude": [],
+   "definition": "how likely something is, from 0 (never) to 1 (certain); a 20% chance is a probability of 0.2.",
+   "lesson": 3
+  },
+  {
+   "term": "unsupervised learning",
+   "match": [
+    "\\bunsupervised\\b"
+   ],
+   "exclude": [],
+   "definition": "learning from examples that have no labels, so the algorithm must find structure on its own.",
+   "lesson": 4
+  },
+  {
+   "term": "clustering",
+   "match": [
+    "\\bcluster(s|ing|ed)?\\b"
+   ],
+   "exclude": [],
+   "definition": "grouping similar examples together, without being told what the groups are.",
+   "lesson": 4
+  },
+  {
+   "term": "visualization",
+   "match": [
+    "\\bvisuali[sz](e|es|ed|ing|ation|ations)\\b"
+   ],
+   "exclude": [],
+   "definition": "here: an algorithm that squeezes many columns into a 2D or 3D picture you can plot, keeping similar examples close together.",
+   "lesson": 4
+  },
+  {
+   "term": "dimensionality reduction",
+   "match": [
+    "\\bdimensionality reduction\\b"
+   ],
+   "exclude": [],
+   "definition": "simplifying the data by using fewer columns while losing as little information as possible.",
+   "lesson": 4
+  },
+  {
+   "term": "dimension",
+   "match": [
+    "\\bdimensions?\\b",
+    "\\bdimensionality\\b"
+   ],
+   "exclude": [
+    "\\bdimensionality reduction\\b"
+   ],
+   "definition": "roughly, one column of the data. 2D means two dimensions: rows and columns, or the two axes of a flat picture.",
+   "lesson": 4
+  },
+  {
+   "term": "feature extraction",
+   "match": [
+    "\\bfeature extraction\\b"
+   ],
+   "exclude": [],
+   "definition": "making one new column out of several correlated ones, e.g. \"wear and tear\" out of a car's mileage and age.",
+   "lesson": 4
+  },
+  {
+   "term": "t-SNE",
+   "match": [
+    "\\bt-SNE\\b"
+   ],
+   "exclude": [],
+   "definition": "the name of one particular visualization algorithm (Chapter 8).",
+   "lesson": 4
+  },
+  {
+   "term": "anomaly detection",
+   "match": [
+    "\\banomal(y|ies|ous)\\b"
+   ],
+   "exclude": [],
+   "definition": "flagging examples that are very different from the usual ones, after learning what \"usual\" looks like.",
+   "lesson": 4
+  },
+  {
+   "term": "novelty detection",
+   "match": [
+    "\\bnovelty\\b"
+   ],
+   "exclude": [],
+   "definition": "flagging examples of a kind never seen in training; it needs a training set with none of that kind in it.",
+   "lesson": 4
+  },
+  {
+   "term": "outlier",
+   "match": [
+    "\\boutliers?\\b"
+   ],
+   "exclude": [],
+   "definition": "an example far away from all the others.",
+   "lesson": 9
+  },
+  {
+   "term": "association rule learning",
+   "match": [
+    "\\bassociation rule"
+   ],
+   "exclude": [],
+   "definition": "finding which attributes tend to occur together, e.g. which products end up in the same basket.",
+   "lesson": 4
+  },
+  {
+   "term": "semi-supervised learning",
+   "match": [
+    "\\bsemi-?supervised\\b"
+   ],
+   "exclude": [],
+   "definition": "learning from data where only a small part has labels and the rest has none.",
+   "lesson": 3
+  },
+  {
+   "term": "self-supervised learning",
+   "match": [
+    "\\bself-supervised\\b"
+   ],
+   "exclude": [],
+   "definition": "learning from data with no labels by making labels out of the data itself, e.g. hiding part of each example and learning to fill it back in.",
+   "lesson": 3
+  },
+  {
+   "term": "reinforcement learning",
+   "match": [
+    "\\breinforcement learning\\b"
+   ],
+   "exclude": [],
+   "definition": "learning by trial and error: an agent acts, gets rewards or penalties, and learns which actions pay off.",
+   "lesson": 5
+  },
+  {
+   "term": "agent",
+   "match": [
+    "\\bagents?\\b"
+   ],
+   "exclude": [],
+   "definition": "in reinforcement learning, the learning system: it observes, acts, and gets rewards.",
+   "lesson": 5
+  },
+  {
+   "term": "reward",
+   "match": [
+    "\\brewards?\\b"
+   ],
+   "exclude": [],
+   "definition": "in reinforcement learning, a score for an action; a penalty is a negative reward.",
+   "lesson": 5
+  },
+  {
+   "term": "environment",
+   "match": [
+    "\\benvironments?\\b"
+   ],
+   "exclude": [
+    "\\bfluctuating environments?\\b"
+   ],
+   "definition": "in reinforcement learning, the world the agent acts in. (\"Fluctuating environments\" in lesson b02 just means situations that keep changing.)",
+   "lesson": 5
+  },
+  {
+   "term": "policy",
+   "match": [
+    "\\bpolic(y|ies)\\b"
+   ],
+   "exclude": [],
+   "definition": "in reinforcement learning, the agent's learned rule for which action to take in each situation.",
+   "lesson": 5
+  },
+  {
+   "term": "transfer learning",
+   "match": [
+    "\\btransfer learning\\b"
+   ],
+   "exclude": [],
+   "definition": "reusing a model trained on one task as the starting point for another task.",
+   "lesson": 5
+  },
+  {
+   "term": "representation",
+   "match": [
+    "\\brepresentations?\\b"
+   ],
+   "exclude": [],
+   "definition": "here: what a model has learned to notice about its inputs, e.g. what cat faces generally look like.",
+   "lesson": 5
+  },
+  {
+   "term": "batch learning",
+   "match": [
+    "\\bbatch learning\\b",
+    "\\bbatch model\\b",
+    "\\bbatch system\\b"
+   ],
+   "exclude": [],
+   "definition": "training once on all the data available, then using the model without it learning any more.",
+   "lesson": 6
+  },
+  {
+   "term": "online learning",
+   "match": [
+    "\\bonline\\b"
+   ],
+   "exclude": [],
+   "definition": "learning in small steps from new data as it arrives, while the model is in use. \"Online\" here means incremental, not \"on the internet\".",
+   "lesson": 6
+  },
+  {
+   "term": "offline",
+   "match": [
+    "\\boffline\\b"
+   ],
+   "exclude": [],
+   "definition": "done separately from the live system, e.g. on a schedule, not while users are being served.",
+   "lesson": 6
+  },
+  {
+   "term": "mini-batch",
+   "match": [
+    "\\bmini-?batch(es)?\\b"
+   ],
+   "exclude": [],
+   "definition": "a small group of examples used for one learning step.",
+   "lesson": 6
+  },
+  {
+   "term": "out-of-core learning",
+   "match": [
+    "\\bout-of-core\\b"
+   ],
+   "exclude": [],
+   "definition": "training on data too big for the computer's memory by loading one part at a time.",
+   "lesson": 6
+  },
+  {
+   "term": "learning rate",
+   "match": [
+    "\\blearning[- ]rates?\\b"
+   ],
+   "exclude": [],
+   "definition": "how big each learning step is: how quickly an online model adapts to new data (and forgets old data).",
+   "lesson": 6
+  },
+  {
+   "term": "model rot",
+   "match": [
+    "\\bmodel rot\\b",
+    "\\bdata drift\\b"
+   ],
+   "exclude": [],
+   "definition": "a model getting worse over time because the world changes and the model does not. Also called data drift.",
+   "lesson": 6
+  },
+  {
+   "term": "production",
+   "match": [
+    "\\bproduction\\b"
+   ],
+   "exclude": [],
+   "definition": "the live system real users depend on, as opposed to your experiments.",
+   "lesson": 6
+  },
+  {
+   "term": "generalize",
+   "match": [
+    "\\bgenerali[sz](e|es|ed|ing)\\b"
+   ],
+   "exclude": [],
+   "definition": "do well on examples the model never saw during training.",
+   "lesson": 7
+  },
+  {
+   "term": "instance-based learning",
+   "match": [
+    "\\binstance-based\\b"
+   ],
+   "exclude": [],
+   "definition": "learning by remembering the training examples and answering a new case from the most similar ones.",
+   "lesson": 7
+  },
+  {
+   "term": "model-based learning",
+   "match": [
+    "\\bmodel-based\\b"
+   ],
+   "exclude": [],
+   "definition": "learning by fitting a model (e.g. a line) to the examples and answering new cases with the model.",
+   "lesson": 7
+  },
+  {
+   "term": "similarity",
+   "match": [
+    "\\bsimilarity\\b"
+   ],
+   "exclude": [],
+   "definition": "a measure of how alike two examples are, e.g. the number of words two emails share, or how close two countries' GDP is.",
+   "lesson": 7
+  },
+  {
+   "term": "k-nearest neighbours",
+   "match": [
+    "\\bk-nearest\\b",
+    "\\bnearest neighbou?rs?\\b",
+    "\\bKNeighbors"
+   ],
+   "exclude": [],
+   "definition": "an instance-based algorithm: find the k training examples most similar to the new case and average their answers.",
+   "lesson": 7
+  },
+  {
+   "term": "linear model",
+   "match": [
+    "\\blinear\\b"
+   ],
+   "exclude": [],
+   "definition": "a model whose answer is a starting value plus a fixed multiple of each input. With one input it is a straight line.",
+   "lesson": 7
+  },
+  {
+   "term": "parameter",
+   "match": [
+    "\\bparameters?\\b"
+   ],
+   "exclude": [],
+   "definition": "a number inside the model that training fills in, e.g. the two numbers that fix a straight line.",
+   "lesson": 6
+  },
+  {
+   "term": "theta",
+   "match": [
+    "θ",
+    "\\btheta\\b"
+   ],
+   "exclude": [],
+   "definition": "θ (\"theta\") is the Greek letter the book uses for model parameters: θ₀ is the line's starting value, θ₁ its slope.",
+   "lesson": 7
+  },
+  {
+   "term": "slope",
+   "match": [
+    "\\bslopes?\\b"
+   ],
+   "exclude": [],
+   "definition": "how much a line rises for each step to the right; here, how much the score goes up per extra dollar of GDP.",
+   "lesson": 6
+  },
+  {
+   "term": "intercept",
+   "match": [
+    "\\bintercepts?\\b"
+   ],
+   "exclude": [],
+   "definition": "where a line starts: its value when the input is 0. The book's θ₀.",
+   "lesson": 8
+  },
+  {
+   "term": "cost function",
+   "match": [
+    "\\bcost function"
+   ],
+   "exclude": [],
+   "definition": "a number that says how badly a model fits the training data; training pushes it down.",
+   "lesson": 7
+  },
+  {
+   "term": "utility function",
+   "match": [
+    "\\butility function"
+   ],
+   "exclude": [],
+   "definition": "a number that says how well a model fits; training pushes it up.",
+   "lesson": 7
+  },
+  {
+   "term": "fit",
+   "match": [
+    "\\bfit(s|ted|ting)?\\b"
+   ],
+   "exclude": [
+    "\\bdo(es)? not fit\\b",
+    "\\bto fit in\\b",
+    "\\bpartial-fit\\b"
+   ],
+   "definition": "train. `model.fit(X, y)` is the training call, and a model that fits the data well has small misses on it.",
+   "lesson": 7
+  },
+  {
+   "term": "inference",
+   "match": [
+    "\\binference\\b"
+   ],
+   "exclude": [],
+   "definition": "using a trained model to get answers for new cases.",
+   "lesson": 7
+  },
+  {
+   "term": "Scikit-Learn",
+   "match": [
+    "\\bscikit-?learn\\b",
+    "\\bsklearn\\b"
+   ],
+   "exclude": [],
+   "definition": "the Python library for machine learning this book uses.",
+   "lesson": 1
+  },
+  {
+   "term": "pandas",
+   "match": [
+    "\\bpandas\\b"
+   ],
+   "exclude": [],
+   "definition": "a Python library for tables (rows and named columns).",
+   "lesson": 8
+  },
+  {
+   "term": "DataFrame",
+   "match": [
+    "\\bdataframe\\b"
+   ],
+   "exclude": [],
+   "definition": "a table in pandas: rows plus named columns.",
+   "lesson": 8
+  },
+  {
+   "term": "NumPy",
+   "match": [
+    "\\bnumpy\\b"
+   ],
+   "exclude": [],
+   "definition": "a Python library for fast grids of numbers (arrays).",
+   "lesson": 8
+  },
+  {
+   "term": "array",
+   "match": [
+    "\\barrays?\\b"
+   ],
+   "exclude": [],
+   "definition": "a grid of numbers with no column names, as NumPy stores them.",
+   "lesson": 8
+  },
+  {
+   "term": "matplotlib",
+   "match": [
+    "\\bmatplotlib\\b"
+   ],
+   "exclude": [],
+   "definition": "a Python library for drawing charts.",
+   "lesson": 8
+  },
+  {
+   "term": "CSV",
+   "match": [
+    "\\bCSV\\b"
+   ],
+   "exclude": [],
+   "definition": "a plain text file holding a table: one row per line, values separated by commas.",
+   "lesson": 8
+  },
+  {
+   "term": "scatterplot",
+   "match": [
+    "\\bscatter ?plots?\\b",
+    "\\bscatter\\b"
+   ],
+   "exclude": [],
+   "definition": "a chart with one dot per row, placed by two columns (one across, one up).",
+   "lesson": 8
+  },
+  {
+   "term": "vector",
+   "match": [
+    "\\bvectors?\\b"
+   ],
+   "exclude": [],
+   "definition": "an ordered list of numbers, e.g. the 27 life-satisfaction scores.",
+   "lesson": 8
+  },
+  {
+   "term": "sampling noise",
+   "match": [
+    "\\bsampling noise\\b"
+   ],
+   "exclude": [],
+   "definition": "a sample that is unrepresentative by chance, because it is too small.",
+   "lesson": 9
+  },
+  {
+   "term": "sampling bias",
+   "match": [
+    "\\bsampling bias\\b"
+   ],
+   "exclude": [],
+   "definition": "a sample that is unrepresentative because of the way it was picked; making it bigger does not help.",
+   "lesson": 9
+  },
+  {
+   "term": "sample",
+   "match": [
+    "\\bsamples?\\b"
+   ],
+   "exclude": [
+    "\\bsampling (noise|bias)\\b",
+    "\\bout-of-sample\\b"
+   ],
+   "definition": "two meanings. (1) One example, one row, as in the card of lesson b03: \"one sample or all samples\". (2) A set of rows picked from a bigger population, e.g. 27 of the world's countries.",
+   "lesson": 3
+  },
+  {
+   "term": "representative",
+   "match": [
+    "\\b(non)?representative\\b"
+   ],
+   "exclude": [],
+   "definition": "a sample is representative when it looks like all the cases the model will meet later.",
+   "lesson": 9
+  },
+  {
+   "term": "feature engineering",
+   "match": [
+    "\\bfeature engineering\\b"
+   ],
+   "exclude": [],
+   "definition": "choosing, combining and creating the input columns a model gets.",
+   "lesson": 9
+  },
+  {
+   "term": "overfitting",
+   "match": [
+    "\\boverfit(s|ted|ting)?\\b"
+   ],
+   "exclude": [],
+   "definition": "the model fits the training data very well but does badly on new data, because it learned the noise too.",
+   "lesson": 10
+  },
+  {
+   "term": "underfitting",
+   "match": [
+    "\\bunderfit(s|ted|ting)?\\b"
+   ],
+   "exclude": [],
+   "definition": "the model is too simple to learn the pattern, so it does badly even on the training data.",
+   "lesson": 10
+  },
+  {
+   "term": "regularization",
+   "match": [
+    "\\bregulari[sz](ation|e|es|ed|ing)\\b"
+   ],
+   "exclude": [],
+   "definition": "holding a model back (e.g. keeping its slope small) so it cannot follow the noise.",
+   "lesson": 10
+  },
+  {
+   "term": "hyperparameter",
+   "match": [
+    "\\bhyper-?parameters?\\b"
+   ],
+   "exclude": [],
+   "definition": "a setting of the learning algorithm that YOU choose before training, e.g. k in k-nearest neighbours; training does not change it.",
+   "lesson": 10
+  },
+  {
+   "term": "degrees of freedom",
+   "match": [
+    "\\bdegrees? of freedom\\b"
+   ],
+   "exclude": [],
+   "definition": "how many independent numbers training may adjust; a line has two (its start and its slope).",
+   "lesson": 10
+  },
+  {
+   "term": "polynomial",
+   "match": [
+    "\\bpolynomials?\\b"
+   ],
+   "exclude": [],
+   "definition": "a formula with the input raised to powers (x, x², x³, ...). Degree 10 goes up to x¹⁰, so the curve can bend many times.",
+   "lesson": 10
+  },
+  {
+   "term": "RMSE",
+   "match": [
+    "\\bRMSE\\b"
+   ],
+   "exclude": [],
+   "definition": "root mean squared error: square every miss, average them, take the square root. A typical size of miss, in the same units as the answer.",
+   "lesson": 10
+  },
+  {
+   "term": "generalization error",
+   "match": [
+    "\\bgenerali[sz]ation error\\b",
+    "\\bout-of-sample error\\b"
+   ],
+   "exclude": [],
+   "definition": "how wrong the model is on new cases; the test set gives an estimate of it.",
+   "lesson": 11
+  },
+  {
+   "term": "validation set",
+   "match": [
+    "\\bvalidation sets?\\b",
+    "\\bdev sets?\\b"
+   ],
+   "exclude": [],
+   "definition": "examples held back from the training set to compare candidate models, before the test set is ever used.",
+   "lesson": 11
+  },
+  {
+   "term": "held out",
+   "match": [
+    "\\b(held|hold|holds|holding) (out|back)\\b",
+    "\\bholdout\\b"
+   ],
+   "exclude": [],
+   "definition": "kept aside and not used for learning.",
+   "lesson": 11
+  },
+  {
+   "term": "cross-validation",
+   "match": [
+    "\\bcross-validation\\b"
+   ],
+   "exclude": [],
+   "definition": "comparing models many times over on several small validation sets, then averaging, instead of trusting one split.",
+   "lesson": 11
+  },
+  {
+   "term": "data mismatch",
+   "match": [
+    "\\bdata mismatch\\b"
+   ],
+   "exclude": [],
+   "definition": "the training data does not look like the data the model will meet in production.",
+   "lesson": 11
+  },
+  {
+   "term": "train-dev set",
+   "match": [
+    "\\btrain-dev\\b"
+   ],
+   "exclude": [],
+   "definition": "examples held out from the training data (not from the production-like data), used to tell overfitting apart from data mismatch.",
+   "lesson": 11
+  },
+  {
+   "term": "no free lunch theorem",
+   "match": [
+    "\\bno free lunch\\b"
+   ],
+   "exclude": [],
+   "definition": "a result saying that, with no assumptions about the data, no model is better than any other in advance.",
+   "lesson": 11
+  },
+  {
+   "term": "decision tree",
+   "match": [
+    "\\bdecision[- ]trees?\\b"
+   ],
+   "exclude": [],
+   "definition": "a model that answers by asking a chain of yes/no questions about the inputs (Chapter 6).",
+   "lesson": 2
+  },
+  {
+   "term": "k-means",
+   "match": [
+    "\\bk-means\\b"
+   ],
+   "exclude": [],
+   "definition": "a common clustering algorithm: it looks for k groups and a centre for each (Chapter 9).",
+   "lesson": 4
+  },
+  {
+   "term": "matrix",
+   "match": [
+    "\\bmatri(x|ces)\\b"
+   ],
+   "exclude": [],
+   "definition": "a grid of numbers with rows and columns; `X` here is a matrix of 27 rows and 1 column.",
+   "lesson": 8
+  },
+  {
+   "term": "shape",
+   "match": [
+    "\\bshapes?\\b"
+   ],
+   "exclude": [
+    "\\bshape of\\b",
+    "\\bwrong shape\\b",
+    "\\bsame shape\\b",
+    "\\bthe shape\\b",
+    "\\ba different shape\\b"
+   ],
+   "definition": "the size of an array or table, written (rows, columns): (27, 1) is 27 rows and 1 column.",
+   "lesson": 8
+  },
+  {
+   "term": "Series",
+   "match": [
+    "\\bSeries\\b"
+   ],
+   "exclude": [],
+   "definition": "a single column in pandas: a list of values with no column name around it.",
+   "lesson": 8
+  },
+  {
+   "term": "float64",
+   "match": [
+    "\\bfloat64\\b"
+   ],
+   "exclude": [],
+   "definition": "NumPy's usual type for numbers with decimals, e.g. 5.8.",
+   "lesson": 8
+  },
+  {
+   "term": "index",
+   "match": [
+    "\\bindex(es)?\\b"
+   ],
+   "exclude": [
+    "\\bBetter Life Index\\b"
+   ],
+   "definition": "the labels pandas gives the rows, 0, 1, 2 and so on; or, in general, a position in a list.",
+   "lesson": 8
+  },
+  {
+   "term": "notebook",
+   "match": [
+    "\\bnotebooks?\\b"
+   ],
+   "exclude": [],
+   "definition": "a document (Jupyter, Google Colab) where code cells and their output sit together.",
+   "lesson": 8
+  },
+  {
+   "term": "module",
+   "match": [
+    "\\bmodules?\\b"
+   ],
+   "exclude": [],
+   "definition": "a Python file of ready-made code that you load with `import`, e.g. `matplotlib.pyplot`.",
+   "lesson": 8
+  },
+  {
+   "term": "object",
+   "match": [
+    "\\bobjects?\\b"
+   ],
+   "exclude": [],
+   "definition": "in Python, one thing held in a variable, carrying its own stored values and functions; `model` is an object.",
+   "lesson": 8
+  },
+  {
+   "term": "median",
+   "match": [
+    "\\bmedian\\b"
+   ],
+   "exclude": [],
+   "definition": "the middle value once a list is sorted.",
+   "lesson": 9
+  },
+  {
+   "term": "SQL",
+   "match": [
+    "\\bSQL\\b"
+   ],
+   "exclude": [],
+   "definition": "the language for querying database tables (`SELECT`, `WHERE`, `CASE WHEN`); the lessons use it for comparisons.",
+   "lesson": 1
+  }
+ ]
+}

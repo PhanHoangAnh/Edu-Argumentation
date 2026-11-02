@@ -1,0 +1,1380 @@
+{
+ "chapter": 17,
+ "flow": [
+  "Get the data",
+  "Set aside a test set",
+  "Explore",
+  "Prepare the data",
+  "Train",
+  "Evaluate",
+  "Fine-tune",
+  "Launch"
+ ],
+ "known": [
+  "ch02-term-registry.json"
+ ],
+ "generated_by": "ml/study/geron-lab/ch17-notes/build_chapter.py",
+ "terms": [
+  {
+   "term": "autoencoder",
+   "match": [
+    "\\bautoencoders?\\b",
+    "\\bauto-encoders?\\b"
+   ],
+   "exclude": [],
+   "definition": "a neural network trained to output a copy of its own input, through a narrow middle, so it has to learn what matters in the data.",
+   "lesson": 1
+  },
+  {
+   "term": "neural network",
+   "match": [
+    "\\bneural net(work)?s?\\b",
+    "\\bnetworks?\\b"
+   ],
+   "exclude": [],
+   "definition": "a model built from many small parts (neurons) arranged in layers; each part does a little arithmetic and passes its result on.",
+   "lesson": 1
+  },
+  {
+   "term": "neuron",
+   "match": [
+    "\\bneurons?\\b"
+   ],
+   "exclude": [],
+   "definition": "one small part of a neural network: it multiplies each input by a learned weight, adds them up, and passes the sum through a fixed curve.",
+   "lesson": 1
+  },
+  {
+   "term": "layer",
+   "match": [
+    "\\blayers?\\b"
+   ],
+   "exclude": [],
+   "definition": "a group of neurons working side by side; a network is several layers, each feeding the next.",
+   "lesson": 1
+  },
+  {
+   "term": "weight",
+   "match": [
+    "\\bweights?\\b",
+    "\\bweighted\\b"
+   ],
+   "exclude": [],
+   "definition": "a number the network learns; each input is multiplied by its weight.",
+   "lesson": 1
+  },
+  {
+   "term": "GAN",
+   "match": [
+    "\\bGANs?\\b",
+    "generative adversarial"
+   ],
+   "exclude": [],
+   "definition": "generative adversarial network: two networks trained against each other, one making fake data and one trying to catch the fakes.",
+   "lesson": 1
+  },
+  {
+   "term": "diffusion model",
+   "match": [
+    "\\bdiffusion\\b"
+   ],
+   "exclude": [],
+   "definition": "a model that learns to remove a little noise from an image, step by step; run from pure noise, it makes a new image.",
+   "lesson": 1
+  },
+  {
+   "term": "unsupervised learning",
+   "match": [
+    "\\bunsupervised\\b",
+    "\\bunlabel(l)?ed\\b"
+   ],
+   "exclude": [],
+   "definition": "learning from data that has no answer column at all.",
+   "lesson": 1
+  },
+  {
+   "term": "generative model",
+   "match": [
+    "\\bgenerat(e|es|ed|ing|ion|ive|or|ors)\\b"
+   ],
+   "exclude": [],
+   "definition": "a model that can produce NEW data that looks like its training data (here: new images of clothes).",
+   "lesson": 1
+  },
+  {
+   "term": "coding",
+   "match": [
+    "\\bcodings?\\b"
+   ],
+   "exclude": [],
+   "definition": "the short list of numbers an encoder squeezes an input into (here 30, or 10, numbers for a 784-pixel image). Also called a latent representation.",
+   "lesson": 1
+  },
+  {
+   "term": "latent representation",
+   "match": [
+    "\\blatent\\b"
+   ],
+   "exclude": [],
+   "definition": "the model's own internal summary of an input: its coding. \"Latent space\" = all possible codings.",
+   "lesson": 1
+  },
+  {
+   "term": "encoder",
+   "match": [
+    "\\bencoders?\\b"
+   ],
+   "exclude": [],
+   "definition": "the half of an autoencoder that turns an input into a coding.",
+   "lesson": 1
+  },
+  {
+   "term": "decoder",
+   "match": [
+    "\\bdecoders?\\b"
+   ],
+   "exclude": [],
+   "definition": "the half of an autoencoder that turns a coding back into a full input.",
+   "lesson": 1
+  },
+  {
+   "term": "reconstruction",
+   "match": [
+    "\\breconstruct(s|ed|ing|ion|ions)?\\b"
+   ],
+   "exclude": [],
+   "definition": "the decoder's rebuilt copy of the input; the reconstruction loss scores how far it is from the original.",
+   "lesson": 1
+  },
+  {
+   "term": "loss",
+   "match": [
+    "\\bloss(es)?\\b"
+   ],
+   "exclude": [],
+   "definition": "the one number that says how wrong the outputs are; training changes the weights to make it smaller.",
+   "lesson": 1
+  },
+  {
+   "term": "dimensionality reduction",
+   "match": [
+    "\\bdimensionality reduction\\b",
+    "\\breduc(e|es|ing) dimensionality\\b"
+   ],
+   "exclude": [],
+   "definition": "describing each row with fewer numbers (columns) while keeping as much information as possible.",
+   "lesson": 1
+  },
+  {
+   "term": "Gaussian noise",
+   "match": [
+    "\\bgaussian noise\\b"
+   ],
+   "exclude": [],
+   "definition": "random values drawn from the bell curve, added to data; pure Gaussian noise looks like TV static.",
+   "lesson": 1
+  },
+  {
+   "term": "discriminator",
+   "match": [
+    "\\bdiscriminators?\\b"
+   ],
+   "exclude": [],
+   "definition": "the network in a GAN that looks at an image and outputs the probability that it is real.",
+   "lesson": 1
+  },
+  {
+   "term": "generator",
+   "match": [
+    "\\bgenerators?\\b"
+   ],
+   "exclude": [],
+   "definition": "the network in a GAN that turns random noise into a fake image.",
+   "lesson": 1
+  },
+  {
+   "term": "U-Net",
+   "match": [
+    "\\bU-Nets?\\b"
+   ],
+   "exclude": [],
+   "definition": "a convolutional network that shrinks an image and then grows it back, with shortcuts between matching sizes; used inside diffusion models.",
+   "lesson": 1
+  },
+  {
+   "term": "convolution",
+   "match": [
+    "\\bconvolution(s|al)?\\b",
+    "\\bConv2D\\b",
+    "\\bCNNs?\\b"
+   ],
+   "exclude": [],
+   "definition": "a layer that slides a small learned pattern-detector (e.g. 3 × 3 pixels) over an image; CNN = convolutional neural network.",
+   "lesson": 1
+  },
+  {
+   "term": "latency",
+   "match": [
+    "\\blatency\\b"
+   ],
+   "exclude": [],
+   "definition": "how long one answer takes.",
+   "lesson": 1
+  },
+  {
+   "term": "high-dimensional",
+   "match": [
+    "\\bhigh-dimensional\\b",
+    "\\blow-dimensional\\b",
+    "\\blower-dimensional\\b"
+   ],
+   "exclude": [],
+   "definition": "with many numbers (columns) per row; low-dimensional = few.",
+   "lesson": 1
+  },
+  {
+   "term": "bottleneck",
+   "match": [
+    "\\bbottlenecks?\\b"
+   ],
+   "exclude": [],
+   "definition": "the narrowest layer, which everything has to pass through.",
+   "lesson": 1
+  },
+  {
+   "term": "identity function",
+   "match": [
+    "\\bidentity (function|mapping)\\b"
+   ],
+   "exclude": [],
+   "definition": "a function that returns its input unchanged.",
+   "lesson": 1
+  },
+  {
+   "term": "PCA",
+   "match": [
+    "\\bPCA\\b",
+    "principal component"
+   ],
+   "exclude": [],
+   "definition": "principal component analysis: finds the flat surface the data lies closest to and describes each row by its position on it.",
+   "lesson": 2
+  },
+  {
+   "term": "hashing",
+   "match": [
+    "\\bhashing\\b"
+   ],
+   "exclude": [],
+   "definition": "turning a value into a short fixed-size code.",
+   "lesson": 2
+  },
+  {
+   "term": "embedding layer",
+   "match": [
+    "\\bembedding layers?\\b"
+   ],
+   "exclude": [],
+   "definition": "a lookup table that gives each ID a short learned list of numbers.",
+   "lesson": 2
+  },
+  {
+   "term": "undercomplete",
+   "match": [
+    "\\bundercomplete\\b"
+   ],
+   "exclude": [],
+   "definition": "an autoencoder whose coding layer is smaller than its input.",
+   "lesson": 3
+  },
+  {
+   "term": "overcomplete",
+   "match": [
+    "\\bovercomplete\\b"
+   ],
+   "exclude": [],
+   "definition": "an autoencoder whose coding layer is as large as, or larger than, its input.",
+   "lesson": 17
+  },
+  {
+   "term": "activation function",
+   "match": [
+    "\\bactivations?\\b",
+    "\\bactivation functions?\\b"
+   ],
+   "exclude": [],
+   "definition": "the fixed curve applied to a neuron's sum before it is passed on.",
+   "lesson": 2
+  },
+  {
+   "term": "linear activation",
+   "match": [
+    "\\blinear activations?\\b"
+   ],
+   "exclude": [],
+   "definition": "no curve at all: the neuron passes its weighted sum on unchanged.",
+   "lesson": 3
+  },
+  {
+   "term": "MSE",
+   "match": [
+    "\\bMSE\\b",
+    "mean squared error"
+   ],
+   "exclude": [],
+   "definition": "mean squared error: square each difference, then average.",
+   "lesson": 3
+  },
+  {
+   "term": "gradient descent",
+   "match": [
+    "\\bgradient descent\\b"
+   ],
+   "exclude": [],
+   "definition": "the training method: again and again, nudge every weight a little in the direction that lowers the loss.",
+   "lesson": 3
+  },
+  {
+   "term": "gradient",
+   "match": [
+    "\\bgradients?\\b"
+   ],
+   "exclude": [],
+   "definition": "for one weight: how much and in which direction the loss changes when that weight changes.",
+   "lesson": 3
+  },
+  {
+   "term": "subspace",
+   "match": [
+    "\\bsubspace\\b"
+   ],
+   "exclude": [],
+   "definition": "a flat surface (a plane, a line) inside a bigger space.",
+   "lesson": 3
+  },
+  {
+   "term": "self-supervised learning",
+   "match": [
+    "\\bself-supervised\\b"
+   ],
+   "exclude": [],
+   "definition": "training where the answers are made from the data itself, e.g. the input used as its own target.",
+   "lesson": 3
+  },
+  {
+   "term": "epoch",
+   "match": [
+    "\\bepochs?\\b"
+   ],
+   "exclude": [],
+   "definition": "one full pass of training over every training example.",
+   "lesson": 3
+  },
+  {
+   "term": "SGD",
+   "match": [
+    "\\bSGD\\b"
+   ],
+   "exclude": [],
+   "definition": "stochastic gradient descent: gradient descent that updates the weights after every small batch.",
+   "lesson": 3
+  },
+  {
+   "term": "learning rate",
+   "match": [
+    "\\blearning[_ ]rates?\\b"
+   ],
+   "exclude": [],
+   "definition": "how big each weight update is.",
+   "lesson": 3
+  },
+  {
+   "term": "optimizer",
+   "match": [
+    "\\boptimi[sz]ers?\\b"
+   ],
+   "exclude": [],
+   "definition": "the algorithm that changes the weights during training, e.g. SGD or Nadam.",
+   "lesson": 3
+  },
+  {
+   "term": "Keras",
+   "match": [
+    "\\bKeras\\b",
+    "\\btf\\.keras\\b"
+   ],
+   "exclude": [],
+   "definition": "the part of Google's TensorFlow library used to build and train neural networks.",
+   "lesson": 3
+  },
+  {
+   "term": "TensorFlow",
+   "match": [
+    "\\bTensorFlow\\b",
+    "\\btf\\.(?!keras)"
+   ],
+   "exclude": [],
+   "definition": "Google's library for neural networks; code calls it tf.",
+   "lesson": 3
+  },
+  {
+   "term": "Dense layer",
+   "match": [
+    "\\bDense\\b",
+    "\\bfully connected\\b"
+   ],
+   "exclude": [],
+   "definition": "an ordinary layer where every input feeds every neuron. (ch02's \"dense\" was about storing every cell of a table.)",
+   "lesson": 3
+  },
+  {
+   "term": "Sequential",
+   "match": [
+    "\\bSequential\\b"
+   ],
+   "exclude": [
+    "sequential (passes|forward|steps|dependency|order)",
+    "Sequential is the painful"
+   ],
+   "definition": "a Keras model that is a straight stack of layers.",
+   "lesson": 3
+  },
+  {
+   "term": "compile",
+   "match": [
+    "\\bcompil(e|es|ed|ing)\\b"
+   ],
+   "exclude": [],
+   "definition": "in Keras, fix a model's loss and optimizer before training.",
+   "lesson": 3
+  },
+  {
+   "term": "local minimum",
+   "match": [
+    "\\blocal minim(a|um)\\b"
+   ],
+   "exclude": [],
+   "definition": "a low point of the loss that is not the lowest one; training can get stuck there.",
+   "lesson": 3
+  },
+  {
+   "term": "closed form",
+   "match": [
+    "\\bclosed form\\b"
+   ],
+   "exclude": [],
+   "definition": "solved directly by a formula, with no training loop.",
+   "lesson": 3
+  },
+  {
+   "term": "deterministic",
+   "match": [
+    "\\bdeterministic\\b"
+   ],
+   "exclude": [],
+   "definition": "always giving the same output for the same input.",
+   "lesson": 3
+  },
+  {
+   "term": "orthogonal",
+   "match": [
+    "\\borthogonal\\b"
+   ],
+   "exclude": [],
+   "definition": "at right angles to each other.",
+   "lesson": 3
+  },
+  {
+   "term": "stacked autoencoder",
+   "match": [
+    "\\bstacked\\b"
+   ],
+   "exclude": [],
+   "definition": "an autoencoder with several hidden layers on each side of the coding layer.",
+   "lesson": 4
+  },
+  {
+   "term": "Fashion MNIST",
+   "match": [
+    "\\bFashion MNIST\\b",
+    "\\bMNIST\\b"
+   ],
+   "exclude": [],
+   "definition": "70,000 small greyscale photos of clothes, 28 × 28 pixels each, in 10 classes (T-shirt, trouser, …).",
+   "lesson": 1
+  },
+  {
+   "term": "pixel",
+   "match": [
+    "\\bpixels?\\b"
+   ],
+   "exclude": [],
+   "definition": "one dot of an image; in Fashion MNIST each pixel is a brightness from 0 (white) to 1 (black) after scaling.",
+   "lesson": 1
+  },
+  {
+   "term": "hierarchical",
+   "match": [
+    "\\bhierarchical\\b"
+   ],
+   "exclude": [],
+   "definition": "built in levels, each on top of the one below: strokes, then parts, then whole shapes.",
+   "lesson": 4
+  },
+  {
+   "term": "flatten",
+   "match": [
+    "\\bflatten(s|ed|ing)?\\b",
+    "\\bFlatten\\b"
+   ],
+   "exclude": [],
+   "definition": "lay the 28 rows of an image end to end as one row of 784 numbers.",
+   "lesson": 4
+  },
+  {
+   "term": "ReLU",
+   "match": [
+    "\\brelu\\b"
+   ],
+   "exclude": [],
+   "definition": "the activation max(0, x): negatives become 0, positives pass through.",
+   "lesson": 2
+  },
+  {
+   "term": "t-SNE",
+   "match": [
+    "\\bt-SNE\\b",
+    "\\bTSNE\\b"
+   ],
+   "exclude": [],
+   "definition": "a method that squeezes many numbers per row down to 2 so the rows can be plotted, keeping similar rows close.",
+   "lesson": 4
+  },
+  {
+   "term": "pretraining",
+   "match": [
+    "\\bpre-?train(ing|ed)?\\b"
+   ],
+   "exclude": [],
+   "definition": "first training a network on a general task (here, reconstruction without labels), then reusing its layers for the real task.",
+   "lesson": 4
+  },
+  {
+   "term": "tied weights",
+   "match": [
+    "\\btie(d|s)?\\b",
+    "\\btying\\b"
+   ],
+   "exclude": [],
+   "definition": "the decoder reuses the encoder's weight matrices, flipped (transposed), instead of learning its own.",
+   "lesson": 4
+  },
+  {
+   "term": "transpose",
+   "match": [
+    "\\btranspos(e|ed)\\b"
+   ],
+   "exclude": [
+    "transpose(d)? convolution",
+    "Conv2DTranspose"
+   ],
+   "definition": "a matrix flipped on its side: rows become columns.",
+   "lesson": 4
+  },
+  {
+   "term": "matrix",
+   "match": [
+    "\\bmatri(x|ces)\\b"
+   ],
+   "exclude": [],
+   "definition": "a grid of numbers in rows and columns.",
+   "lesson": 3
+  },
+  {
+   "term": "spatial structure",
+   "match": [
+    "\\bspatial\\b"
+   ],
+   "exclude": [],
+   "definition": "the fact that neighbouring pixels belong together.",
+   "lesson": 5
+  },
+  {
+   "term": "channel",
+   "match": [
+    "\\bchannels?\\b"
+   ],
+   "exclude": [],
+   "definition": "one layer of an image stack: a greyscale photo has 1 channel; after a convolutional layer there is one channel per filter.",
+   "lesson": 5
+  },
+  {
+   "term": "feature map",
+   "match": [
+    "\\bfeature maps?\\b"
+   ],
+   "exclude": [],
+   "definition": "the output of one filter: one number per position saying how strongly its pattern matched there.",
+   "lesson": 5
+  },
+  {
+   "term": "filter",
+   "match": [
+    "\\bfilters?\\b"
+   ],
+   "exclude": [],
+   "definition": "in a convolutional layer, a small set of learned weights (e.g. 3 × 3) that detects one pattern.",
+   "lesson": 5
+  },
+  {
+   "term": "pooling",
+   "match": [
+    "\\bpooling\\b",
+    "\\bMaxPool2D\\b",
+    "\\bGlobalAvgPool2D\\b"
+   ],
+   "exclude": [],
+   "definition": "a layer that shrinks an image by keeping one value (the maximum, or the average) per small block.",
+   "lesson": 5
+  },
+  {
+   "term": "transpose convolution",
+   "match": [
+    "\\btranspose(d)? convolution(s|al)?\\b",
+    "\\bConv2DTranspose\\b"
+   ],
+   "exclude": [],
+   "definition": "a layer that grows an image (e.g. doubles its height and width) while learning how to fill in the new pixels.",
+   "lesson": 1
+  },
+  {
+   "term": "upsampling",
+   "match": [
+    "\\bup-?sampl(e|es|ed|ing)\\b",
+    "\\bupscal(e|es|ed|ing)\\b"
+   ],
+   "exclude": [],
+   "definition": "making an image bigger, e.g. by repeating each pixel.",
+   "lesson": 5
+  },
+  {
+   "term": "stride",
+   "match": [
+    "\\bstrides?\\b",
+    "\\bstrided\\b"
+   ],
+   "exclude": [],
+   "definition": "how many pixels a filter jumps between positions; stride 2 halves the size.",
+   "lesson": 5
+  },
+  {
+   "term": "padding",
+   "match": [
+    "\\bpadd(ing|ed)\\b"
+   ],
+   "exclude": [],
+   "definition": "filler pixels (zeros) added around the edge; \"same\" keeps the size, \"valid\" adds none.",
+   "lesson": 5
+  },
+  {
+   "term": "kernel size",
+   "match": [
+    "\\bkernel[_ ]size\\b",
+    "\\bkernels?\\b"
+   ],
+   "exclude": [],
+   "definition": "the width of a filter, e.g. 3 = 3 × 3 pixels. (Not ch02's similarity kernel.)",
+   "lesson": 5
+  },
+  {
+   "term": "denoising",
+   "match": [
+    "\\bdenois(e|es|ed|ing)\\b"
+   ],
+   "exclude": [],
+   "definition": "removing noise; a denoising autoencoder (b06) is fed damaged inputs and trained to output the clean originals.",
+   "lesson": 1
+  },
+  {
+   "term": "dropout",
+   "match": [
+    "\\bdropout\\b",
+    "\\bDropout\\b"
+   ],
+   "exclude": [],
+   "definition": "setting a random share of values to 0 (during training only).",
+   "lesson": 6
+  },
+  {
+   "term": "inference",
+   "match": [
+    "\\binference\\b"
+   ],
+   "exclude": [],
+   "definition": "using a trained model on new data (as opposed to training it).",
+   "lesson": 1
+  },
+  {
+   "term": "feature extraction",
+   "match": [
+    "\\bfeature extraction\\b"
+   ],
+   "exclude": [],
+   "definition": "using a trained encoder's codings as the input columns of another model.",
+   "lesson": 5
+  },
+  {
+   "term": "sparse",
+   "match": [
+    "\\bspars(e|ity)\\b"
+   ],
+   "exclude": [
+    "sparse matri"
+   ],
+   "definition": "mostly zeros: here, most coding neurons are (almost) off for any one input.",
+   "lesson": 1
+  },
+  {
+   "term": "sigmoid",
+   "match": [
+    "\\bsigmoid\\b"
+   ],
+   "exclude": [],
+   "definition": "the S-shaped curve that turns any number into a number between 0 and 1.",
+   "lesson": 7
+  },
+  {
+   "term": "ℓ1 regularization",
+   "match": [
+    "ℓ1",
+    "\\bl1\\b",
+    "\\bL1\\b"
+   ],
+   "exclude": [],
+   "definition": "adding the sum of absolute values to the loss, which pushes many values to exactly 0.",
+   "lesson": 7
+  },
+  {
+   "term": "ℓ2",
+   "match": [
+    "ℓ2",
+    "\\bL2\\b"
+   ],
+   "exclude": [],
+   "definition": "adding the sum of squares to the loss, which shrinks all values a little.",
+   "lesson": 7
+  },
+  {
+   "term": "KL divergence",
+   "match": [
+    "\\bKL\\b",
+    "Kullback"
+   ],
+   "exclude": [],
+   "definition": "Kullback–Leibler divergence: how far one probability distribution is from another; 0 when they are the same.",
+   "lesson": 7
+  },
+  {
+   "term": "regularizer",
+   "match": [
+    "\\bregulari[sz]er(s)?\\b"
+   ],
+   "exclude": [],
+   "definition": "an extra term added to the loss to discourage something, e.g. too many active neurons.",
+   "lesson": 7
+  },
+  {
+   "term": "class",
+   "match": [
+    "\\bclass(es)?\\b"
+   ],
+   "exclude": [
+    "\\bclassif",
+    "class_names"
+   ],
+   "definition": "in Python, a blueprint for objects: the data an object holds and its functions (methods). (Also, in data: a category, e.g. Trouser.)",
+   "lesson": 1
+  },
+  {
+   "term": "probability distribution",
+   "match": [
+    "\\bprobability distributions?\\b"
+   ],
+   "exclude": [],
+   "definition": "a list of possible outcomes, each with its probability, adding up to 1.",
+   "lesson": 7
+  },
+  {
+   "term": "Bernoulli",
+   "match": [
+    "\\bBernoulli\\b"
+   ],
+   "exclude": [],
+   "definition": "a distribution with two outcomes (on/off), like one coin flip.",
+   "lesson": 7
+  },
+  {
+   "term": "variational autoencoder",
+   "match": [
+    "\\bvariational\\b",
+    "\\bVAEs?\\b"
+   ],
+   "exclude": [],
+   "definition": "an autoencoder whose encoder outputs a bell curve (a mean and a spread) for each coding number, and samples the coding from it.",
+   "lesson": 8
+  },
+  {
+   "term": "stochastic",
+   "match": [
+    "\\bstochastic\\b"
+   ],
+   "exclude": [],
+   "definition": "involving chance: the same input can give different outputs.",
+   "lesson": 3
+  },
+  {
+   "term": "standard normal",
+   "match": [
+    "\\bstandard normal\\b"
+   ],
+   "exclude": [],
+   "definition": "the bell curve centred on 0 with a standard deviation of 1.",
+   "lesson": 8
+  },
+  {
+   "term": "reparameterisation trick",
+   "match": [
+    "\\breparameteri[sz]ation\\b"
+   ],
+   "exclude": [],
+   "definition": "writing a random draw as mean + noise × spread, so gradients can flow through the mean and the spread.",
+   "lesson": 8
+  },
+  {
+   "term": "exponential",
+   "match": [
+    "\\bexp\\b",
+    "\\bexponential\\b"
+   ],
+   "exclude": [],
+   "definition": "exp(x) = e to the power x; always positive, and the inverse of log.",
+   "lesson": 8
+  },
+  {
+   "term": "functional API",
+   "match": [
+    "\\bfunctional API\\b"
+   ],
+   "exclude": [],
+   "definition": "the Keras way of wiring layers by calling them on each other's outputs, which allows branches.",
+   "lesson": 8
+  },
+  {
+   "term": "semantic interpolation",
+   "match": [
+    "\\binterpolat(e|es|ed|ing|ion)\\b"
+   ],
+   "exclude": [],
+   "definition": "making the in-between steps from one item to another; semantic = done on the codings, so each step is a real-looking item.",
+   "lesson": 9
+  },
+  {
+   "term": "disentanglement",
+   "match": [
+    "\\bdisentangle(ment|d)?\\b"
+   ],
+   "exclude": [],
+   "definition": "each coding number controlling one trait (e.g. sleeve length) on its own.",
+   "lesson": 9
+  },
+  {
+   "term": "zero-sum",
+   "match": [
+    "\\bzero-sum\\b"
+   ],
+   "exclude": [],
+   "definition": "a game where one side's gain is exactly the other side's loss.",
+   "lesson": 10
+  },
+  {
+   "term": "binary cross-entropy",
+   "match": [
+    "\\bbinary cross-?entropy\\b",
+    "binary_crossentropy"
+   ],
+   "exclude": [],
+   "definition": "the usual loss for a yes/no classifier; it punishes confident wrong answers hardest.",
+   "lesson": 10
+  },
+  {
+   "term": "train_on_batch",
+   "match": [
+    "\\btrain_on_batch\\b"
+   ],
+   "exclude": [],
+   "definition": "Keras: run ONE training step on one batch.",
+   "lesson": 10
+  },
+  {
+   "term": "RMSProp",
+   "match": [
+    "\\bRMSProp\\b"
+   ],
+   "exclude": [],
+   "definition": "an optimizer that divides each step by a running average of recent gradient sizes.",
+   "lesson": 10
+  },
+  {
+   "term": "Nadam",
+   "match": [
+    "\\bNadam\\b",
+    "\\bAdam\\b"
+   ],
+   "exclude": [],
+   "definition": "Adam is a popular optimizer that adapts each weight's step size; Nadam is a small improvement of Adam.",
+   "lesson": 3
+  },
+  {
+   "term": "batch",
+   "match": [
+    "\\bbatch(es)?\\b"
+   ],
+   "exclude": [
+    "batch learning",
+    "batch normali",
+    "mini-?batch",
+    "batch_size"
+   ],
+   "definition": "a group of examples processed together in one training step, e.g. 32 images.",
+   "lesson": 3
+  },
+  {
+   "term": "mini-batch",
+   "match": [
+    "\\bmini-?batch(es)?\\b"
+   ],
+   "exclude": [],
+   "definition": "a small batch of examples (e.g. 32) processed together.",
+   "lesson": 11
+  },
+  {
+   "term": "Nash equilibrium",
+   "match": [
+    "\\bNash\\b"
+   ],
+   "exclude": [],
+   "definition": "a state where no player can do better by changing only their own strategy.",
+   "lesson": 11
+  },
+  {
+   "term": "mode collapse",
+   "match": [
+    "\\bmode collapse\\b"
+   ],
+   "exclude": [],
+   "definition": "a GAN generator making only one kind of image (e.g. only shoes).",
+   "lesson": 11
+  },
+  {
+   "term": "mode",
+   "match": [
+    "\\bmodes?\\b"
+   ],
+   "exclude": [
+    "mode collapse",
+    "\\bmode=",
+    "render_mode"
+   ],
+   "definition": "one bump of a data distribution: here, one class of clothing.",
+   "lesson": 11
+  },
+  {
+   "term": "experience replay",
+   "match": [
+    "\\bexperience replay\\b",
+    "\\breplay buffer\\b"
+   ],
+   "exclude": [],
+   "definition": "keeping old fake images in a buffer and training the discriminator on a mix of old and new ones.",
+   "lesson": 11
+  },
+  {
+   "term": "mini-batch discrimination",
+   "match": [
+    "\\bmini-?batch discrimination\\b"
+   ],
+   "exclude": [],
+   "definition": "giving the discriminator a measure of how similar the images in a batch are, so it can reject batches with no variety.",
+   "lesson": 11
+  },
+  {
+   "term": "DCGAN",
+   "match": [
+    "\\bDCGANs?\\b"
+   ],
+   "exclude": [],
+   "definition": "deep convolutional GAN: a set of architecture rules (2015) that made convolutional GANs train reliably.",
+   "lesson": 12
+  },
+  {
+   "term": "batch normalization",
+   "match": [
+    "\\bbatch norm(ali[sz]ation)?\\b",
+    "BatchNormalization"
+   ],
+   "exclude": [],
+   "definition": "rescaling each layer's outputs over the batch to a steady average and spread.",
+   "lesson": 10
+  },
+  {
+   "term": "leaky ReLU",
+   "match": [
+    "\\bleaky ReLU\\b",
+    "LeakyReLU"
+   ],
+   "exclude": [],
+   "definition": "like ReLU, but negative values are multiplied by a small number (e.g. 0.2) instead of set to 0.",
+   "lesson": 12
+  },
+  {
+   "term": "tanh",
+   "match": [
+    "\\btanh\\b"
+   ],
+   "exclude": [],
+   "definition": "an S-shaped curve like sigmoid but from −1 to 1.",
+   "lesson": 12
+  },
+  {
+   "term": "conditional GAN",
+   "match": [
+    "\\bconditional GANs?\\b"
+   ],
+   "exclude": [],
+   "definition": "a GAN that also receives the class as input, so you choose what it generates.",
+   "lesson": 12
+  },
+  {
+   "term": "progressive growing",
+   "match": [
+    "\\bprogressive(ly)?\\b",
+    "\\bProGAN\\b"
+   ],
+   "exclude": [],
+   "definition": "training a GAN on tiny images first and adding layers to double the resolution step by step.",
+   "lesson": 13
+  },
+  {
+   "term": "He initialization",
+   "match": [
+    "\\bHe initiali[sz]ation\\b"
+   ],
+   "exclude": [],
+   "definition": "starting weights scaled by √(2 ÷ number of inputs), so signals keep a steady size through the layers.",
+   "lesson": 13
+  },
+  {
+   "term": "pixelwise normalization",
+   "match": [
+    "\\bpixelwise normali[sz]ation\\b",
+    "pixelwise_normalization"
+   ],
+   "exclude": [],
+   "definition": "dividing each pixel's channel values by their root-mean-square.",
+   "lesson": 13
+  },
+  {
+   "term": "root-mean-square",
+   "match": [
+    "\\broot-mean-square\\b",
+    "\\bRMS\\b"
+   ],
+   "exclude": [],
+   "definition": "the square root of the average of the squares.",
+   "lesson": 13
+  },
+  {
+   "term": "StyleGAN",
+   "match": [
+    "\\bStyleGAN\\b"
+   ],
+   "exclude": [],
+   "definition": "a 2018 GAN whose generator injects a \"style\" at every resolution and adds separate random noise for fine details.",
+   "lesson": 9
+  },
+  {
+   "term": "MLP",
+   "match": [
+    "\\bMLPs?\\b",
+    "multilayer perceptron"
+   ],
+   "exclude": [],
+   "definition": "multilayer perceptron: a plain stack of Dense layers.",
+   "lesson": 14
+  },
+  {
+   "term": "bias term",
+   "match": [
+    "\\bbias terms?\\b",
+    "\\bbias(es)?\\b"
+   ],
+   "exclude": [],
+   "definition": "a neuron's own extra number, added to its weighted sum; it is learned like a weight, and a layer has one per neuron.",
+   "lesson": 4
+  },
+  {
+   "term": "affine transformation",
+   "match": [
+    "\\baffine\\b"
+   ],
+   "exclude": [],
+   "definition": "multiply by learned weights and add a learned bias, with no activation: a scale-and-shift.",
+   "lesson": 14
+  },
+  {
+   "term": "AdaIN",
+   "match": [
+    "\\bAdaIN\\b",
+    "adaptive instance normali[sz]ation"
+   ],
+   "exclude": [],
+   "definition": "adaptive instance normalization: standardise each feature map, then scale and shift it by numbers taken from the style vector.",
+   "lesson": 14
+  },
+  {
+   "term": "DDPM",
+   "match": [
+    "\\bDDPMs?\\b"
+   ],
+   "exclude": [],
+   "definition": "denoising diffusion probabilistic model: the 2020 form of the diffusion model this chapter builds.",
+   "lesson": 15
+  },
+  {
+   "term": "forward process",
+   "match": [
+    "\\bforward process\\b"
+   ],
+   "exclude": [],
+   "definition": "the fixed recipe that adds a little noise to an image at each of T steps.",
+   "lesson": 15
+  },
+  {
+   "term": "reverse process",
+   "match": [
+    "\\breverse process\\b"
+   ],
+   "exclude": [],
+   "definition": "the learned opposite: remove a little noise per step, starting from pure noise.",
+   "lesson": 15
+  },
+  {
+   "term": "isotropic",
+   "match": [
+    "\\bisotropic\\b"
+   ],
+   "exclude": [],
+   "definition": "the same in every direction: here, each pixel gets its own noise draw with the same spread.",
+   "lesson": 15
+  },
+  {
+   "term": "variance schedule",
+   "match": [
+    "\\b(variance|cosine|linear|noise) schedules?\\b",
+    "variance_schedule"
+   ],
+   "exclude": [],
+   "definition": "the list of how much noise (β) is added at each step; chosen by you, not learned.",
+   "lesson": 15
+  },
+  {
+   "term": "cosine",
+   "match": [
+    "\\bcosines?\\b",
+    "\\bcos\\b"
+   ],
+   "exclude": [],
+   "definition": "a wave function between −1 and 1; cos(0) = 1.",
+   "lesson": 15
+  },
+  {
+   "term": "identity matrix",
+   "match": [
+    "\\bidentity matrix\\b"
+   ],
+   "exclude": [],
+   "definition": "the matrix with 1s on its diagonal and 0s elsewhere; here it means \"each pixel on its own\".",
+   "lesson": 15
+  },
+  {
+   "term": "Huber loss",
+   "match": [
+    "\\bHuber\\b"
+   ],
+   "exclude": [],
+   "definition": "a loss that acts like squared error for small errors and like absolute error for large ones.",
+   "lesson": 16
+  },
+  {
+   "term": "positional encoding",
+   "match": [
+    "\\bpositional encodings?\\b"
+   ],
+   "exclude": [],
+   "definition": "a list of sine and cosine values that turns a whole number (here the time step t) into a vector a network can read.",
+   "lesson": 16
+  },
+  {
+   "term": "latent diffusion",
+   "match": [
+    "\\blatent diffusion\\b"
+   ],
+   "exclude": [],
+   "definition": "diffusion run on the codings of an autoencoder instead of on pixels, which is much faster.",
+   "lesson": 16
+  },
+  {
+   "term": "Stable Diffusion",
+   "match": [
+    "\\bStable Diffusion\\b"
+   ],
+   "exclude": [],
+   "definition": "a well-known latent diffusion model that makes images from a text prompt.",
+   "lesson": 17
+  },
+  {
+   "term": "prompt engineering",
+   "match": [
+    "\\bprompt engineering\\b"
+   ],
+   "exclude": [],
+   "definition": "carefully wording the text you give a model to get the output you want.",
+   "lesson": 17
+  },
+  {
+   "term": "anomaly detection",
+   "match": [
+    "\\banomaly detection\\b"
+   ],
+   "exclude": [],
+   "definition": "flagging inputs that look unusual, e.g. ones an autoencoder reconstructs badly.",
+   "lesson": 17
+  },
+  {
+   "term": "preprint",
+   "match": [
+    "\\barXiv\\b",
+    "\\bpreprint\\b"
+   ],
+   "exclude": [],
+   "definition": "a research paper posted online (arXiv is the main free site).",
+   "lesson": 8
+  },
+  {
+   "term": "ICML, NeurIPS, ICLR",
+   "match": [
+    "\\bICML\\b",
+    "\\bNeurIPS\\b",
+    "\\bICLR\\b",
+    "\\bICANN\\b"
+   ],
+   "exclude": [],
+   "definition": "the names of big yearly machine-learning conferences where papers are published.",
+   "lesson": 5
+  },
+  {
+   "term": "lossy compression",
+   "match": [
+    "\\blossy\\b"
+   ],
+   "exclude": [],
+   "definition": "compression that throws some detail away for good (like JPEG photos).",
+   "lesson": 2
+  },
+  {
+   "term": "freeze",
+   "match": [
+    "\\bfreez\\w*",
+    "\\bfrozen\\b"
+   ],
+   "exclude": [],
+   "definition": "stop training some layers, so their weights stay fixed while the rest of the network trains (in Keras: `trainable = False`).",
+   "lesson": 4
+  },
+  {
+   "term": "tensor",
+   "match": [
+    "\\btensors?\\b"
+   ],
+   "exclude": [],
+   "definition": "TensorFlow's name for a block of numbers with any number of axes, e.g. 28 × 28 × 1 for one photo; 32 photos together are a 32 × 28 × 28 × 1 tensor.",
+   "lesson": 5
+  },
+  {
+   "term": "subclass",
+   "match": [
+    "\\bsubclass\\w*",
+    "\\bbase class",
+    "\\bparent class",
+    "super\\(\\)"
+   ],
+   "exclude": [],
+   "definition": "a class built on top of another (its parent, or base, class): it inherits everything the parent does and adds or changes only what it writes itself; `super().__init__()` runs the parent's own setup.",
+   "lesson": 7
+  },
+  {
+   "term": "forward pass",
+   "match": [
+    "\\bforward pass(es)?\\b"
+   ],
+   "exclude": [],
+   "definition": "one run of the input through the network (or one layer), from start to end, to get its output.",
+   "lesson": 8
+  },
+  {
+   "term": "graph",
+   "match": [
+    "\\bgraphs?\\b"
+   ],
+   "exclude": [],
+   "definition": "the fixed plan of operations TensorFlow builds from your code before running it.",
+   "lesson": 8
+  },
+  {
+   "term": "prior",
+   "match": [
+    "\\bprior\\b"
+   ],
+   "exclude": [],
+   "definition": "in statistics, the distribution you assume before seeing any data; here, the standard normal the codings are pulled toward.",
+   "lesson": 8
+  },
+  {
+   "term": "backpropagation",
+   "match": [
+    "\\bbackprop\\w*"
+   ],
+   "exclude": [],
+   "definition": "the step of training that works out, layer by layer from the output back to the input, how each weight should change to lower the loss.",
+   "lesson": 10
+  },
+  {
+   "term": "broadcast",
+   "match": [
+    "\\bbroadcast\\w*"
+   ],
+   "exclude": [],
+   "definition": "automatically repeat an array along a size-1 axis so that it matches a bigger array, e.g. one value per pixel stretched across 512 channels.",
+   "lesson": 13
+  },
+  {
+   "term": "scalar",
+   "match": [
+    "\\bscalars?\\b"
+   ],
+   "exclude": [],
+   "definition": "a single number (a tensor with no axes).",
+   "lesson": 13
+  }
+ ]
+}

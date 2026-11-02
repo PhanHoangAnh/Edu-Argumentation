@@ -1,0 +1,1541 @@
+{
+ "chapter": 15,
+ "flow": [
+  "Get the data",
+  "Set aside a test set",
+  "Explore",
+  "Prepare the data",
+  "Train",
+  "Evaluate",
+  "Fine-tune",
+  "Launch"
+ ],
+ "known": [
+  "ch02-term-registry.json"
+ ],
+ "generated_by": "ml/study/geron-lab/ch15-notes/build_chapter.py",
+ "terms": [
+  {
+   "term": "time series",
+   "match": [
+    "\\btime[- ]series\\b"
+   ],
+   "exclude": [],
+   "definition": "values measured at regular times and kept in time order, e.g. one rail-rider count per day.",
+   "lesson": 3
+  },
+  {
+   "term": "forecasting",
+   "match": [
+    "\\bforecast(s|ing|ed|er|ers)?\\b"
+   ],
+   "exclude": [],
+   "definition": "predicting future values, e.g. tomorrow's rail riders from the past 8 weeks.",
+   "lesson": 1
+  },
+  {
+   "term": "sequence",
+   "match": [
+    "\\bsequen(ce|ces|tial|tially)\\b"
+   ],
+   "exclude": [],
+   "definition": "a list of values where the order matters: 56 days of ridership, or the words of a sentence.",
+   "lesson": 1
+  },
+  {
+   "term": "time step",
+   "match": [
+    "\\btime[- ]steps?\\b",
+    "\\bsteps? t\\b",
+    "\\bat step\\b"
+   ],
+   "exclude": [],
+   "definition": "one position in a sequence; in our data one day. Step t means \"now\", step t−1 the step before.",
+   "lesson": 1
+  },
+  {
+   "term": "ridership",
+   "match": [
+    "\\bridership\\b"
+   ],
+   "exclude": [],
+   "definition": "how many people rode, counted per day: the Chicago bus and rail boardings used in this chapter.",
+   "lesson": 1
+  },
+  {
+   "term": "day type",
+   "match": [
+    "\\bday[_ ]types?\\b"
+   ],
+   "exclude": [],
+   "definition": "the data's label for each date: W = weekday, A = Saturday, U = Sunday or holiday.",
+   "lesson": 3
+  },
+  {
+   "term": "seasonality",
+   "match": [
+    "\\bseasonal(ity)?\\b"
+   ],
+   "exclude": [],
+   "definition": "a pattern that repeats at a fixed interval, e.g. every week (low on Sundays) or every year.",
+   "lesson": 3
+  },
+  {
+   "term": "trend",
+   "match": [
+    "\\btrends?\\b"
+   ],
+   "exclude": [],
+   "definition": "a slow drift of a series up or down over months or years.",
+   "lesson": 3
+  },
+  {
+   "term": "lag",
+   "match": [
+    "\\blag(s|ged)?\\b",
+    "LAG\\("
+   ],
+   "exclude": [],
+   "definition": "how many steps back you look; a 7-day lag is the value from exactly one week earlier.",
+   "lesson": 1
+  },
+  {
+   "term": "naive forecast",
+   "match": [
+    "\\bnaive\\b"
+   ],
+   "exclude": [],
+   "definition": "the cheapest forecast: copy a past value, here the same day one week earlier.",
+   "lesson": 3
+  },
+  {
+   "term": "MAPE",
+   "match": [
+    "\\bMAPE\\b",
+    "mean absolute percentage error"
+   ],
+   "exclude": [],
+   "definition": "mean absolute percentage error: each miss divided by that day's real value, signs dropped, then averaged.",
+   "lesson": 3
+  },
+  {
+   "term": "MSE",
+   "match": [
+    "\\bMSE\\b",
+    "mean squared error"
+   ],
+   "exclude": [],
+   "definition": "mean squared error: square each miss, then average, so one big miss counts much more than several small ones.",
+   "lesson": 3
+  },
+  {
+   "term": "differencing",
+   "match": [
+    "\\bdifferenc(ing|ed)\\b"
+   ],
+   "exclude": [],
+   "definition": "replacing each value by (value − the value k steps earlier), which removes a repeating pattern or a drift.",
+   "lesson": 3
+  },
+  {
+   "term": "stationary",
+   "match": [
+    "\\b(non-?)?stationar(y|ity)\\b"
+   ],
+   "exclude": [],
+   "definition": "a series whose average and spread stay the same over time; the opposite is non-stationary.",
+   "lesson": 3
+  },
+  {
+   "term": "quadratic",
+   "match": [
+    "\\bquadratic\\b"
+   ],
+   "exclude": [],
+   "definition": "growing like the squares 1, 4, 9, 16, 25 …",
+   "lesson": 4
+  },
+  {
+   "term": "polynomial",
+   "match": [
+    "\\bpolynomials?\\b"
+   ],
+   "exclude": [],
+   "definition": "a formula made of powers of one quantity, such as 3t² + 2t + 1; a straight line and a quadratic are both polynomials.",
+   "lesson": 4
+  },
+  {
+   "term": "ARMA",
+   "match": [
+    "\\bARMA\\b"
+   ],
+   "exclude": [],
+   "definition": "a classical forecasting formula: tomorrow = weighted sum of recent real values + weighted sum of recent forecast mistakes (b04).",
+   "lesson": 4
+  },
+  {
+   "term": "autoregressive",
+   "match": [
+    "\\bautoregressi(ve|on)\\b",
+    "\\bAR\\b"
+   ],
+   "exclude": [],
+   "definition": "predicting a series from its own past values (the AR half of ARMA).",
+   "lesson": 4
+  },
+  {
+   "term": "moving average (ARMA)",
+   "match": [
+    "\\bmoving[- ]average\\b",
+    "\\bMA\\b"
+   ],
+   "exclude": [
+    "exponential moving average"
+   ],
+   "definition": "in ARMA, a weighted sum of the last q forecast mistakes. Not the everyday rolling average of values.",
+   "lesson": 4
+  },
+  {
+   "term": "ARIMA",
+   "match": [
+    "\\bARIMA\\b"
+   ],
+   "exclude": [],
+   "definition": "ARMA run on a differenced series; the I stands for the differencing.",
+   "lesson": 4
+  },
+  {
+   "term": "SARIMA",
+   "match": [
+    "\\bSARIMA\\b"
+   ],
+   "exclude": [],
+   "definition": "ARIMA plus a second, seasonal copy of itself that works at the season's lag (7 days here).",
+   "lesson": 4
+  },
+  {
+   "term": "statsmodels",
+   "match": [
+    "\\bstatsmodels\\b"
+   ],
+   "exclude": [],
+   "definition": "a Python library of classical statistics tools (b04 uses it).",
+   "lesson": 3
+  },
+  {
+   "term": "information criterion",
+   "match": [
+    "\\binformation criteri(on|a)\\b",
+    "\\bAIC\\b",
+    "\\bBIC\\b"
+   ],
+   "exclude": [],
+   "definition": "a score (AIC or BIC) that rewards fitting the data and punishes extra parameters; lower is better.",
+   "lesson": 4
+  },
+  {
+   "term": "autocorrelation",
+   "match": [
+    "\\b(partial )?autocorrelation\\b",
+    "plot_p?acf"
+   ],
+   "exclude": [],
+   "definition": "how strongly a series is correlated with itself shifted by k steps; plotting it shows which lags matter.",
+   "lesson": 3
+  },
+  {
+   "term": "univariate time series",
+   "match": [
+    "\\bunivariate\\b"
+   ],
+   "exclude": [],
+   "definition": "one value per time step, e.g. rail riders only.",
+   "lesson": 3
+  },
+  {
+   "term": "multivariate time series",
+   "match": [
+    "\\bmultivariate (time )?series\\b",
+    "\\bmultivariate (input|forecast)"
+   ],
+   "exclude": [],
+   "definition": "several values per time step, e.g. bus AND rail riders on each day. (ch02's \"multivariate\" meant several OUTPUTS; here it means several inputs.)",
+   "lesson": 3
+  },
+  {
+   "term": "correlated",
+   "match": [
+    "\\bcorrelated\\b"
+   ],
+   "exclude": [],
+   "definition": "two series that tend to rise and fall together, like bus and rail riders.",
+   "lesson": 3
+  },
+  {
+   "term": "neural network",
+   "match": [
+    "\\bneural net(work)?s?\\b",
+    "\\bnetworks?\\b"
+   ],
+   "exclude": [],
+   "definition": "a model built from many small parts (neurons) arranged in layers; each part does a little arithmetic and passes its result on.",
+   "lesson": 1
+  },
+  {
+   "term": "neuron",
+   "match": [
+    "\\bneurons?\\b"
+   ],
+   "exclude": [],
+   "definition": "one small part of a neural network: it multiplies each input by a weight, adds them up plus a bias, and passes the sum through an activation function.",
+   "lesson": 1
+  },
+  {
+   "term": "weight",
+   "match": [
+    "\\bweights?\\b",
+    "\\bweighted\\b"
+   ],
+   "exclude": [
+    "sample_weight"
+   ],
+   "definition": "a number the network learns, one per connection: an input is multiplied by its weight, so the weight says how much that input counts.",
+   "lesson": 1
+  },
+  {
+   "term": "bias",
+   "match": [
+    "\\bbias(es)?\\b"
+   ],
+   "exclude": [
+    "sampling bias",
+    "snooping bias"
+   ],
+   "definition": "in a neural network, a learned number added to a neuron's weighted sum. (Not ch02's \"sampling bias\".)",
+   "lesson": 1
+  },
+  {
+   "term": "activation function",
+   "match": [
+    "\\bactivations?\\b",
+    "\\bactivation functions?\\b"
+   ],
+   "exclude": [],
+   "definition": "a fixed curve applied to a neuron's sum before it is passed on (e.g. tanh); it lets the network learn curved, nonlinear patterns.",
+   "lesson": 1
+  },
+  {
+   "term": "layer",
+   "match": [
+    "\\blayers?\\b"
+   ],
+   "exclude": [],
+   "definition": "a group of neurons that all read the same inputs; a network is several layers, each feeding the next.",
+   "lesson": 1
+  },
+  {
+   "term": "feedforward network",
+   "match": [
+    "\\bfeed-?forward\\b"
+   ],
+   "exclude": [],
+   "definition": "a neural network where data flows one way, from inputs through the layers to the output, with no loops.",
+   "lesson": 1
+  },
+  {
+   "term": "recurrent",
+   "match": [
+    "\\brecurren(t|ce)\\b"
+   ],
+   "exclude": [],
+   "definition": "looping back: a recurrent neuron's output at one time step is fed back in as an extra input at the next step.",
+   "lesson": 1
+  },
+  {
+   "term": "RNN",
+   "match": [
+    "\\bRNNs?\\b",
+    "recurrent neural networks?"
+   ],
+   "exclude": [],
+   "definition": "recurrent neural network: a neural network with recurrent neurons, so it can carry information from earlier time steps.",
+   "lesson": 1
+  },
+  {
+   "term": "temporal dependency",
+   "match": [
+    "\\btemporal\\b"
+   ],
+   "exclude": [],
+   "definition": "temporal = about time; a temporal dependency is a pattern that depends on the order of the steps and how far apart they are.",
+   "lesson": 1
+  },
+  {
+   "term": "unrolling",
+   "match": [
+    "\\bunroll(s|ed|ing)?\\b"
+   ],
+   "exclude": [],
+   "definition": "drawing a recurrent network once per time step, side by side, so the loop becomes a chain; it is still ONE set of weights.",
+   "lesson": 1
+  },
+  {
+   "term": "matrix",
+   "match": [
+    "\\bmatri(x|ces)\\b"
+   ],
+   "exclude": [],
+   "definition": "a grid of numbers in rows and columns; 2 rows × 3 columns is a 2 × 3 matrix.",
+   "lesson": 1
+  },
+  {
+   "term": "transpose",
+   "match": [
+    "\\btranspos(e|ed)\\b"
+   ],
+   "exclude": [],
+   "definition": "a matrix flipped on its side: rows become columns.",
+   "lesson": 1
+  },
+  {
+   "term": "mini-batch",
+   "match": [
+    "\\bmini-?batch(es)?\\b",
+    "\\bmicro-batch\\b"
+   ],
+   "exclude": [],
+   "definition": "a small group of instances (here 32 windows) that the network processes together in one training step.",
+   "lesson": 1
+  },
+  {
+   "term": "batch",
+   "match": [
+    "\\bbatch(es)?\\b"
+   ],
+   "exclude": [
+    "\\bbatch (learning|norm)",
+    "mini-?batch",
+    "micro-batch"
+   ],
+   "definition": "a group of windows handed to the model together, e.g. 32. (Not ch02's \"batch learning\".)",
+   "lesson": 5
+  },
+  {
+   "term": "concatenate",
+   "match": [
+    "\\bconcatenat(e|ed|es|ing|ion)\\b"
+   ],
+   "exclude": [],
+   "definition": "join two tables of numbers side by side, or one above the other.",
+   "lesson": 1
+  },
+  {
+   "term": "GPU",
+   "match": [
+    "\\bGPUs?\\b"
+   ],
+   "exclude": [],
+   "definition": "graphics processing unit: a chip built to do many multiplications at once, which makes training much faster.",
+   "lesson": 1
+  },
+  {
+   "term": "cell",
+   "match": [
+    "\\bcells?\\b"
+   ],
+   "exclude": [],
+   "definition": "the part of a recurrent layer that does ONE time step of work and keeps a memory (its state) for the next step.",
+   "lesson": 1
+  },
+  {
+   "term": "state",
+   "match": [
+    "\\b(hidden )?states?\\b"
+   ],
+   "exclude": [],
+   "definition": "the numbers a recurrent cell carries from one time step to the next: its memory. Also called the hidden state.",
+   "lesson": 1
+  },
+  {
+   "term": "sequence-to-sequence",
+   "match": [
+    "\\bsequence-to-sequence\\b",
+    "\\bseq2seq\\b",
+    "seq-to-seq"
+   ],
+   "exclude": [],
+   "definition": "a network that reads a sequence and outputs a sequence, one output per step.",
+   "lesson": 1
+  },
+  {
+   "term": "sequence-to-vector",
+   "match": [
+    "\\bsequence-to-vector\\b",
+    "seq-to-vector"
+   ],
+   "exclude": [],
+   "definition": "a network that reads a sequence and keeps only its last output: one answer for the whole sequence.",
+   "lesson": 1
+  },
+  {
+   "term": "vector-to-sequence",
+   "match": [
+    "\\bvector-to-sequence\\b"
+   ],
+   "exclude": [],
+   "definition": "a network that reads one input and outputs a sequence.",
+   "lesson": 1
+  },
+  {
+   "term": "encoder–decoder",
+   "match": [
+    "\\bencoder\\b",
+    "\\bdecoder\\b",
+    "encoder[-–]decoder"
+   ],
+   "exclude": [],
+   "definition": "two networks chained: the encoder reads the whole input sequence into one vector, the decoder turns that vector into the output sequence.",
+   "lesson": 1
+  },
+  {
+   "term": "sentiment",
+   "match": [
+    "\\bsentiment\\b"
+   ],
+   "exclude": [],
+   "definition": "whether a text is positive or negative, e.g. a film review.",
+   "lesson": 1
+  },
+  {
+   "term": "identity activation",
+   "match": [
+    "\\bidentity activation\\b",
+    "\\bidentity\\b"
+   ],
+   "exclude": [],
+   "definition": "an activation that returns its input unchanged.",
+   "lesson": 1
+  },
+  {
+   "term": "ReLU",
+   "match": [
+    "\\bReLU\\b",
+    "\\brelu\\b"
+   ],
+   "exclude": [],
+   "definition": "the activation max(0, sum): negative sums become 0, positive ones pass through; it has no upper limit.",
+   "lesson": 1
+  },
+  {
+   "term": "LSTM",
+   "match": [
+    "\\bLSTMs?\\b",
+    "long short-term memory"
+   ],
+   "exclude": [],
+   "definition": "long short-term memory: a recurrent cell with a second, separate memory that is rarely overwritten, so it can learn patterns spanning many more steps (b12).",
+   "lesson": 1
+  },
+  {
+   "term": "GRU",
+   "match": [
+    "\\bGRUs?\\b",
+    "gated recurrent unit"
+   ],
+   "exclude": [],
+   "definition": "gated recurrent unit: a simpler cousin of the LSTM cell with fewer parameters (b13).",
+   "lesson": 1
+  },
+  {
+   "term": "loss",
+   "match": [
+    "\\bloss(es)?\\b",
+    "\\bloss function\\b"
+   ],
+   "exclude": [
+    "memory loss",
+    "loss of"
+   ],
+   "definition": "the one number that says how wrong the predictions are; training changes the weights to make it smaller.",
+   "lesson": 1
+  },
+  {
+   "term": "Keras",
+   "match": [
+    "\\bKeras\\b"
+   ],
+   "exclude": [],
+   "definition": "Google's Python library for building and training neural networks in a few lines.",
+   "lesson": 1
+  },
+  {
+   "term": "TensorFlow",
+   "match": [
+    "\\bTensorFlow\\b",
+    "\\btf\\.(?!data)"
+   ],
+   "exclude": [],
+   "definition": "the larger Google library that Keras is part of; code calls it as tf, as in tf.keras.",
+   "lesson": 3
+  },
+  {
+   "term": "backpropagation",
+   "match": [
+    "\\bbackprop(agation)?\\b"
+   ],
+   "exclude": [],
+   "definition": "how a neural network learns: run the data forward, measure the loss, then pass the error backward through the network to find each weight's gradient.",
+   "lesson": 2
+  },
+  {
+   "term": "gradient",
+   "match": [
+    "\\bgradients?\\b"
+   ],
+   "exclude": [],
+   "definition": "for one weight: how much the loss would change if that weight were nudged up a little, and in which direction.",
+   "lesson": 2
+  },
+  {
+   "term": "gradient descent",
+   "match": [
+    "\\bgradient descent\\b"
+   ],
+   "exclude": [],
+   "definition": "the training method: again and again, move every weight a small step in the direction that lowers the loss.",
+   "lesson": 2
+  },
+  {
+   "term": "forward pass",
+   "match": [
+    "\\bforward pass(es)?\\b"
+   ],
+   "exclude": [],
+   "definition": "running inputs through the network, layer by layer, to get its predictions.",
+   "lesson": 2
+  },
+  {
+   "term": "BPTT",
+   "match": [
+    "\\bBPTT\\b",
+    "backpropagation through time"
+   ],
+   "exclude": [],
+   "definition": "backpropagation through time: unroll the RNN over the time steps, then run ordinary backpropagation on the chain.",
+   "lesson": 2
+  },
+  {
+   "term": "DAG",
+   "match": [
+    "\\bDAG\\b"
+   ],
+   "exclude": [],
+   "definition": "directed acyclic graph: steps connected by arrows with no loops, like a pipeline's task graph.",
+   "lesson": 2
+  },
+  {
+   "term": "query plan",
+   "match": [
+    "\\bquery plan\\b"
+   ],
+   "exclude": [],
+   "definition": "the list of steps a database works out before it runs a query.",
+   "lesson": 2
+  },
+  {
+   "term": "SQL",
+   "match": [
+    "\\bSQL\\b"
+   ],
+   "exclude": [],
+   "definition": "the language used to query tables in a database (SELECT … FROM …).",
+   "lesson": 1
+  },
+  {
+   "term": "window function",
+   "match": [
+    "\\bwindow (function|frame)s?\\b",
+    "ROWS BETWEEN",
+    "OVER \\("
+   ],
+   "exclude": [],
+   "definition": "an SQL function that computes, for each row, a value from nearby rows (e.g. LAG() reads the row 7 back); the window frame is which rows it may see.",
+   "lesson": 1
+  },
+  {
+   "term": "recursive CTE",
+   "match": [
+    "\\brecursive CTE\\b",
+    "\\bCTE\\b"
+   ],
+   "exclude": [],
+   "definition": "an SQL query that repeats itself: it starts from a first \"seed\" row, and each pass reads the rows the previous pass produced.",
+   "lesson": 1
+  },
+  {
+   "term": "fact table",
+   "match": [
+    "\\bfact table\\b"
+   ],
+   "exclude": [],
+   "definition": "a table with one row per event or per day and number columns (measures), e.g. one row per date.",
+   "lesson": 3
+  },
+  {
+   "term": "dimension table",
+   "match": [
+    "\\bdimension\\b(?! of)"
+   ],
+   "exclude": [
+    "feature dimension",
+    "dimension of",
+    "dimensions? (of|is|to)",
+    "time dimension",
+    "batch dimension",
+    "dimensionality",
+    "last dimension",
+    "inner dimension",
+    "output dimension",
+    "input dimension",
+    "target (output )?dimension",
+    "length-1",
+    "extra dimension"
+   ],
+   "definition": "a lookup table of descriptions (e.g. a date table saying which days are holidays) that is joined onto a fact table.",
+   "lesson": 8
+  },
+  {
+   "term": "MERGE",
+   "match": [
+    "\\bMERGE\\b"
+   ],
+   "exclude": [],
+   "definition": "an SQL statement that updates matching rows and inserts the new ones in one go.",
+   "lesson": 12
+  },
+  {
+   "term": "partition",
+   "match": [
+    "\\bpartitions?\\b"
+   ],
+   "exclude": [],
+   "definition": "one slice of a big table or job that is stored or processed on its own.",
+   "lesson": 5
+  },
+  {
+   "term": "window",
+   "match": [
+    "\\bwindows?\\b"
+   ],
+   "exclude": [
+    "window (function|frame)"
+   ],
+   "definition": "a fixed-length slice of consecutive values, e.g. 56 days; each window is one training instance, paired with the value that follows it.",
+   "lesson": 1
+  },
+  {
+   "term": "tensor",
+   "match": [
+    "\\btensors?\\b"
+   ],
+   "exclude": [],
+   "definition": "TensorFlow's array: numbers with a fixed shape, e.g. [32, 56, 1].",
+   "lesson": 5
+  },
+  {
+   "term": "shape",
+   "match": [
+    "\\bshapes?\\b"
+   ],
+   "exclude": [],
+   "definition": "the size of an array along each axis: [32, 56, 5] = 32 windows, 56 time steps, 5 numbers per step.",
+   "lesson": 1
+  },
+  {
+   "term": "tf.data",
+   "match": [
+    "\\btf\\.data\\b"
+   ],
+   "exclude": [],
+   "definition": "TensorFlow's tool for feeding data to training: a Dataset object hands out the windows batch by batch.",
+   "lesson": 5
+  },
+  {
+   "term": "shuffle",
+   "match": [
+    "\\bshuffl(e|es|ed|ing)\\b"
+   ],
+   "exclude": [],
+   "definition": "put the rows in a random order.",
+   "lesson": 5
+  },
+  {
+   "term": "i.i.d.",
+   "match": [
+    "\\bidentically distributed\\b",
+    "\\bi\\.i\\.d\\."
+   ],
+   "exclude": [],
+   "definition": "independent and identically distributed: the rows are unrelated to each other and all come from the same distribution, as gradient descent assumes.",
+   "lesson": 5
+  },
+  {
+   "term": "epoch",
+   "match": [
+    "\\bepochs?\\b"
+   ],
+   "exclude": [],
+   "definition": "one full pass of training over every training window.",
+   "lesson": 2
+  },
+  {
+   "term": "SimpleRNN",
+   "match": [
+    "\\bSimpleRNN(Cell)?\\b"
+   ],
+   "exclude": [],
+   "definition": "Keras's basic recurrent layer: one state vector, rewritten at every time step.",
+   "lesson": 6
+  },
+  {
+   "term": "tanh",
+   "match": [
+    "\\btanh\\b",
+    "hyperbolic tangent"
+   ],
+   "exclude": [],
+   "definition": "the hyperbolic tangent, an S-shaped activation whose output always stays between −1 and +1.",
+   "lesson": 1
+  },
+  {
+   "term": "Dense layer",
+   "match": [
+    "\\bDense\\b",
+    "\\bfully connected\\b"
+   ],
+   "exclude": [],
+   "definition": "an ordinary (fully connected) layer: every input feeds every neuron. (ch02's \"dense\" was about storing every cell of a table.)",
+   "lesson": 6
+  },
+  {
+   "term": "unit",
+   "match": [
+    "\\bunits?\\b"
+   ],
+   "exclude": [
+    "units bug",
+    "units of the data",
+    "in riders",
+    "processing unit",
+    "recurrent unit",
+    "activation units?"
+   ],
+   "definition": "Keras's word for a neuron: a layer with 32 units has 32 neurons.",
+   "lesson": 6
+  },
+  {
+   "term": "optimizer",
+   "match": [
+    "\\boptimi[sz]ers?\\b"
+   ],
+   "exclude": [],
+   "definition": "the algorithm that changes the weights using the gradients, e.g. SGD.",
+   "lesson": 6
+  },
+  {
+   "term": "SGD",
+   "match": [
+    "\\bSGD\\b",
+    "stochastic gradient"
+   ],
+   "exclude": [],
+   "definition": "stochastic gradient descent: gradient descent that updates the weights after every mini-batch.",
+   "lesson": 6
+  },
+  {
+   "term": "learning rate",
+   "match": [
+    "\\blearning[_ ]rates?\\b"
+   ],
+   "exclude": [],
+   "definition": "how big each weight update is: too big and training blows up, too small and it crawls.",
+   "lesson": 6
+  },
+  {
+   "term": "momentum",
+   "match": [
+    "\\bmomentum\\b"
+   ],
+   "exclude": [],
+   "definition": "an optimizer option that carries part of the previous update into the next, smoothing a noisy path.",
+   "lesson": 6
+  },
+  {
+   "term": "compile",
+   "match": [
+    "\\bcompil(e|es|ed|ing)\\b"
+   ],
+   "exclude": [],
+   "definition": "in Keras, fix the loss, optimizer and metrics of a model before training it.",
+   "lesson": 6
+  },
+  {
+   "term": "Huber loss",
+   "match": [
+    "\\bHuber\\b"
+   ],
+   "exclude": [],
+   "definition": "a loss that acts like MSE for small errors and like MAE for large ones.",
+   "lesson": 6
+  },
+  {
+   "term": "metric",
+   "match": [
+    "\\bmetrics?\\b"
+   ],
+   "exclude": [],
+   "definition": "a number that scores predictions, e.g. MAE or MAPE. Keras reports metrics during training, but training does not try to lower them directly.",
+   "lesson": 3
+  },
+  {
+   "term": "validation MAE",
+   "match": [
+    "\\bvalidation MAE\\b"
+   ],
+   "exclude": [],
+   "definition": "the MAE measured on the validation windows (January–May 2019), never used for training.",
+   "lesson": 6
+  },
+  {
+   "term": "return_sequences",
+   "match": [
+    "return_sequences"
+   ],
+   "exclude": [],
+   "definition": "a Keras recurrent-layer option: True = output the numbers of EVERY time step (a sequence); False, the default = only the last step's.",
+   "lesson": 7
+  },
+  {
+   "term": "early stopping",
+   "match": [
+    "\\bearly stopping\\b",
+    "EarlyStopping"
+   ],
+   "exclude": [],
+   "definition": "stop training when the validation score has not improved for a while (50 epochs here) and keep the best weights.",
+   "lesson": 6
+  },
+  {
+   "term": "deep RNN",
+   "match": [
+    "\\bdeep RNNs?\\b"
+   ],
+   "exclude": [],
+   "definition": "an RNN with several recurrent layers stacked on top of each other.",
+   "lesson": 7
+  },
+  {
+   "term": "deep network",
+   "match": [
+    "\\bdeep (model|models|network|networks|net|nets|learning|neural)\\b",
+    "\\bdeep-net\\b"
+   ],
+   "exclude": [],
+   "definition": "a neural network with many layers; deep learning means using such networks.",
+   "lesson": 4
+  },
+  {
+   "term": "stack",
+   "match": [
+    "\\bstack(s|ed|ing)?\\b"
+   ],
+   "exclude": [],
+   "definition": "put things one on top of another; stacked layers each feed the next one up.",
+   "lesson": 1
+  },
+  {
+   "term": "multitask learning",
+   "match": [
+    "\\bmulti-?task\\b"
+   ],
+   "exclude": [],
+   "definition": "one model trained to predict several targets at once, here bus and rail.",
+   "lesson": 8
+  },
+  {
+   "term": "iterative forecasting",
+   "match": [
+    "\\biterative\\b"
+   ],
+   "exclude": [],
+   "definition": "forecasting many days by predicting one day, appending the guess to the input, and predicting again.",
+   "lesson": 9
+  },
+  {
+   "term": "horizon",
+   "match": [
+    "\\bhorizons?\\b"
+   ],
+   "exclude": [],
+   "definition": "how far ahead a forecast reaches: 14 days here.",
+   "lesson": 9
+  },
+  {
+   "term": "causal",
+   "match": [
+    "\\bcausal(ity)?\\b"
+   ],
+   "exclude": [],
+   "definition": "a model is causal if each output uses only the current and past inputs, never later ones.",
+   "lesson": 10
+  },
+  {
+   "term": "inference",
+   "match": [
+    "\\binference\\b"
+   ],
+   "exclude": [],
+   "definition": "using a trained model to make predictions (as opposed to training it).",
+   "lesson": 10
+  },
+  {
+   "term": "TimeDistributed",
+   "match": [
+    "\\bTimeDistributed\\b"
+   ],
+   "exclude": [],
+   "definition": "a Keras wrapper that applies the same layer separately at every time step.",
+   "lesson": 10
+  },
+  {
+   "term": "unstable gradients",
+   "match": [
+    "\\b(exploding|vanishing|unstable) gradients?\\b",
+    "\\bexplod(e|es|ing)\\b",
+    "\\bvanish(es|ing)?\\b"
+   ],
+   "exclude": [],
+   "definition": "gradients that grow huge (explode) or shrink to nearly 0 (vanish) as they are passed back through many steps, so training breaks.",
+   "lesson": 2
+  },
+  {
+   "term": "saturating",
+   "match": [
+    "\\b(non-?)?saturat(e|es|ed|ing|ion)\\b"
+   ],
+   "exclude": [],
+   "definition": "an activation saturates when it flattens out at its limits: tanh never goes past ±1, however big its input.",
+   "lesson": 6
+  },
+  {
+   "term": "gradient clipping",
+   "match": [
+    "\\bclipp(ing|ed)\\b",
+    "\\bclip\\b"
+   ],
+   "exclude": [],
+   "definition": "cap every gradient at a maximum size so one huge gradient cannot wreck training.",
+   "lesson": 11
+  },
+  {
+   "term": "normalization",
+   "match": [
+    "\\bnormali[sz](ation|ations|e|es|ed|ing)\\b",
+    "\\bnormalis(ation|e)\\b"
+   ],
+   "exclude": [],
+   "definition": "rescale numbers to a common, small range, e.g. divide riders by 1,000,000, or shift and scale them to average 0 and typical size 1.",
+   "lesson": 8
+  },
+  {
+   "term": "batch normalization",
+   "match": [
+    "\\bbatch norm(ali[sz]ation)?\\b",
+    "\\bBN\\b"
+   ],
+   "exclude": [],
+   "definition": "normalization using averages taken across the whole batch.",
+   "lesson": 11
+  },
+  {
+   "term": "layer normalization",
+   "match": [
+    "\\blayer norm(ali[sz]ation)?\\b",
+    "LayerNormalization",
+    "\\bLN\\b"
+   ],
+   "exclude": [],
+   "definition": "normalization using the numbers of ONE instance at ONE time step, so it works the same at every step.",
+   "lesson": 11
+  },
+  {
+   "term": "dropout",
+   "match": [
+    "\\bdropout\\b"
+   ],
+   "exclude": [],
+   "definition": "during training, randomly set a fraction of values to 0 at each step so the model cannot lean on any single one.",
+   "lesson": 11
+  },
+  {
+   "term": "MC dropout",
+   "match": [
+    "\\bMC dropout\\b",
+    "Monte Carlo"
+   ],
+   "exclude": [],
+   "definition": "Monte Carlo dropout: keep dropout on when predicting and predict several times; the spread of the answers shows how unsure the model is.",
+   "lesson": 11
+  },
+  {
+   "term": "error bars",
+   "match": [
+    "\\berror bars?\\b"
+   ],
+   "exclude": [],
+   "definition": "a range drawn around a prediction to show how unsure it is.",
+   "lesson": 11
+  },
+  {
+   "term": "class",
+   "match": [
+    "\\bclass(es)?\\b",
+    "\\bsubclass"
+   ],
+   "exclude": [],
+   "definition": "in Python, a blueprint for objects: it lists the data an object holds and the functions (methods) it can run.",
+   "lesson": 4
+  },
+  {
+   "term": "parent class",
+   "match": [
+    "\\bparent\\b",
+    "\\bsuper\\(\\)"
+   ],
+   "exclude": [],
+   "definition": "the class a new class is built from; super().__init__() runs the parent's own setup code.",
+   "lesson": 11
+  },
+  {
+   "term": "kwargs",
+   "match": [
+    "kwargs"
+   ],
+   "exclude": [],
+   "definition": "**kwargs collects any extra named arguments so they can be passed on unchanged.",
+   "lesson": 11
+  },
+  {
+   "term": "preprint",
+   "match": [
+    "\\barXiv\\b",
+    "\\bpreprint\\b"
+   ],
+   "exclude": [],
+   "definition": "a research paper posted online (arXiv is the main free site) before or instead of a journal.",
+   "lesson": 11
+  },
+  {
+   "term": "gate",
+   "match": [
+    "\\bgat(e|es|ed|ing)\\b"
+   ],
+   "exclude": [],
+   "definition": "inside a cell, a small layer whose outputs lie between 0 and 1; multiplying by it lets a value through (1) or blocks it (0).",
+   "lesson": 1
+  },
+  {
+   "term": "logistic function",
+   "match": [
+    "\\blogistic\\b",
+    "\\bsigmoid\\b",
+    "\\bsigma\\b"
+   ],
+   "exclude": [],
+   "definition": "the S-shaped curve (also called sigmoid) that turns any number into a number between 0 and 1.",
+   "lesson": 12
+  },
+  {
+   "term": "forget gate",
+   "match": [
+    "\\bforget gate\\b"
+   ],
+   "exclude": [],
+   "definition": "the LSTM gate that decides which parts of the long-term memory to erase.",
+   "lesson": 12
+  },
+  {
+   "term": "input gate",
+   "match": [
+    "\\binput gate\\b"
+   ],
+   "exclude": [],
+   "definition": "the LSTM gate that decides which new values are written into the long-term memory.",
+   "lesson": 12
+  },
+  {
+   "term": "output gate",
+   "match": [
+    "\\boutput gate\\b"
+   ],
+   "exclude": [],
+   "definition": "the LSTM gate that decides which parts of the long-term memory are read out as the output.",
+   "lesson": 12
+  },
+  {
+   "term": "long-term state",
+   "match": [
+    "\\blong-term (state|memory|lane)\\b"
+   ],
+   "exclude": [],
+   "definition": "the LSTM's second memory, c, passed from step to step almost untouched.",
+   "lesson": 12
+  },
+  {
+   "term": "short-term state",
+   "match": [
+    "\\bshort-term state\\b"
+   ],
+   "exclude": [],
+   "definition": "the LSTM's h: its output at each step, also passed to the next step.",
+   "lesson": 12
+  },
+  {
+   "term": "candidate",
+   "match": [
+    "\\bcandidates?\\b"
+   ],
+   "exclude": [],
+   "definition": "a proposed new memory value, which a gate may or may not let in.",
+   "lesson": 12
+  },
+  {
+   "term": "update gate",
+   "match": [
+    "\\bupdate gate\\b"
+   ],
+   "exclude": [],
+   "definition": "the GRU gate z that decides how much old memory to keep; the new value gets the rest.",
+   "lesson": 13
+  },
+  {
+   "term": "reset gate",
+   "match": [
+    "\\breset gate\\b"
+   ],
+   "exclude": [],
+   "definition": "the GRU gate r that decides how much old memory the candidate is allowed to see.",
+   "lesson": 13
+  },
+  {
+   "term": "exponential moving average",
+   "match": [
+    "\\bexponential moving average\\b"
+   ],
+   "exclude": [],
+   "definition": "a running average where each new value gets a fixed share and older values fade away.",
+   "lesson": 13
+  },
+  {
+   "term": "residual connection",
+   "match": [
+    "\\bresidual connections?\\b",
+    "\\bskip connections?\\b"
+   ],
+   "exclude": [],
+   "definition": "a shortcut that adds a layer's input straight to its output, so a signal can skip past the layer (also called a skip connection).",
+   "lesson": 12
+  },
+  {
+   "term": "attention",
+   "match": [
+    "\\battention\\b"
+   ],
+   "exclude": [],
+   "definition": "a mechanism (Chapter 16) that lets a model look back directly at any earlier step instead of squeezing everything into one state.",
+   "lesson": 12
+  },
+  {
+   "term": "Transformer (network)",
+   "match": [
+    "\\bthe transformer\\b",
+    "\\btransformer architecture\\b"
+   ],
+   "exclude": [],
+   "definition": "a network made of attention layers instead of recurrent ones (Chapter 16). Not ch02's Scikit-Learn transformer.",
+   "lesson": 15
+  },
+  {
+   "term": "convolutional layer",
+   "match": [
+    "\\bconvolution(s|al)?\\b",
+    "\\bConv1D\\b"
+   ],
+   "exclude": [],
+   "definition": "a layer that slides a small learned pattern-detector along the data and records how well it matches at each position (b14).",
+   "lesson": 7
+  },
+  {
+   "term": "filter",
+   "match": [
+    "\\bfilters?\\b"
+   ],
+   "exclude": [
+    "\\bfilters the\\b",
+    "filtered",
+    "filtering"
+   ],
+   "definition": "in a convolutional layer, a small set of learned weights (e.g. 4 in a row) that detects one short pattern.",
+   "lesson": 14
+  },
+  {
+   "term": "kernel size",
+   "match": [
+    "\\bkernel[_ ]size\\b",
+    "\\bkernels?\\b"
+   ],
+   "exclude": [],
+   "definition": "the width of a convolution filter: how many consecutive steps it looks at. (Not ch02's similarity kernel.)",
+   "lesson": 14
+  },
+  {
+   "term": "feature map",
+   "match": [
+    "\\bfeature maps?\\b"
+   ],
+   "exclude": [],
+   "definition": "the output of one filter: one number per position saying how strongly its pattern matched there.",
+   "lesson": 14
+  },
+  {
+   "term": "stride",
+   "match": [
+    "\\bstrides?\\b"
+   ],
+   "exclude": [],
+   "definition": "how many steps a filter jumps between two positions; stride 2 halves the length of the output.",
+   "lesson": 14
+  },
+  {
+   "term": "padding",
+   "match": [
+    "\\bpadd(ing|ed)\\b",
+    "\\bpads?\\b"
+   ],
+   "exclude": [],
+   "definition": "filler values (zeros) added at the ends of a sequence before a convolutional layer slides along it; \"same\" adds enough to keep the length, \"valid\" adds none.",
+   "lesson": 10
+  },
+  {
+   "term": "downsample",
+   "match": [
+    "\\bdown-?sampl(e|es|ed|ing)\\b"
+   ],
+   "exclude": [],
+   "definition": "keep fewer steps, e.g. every second one, making a sequence shorter.",
+   "lesson": 14
+  },
+  {
+   "term": "pooling",
+   "match": [
+    "\\bpooling\\b"
+   ],
+   "exclude": [],
+   "definition": "a layer that shrinks a sequence by keeping, say, the maximum or the average of every few steps.",
+   "lesson": 14
+  },
+  {
+   "term": "receptive field",
+   "match": [
+    "\\breceptive fields?\\b"
+   ],
+   "exclude": [],
+   "definition": "the span of original time steps that one output value depends on.",
+   "lesson": 14
+  },
+  {
+   "term": "WaveNet",
+   "match": [
+    "\\bWaveNet\\b"
+   ],
+   "exclude": [],
+   "definition": "a 2016 network from DeepMind (Google's AI lab) made only of stacked convolutional layers whose inputs are spaced further apart at each level; used here for forecasting.",
+   "lesson": 10
+  },
+  {
+   "term": "dilation rate",
+   "match": [
+    "\\bdilat(ion|ed|ions)\\b",
+    "dilation_rate"
+   ],
+   "exclude": [],
+   "definition": "how far apart the two inputs of a filter are: rate 4 reads steps t and t−4.",
+   "lesson": 15
+  },
+  {
+   "term": "causal padding",
+   "match": [
+    "\\bcausal padding\\b",
+    "padding=\\\"causal\\\""
+   ],
+   "exclude": [],
+   "definition": "padding only at the start, so no output can see a later step.",
+   "lesson": 10
+  },
+  {
+   "term": "gated activation unit",
+   "match": [
+    "\\bgated activation units?\\b"
+   ],
+   "exclude": [],
+   "definition": "WaveNet's gate: one tanh output multiplied by one logistic output.",
+   "lesson": 15
+  },
+  {
+   "term": "TensorFlow Datasets",
+   "match": [
+    "\\bTensorFlow Datasets\\b"
+   ],
+   "exclude": [],
+   "definition": "a free collection of ready-made datasets that load into TensorFlow in one line.",
+   "lesson": 16
+  },
+  {
+   "term": "SketchRNN",
+   "match": [
+    "\\bSketchRNN\\b"
+   ],
+   "exclude": [],
+   "definition": "a dataset of millions of quick drawings, each stored as a sequence of pen strokes.",
+   "lesson": 16
+  },
+  {
+   "term": "Bach chorales",
+   "match": [
+    "\\bBach chorales?\\b",
+    "\\bchorales?\\b"
+   ],
+   "exclude": [],
+   "definition": "382 hymns by J. S. Bach, stored as sequences of 4-note chords.",
+   "lesson": 16
+  },
+  {
+   "term": "bottleneck",
+   "match": [
+    "\\bbottlenecks?\\b"
+   ],
+   "exclude": [],
+   "definition": "the narrowest point that everything has to pass through; here, the single vector between an encoder and a decoder.",
+   "lesson": 1
+  },
+  {
+   "term": "streaming job",
+   "match": [
+    "\\bstreaming job\\b"
+   ],
+   "exclude": [],
+   "definition": "a program that runs all the time and processes data as it arrives, a little at a time.",
+   "lesson": 5
+  },
+  {
+   "term": "incremental load",
+   "match": [
+    "\\bincremental load\\b"
+   ],
+   "exclude": [],
+   "definition": "updating a table by adding only the new rows on each run.",
+   "lesson": 6
+  },
+  {
+   "term": "full scan",
+   "match": [
+    "\\bfull scan\\b"
+   ],
+   "exclude": [],
+   "definition": "reading every row of a table.",
+   "lesson": 6
+  },
+  {
+   "term": "grain",
+   "match": [
+    "\\bgrain\\b"
+   ],
+   "exclude": [],
+   "definition": "what one row of a table stands for, e.g. one row per day or one row per hour.",
+   "lesson": 14
+  },
+  {
+   "term": "pre-aggregation",
+   "match": [
+    "\\bpre-aggregation\\b"
+   ],
+   "exclude": [],
+   "definition": "summing detailed rows into fewer, coarser rows before an expensive step runs.",
+   "lesson": 14
+  },
+  {
+   "term": "optimum",
+   "match": [
+    "\\boptimum\\b"
+   ],
+   "exclude": [],
+   "definition": "the best possible weights: where the loss is lowest.",
+   "lesson": 6
+  },
+  {
+   "term": "initialization",
+   "match": [
+    "\\binitiali[sz](ation|e|es|ed|ing)\\b"
+   ],
+   "exclude": [],
+   "definition": "the starting values given to a network's weights (or state) before training changes them.",
+   "lesson": 1
+  },
+  {
+   "term": "channel",
+   "match": [
+    "\\bchannels?\\b"
+   ],
+   "exclude": [],
+   "definition": "one of the numbers at each time step: one per input column, or one per filter after a convolutional layer.",
+   "lesson": 15
+  },
+  {
+   "term": "scalar",
+   "match": [
+    "\\bscalars?\\b"
+   ],
+   "exclude": [],
+   "definition": "a single number, not a list of numbers.",
+   "lesson": 5
+  },
+  {
+   "term": "interpolation",
+   "match": [
+    "\\binterpolat(ion|e|ing)\\b"
+   ],
+   "exclude": [],
+   "definition": "guessing a value BETWEEN known ones, which is easier than forecasting one that comes after them all.",
+   "lesson": 5
+  },
+  {
+   "term": "softmax",
+   "match": [
+    "\\bsoftmax\\b"
+   ],
+   "exclude": [],
+   "definition": "an output activation for picking one of several classes: it turns the last layer's numbers into probabilities, one per class, that add up to 1.",
+   "lesson": 16
+  },
+  {
+   "term": "2D CNN",
+   "match": [
+    "\\b[23]D CNNs?\\b",
+    "\\b2D convolutional (neural )?network"
+   ],
+   "exclude": [],
+   "definition": "a 2D convolutional neural network: convolutional layers whose filters slide across an image's width and height (its spatial dimensions) rather than along time; Chapter 14 teaches them.",
+   "lesson": 16
+  }
+ ]
+}

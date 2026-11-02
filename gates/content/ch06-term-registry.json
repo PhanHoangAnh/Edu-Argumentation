@@ -1,0 +1,798 @@
+{
+ "chapter": 6,
+ "flow": [
+  "Get the data",
+  "Set aside a test set",
+  "Explore",
+  "Prepare the data",
+  "Train",
+  "Evaluate",
+  "Fine-tune",
+  "Launch"
+ ],
+ "generated_by": "ml/study/geron-lab/ch06-notes/build_ch06.py",
+ "known_from": "ch02-term-registry.json (terms defined there count as known in every chapter)",
+ "terms": [
+  {
+   "term": "iris dataset",
+   "match": [
+    "\\biris\\b"
+   ],
+   "exclude": [],
+   "definition": "a small, famous table of 150 flowers: 4 measurements per flower (petal and sepal length and width, in cm) plus the flower's species. It ships inside Scikit-Learn.",
+   "lesson": 1
+  },
+  {
+   "term": "petal",
+   "match": [
+    "\\bpetals?\\b"
+   ],
+   "exclude": [],
+   "definition": "the coloured leaf-like parts of a flower. The iris data measures each flower's petal length and petal width in centimetres.",
+   "lesson": 1
+  },
+  {
+   "term": "species",
+   "match": [
+    "\\bspecies\\b",
+    "\\bsetosa\\b",
+    "\\bversicolor\\b",
+    "\\bvirginica\\b"
+   ],
+   "exclude": [],
+   "definition": "the kind of iris a flower is: setosa, versicolor or virginica. It is the label the iris model learns to predict.",
+   "lesson": 1
+  },
+  {
+   "term": "class",
+   "match": [
+    "\\bclass(es)?\\b"
+   ],
+   "exclude": [
+    "\\bclass (DecisionTree\\w+|RandomForest\\w+)",
+    "\\bthe tree class\\b",
+    "\\bmodel class\\b",
+    "\\bclass itself\\b",
+    "\\bclass_names\\b"
+   ],
+   "definition": "one of the categories a classifier chooses between; here a species (class 0 = setosa, 1 = versicolor, 2 = virginica). Careful: Python also says \"class\" for a blueprint that objects are made from, such as `DecisionTreeClassifier`. Which one is meant is always clear from the sentence.",
+   "lesson": 1
+  },
+  {
+   "term": "classifier",
+   "match": [
+    "\\bclassifiers?\\b"
+   ],
+   "exclude": [
+    "DecisionTreeClassifier",
+    "RandomForestClassifier"
+   ],
+   "definition": "a model that predicts a class (a category), such as a species, rather than a number.",
+   "lesson": 1
+  },
+  {
+   "term": "multi-output",
+   "match": [
+    "\\bmulti-?output\\b"
+   ],
+   "exclude": [],
+   "definition": "a task where the model must produce several answers per row at once (for example two numbers), not just one.",
+   "lesson": 1
+  },
+  {
+   "term": "CART",
+   "match": [
+    "\\bCART\\b"
+   ],
+   "exclude": [],
+   "definition": "Classification And Regression Tree: the recipe Scikit-Learn uses to grow a decision tree. b04 explains it step by step.",
+   "lesson": 1
+  },
+  {
+   "term": "max_depth",
+   "match": [
+    "\\bmax_depth\\b"
+   ],
+   "exclude": [],
+   "definition": "the hyperparameter that caps how many questions deep a tree may grow. max_depth=2 means at most two questions from the top to an answer.",
+   "lesson": 1
+  },
+  {
+   "term": "depth",
+   "match": [
+    "\\bdepths?\\b",
+    "\\bDepth=\\d"
+   ],
+   "exclude": [
+    "\\bmax_depth\\b",
+    "\\bin depth\\b"
+   ],
+   "definition": "how many questions below the top a node sits: the top node is depth 0, its two children are depth 1, and so on.",
+   "lesson": 1
+  },
+  {
+   "term": "Graphviz",
+   "match": [
+    "\\bGraphviz\\b",
+    "\\bexport_graphviz\\b"
+   ],
+   "exclude": [],
+   "definition": "a free program that turns a plain-text description of boxes and arrows (a `.dot` file) into a picture. `export_graphviz()` is the Scikit-Learn function that writes that text for a trained tree.",
+   "lesson": 1
+  },
+  {
+   "term": "node",
+   "match": [
+    "\\bnodes?\\b"
+   ],
+   "exclude": [],
+   "definition": "one box of the tree. Each node either asks a yes/no question or, at the bottom, gives the answer.",
+   "lesson": 1
+  },
+  {
+   "term": "root",
+   "match": [
+    "\\broot\\b"
+   ],
+   "exclude": [
+    "\\bsquare root\\b"
+   ],
+   "definition": "the top node of the tree, where every walk starts (depth 0).",
+   "lesson": 1
+  },
+  {
+   "term": "leaf",
+   "match": [
+    "\\bleaf\\b",
+    "\\bleaves\\b"
+   ],
+   "exclude": [],
+   "definition": "a node at the bottom with no question of its own: it only holds the answer for every row that reaches it.",
+   "lesson": 1
+  },
+  {
+   "term": "split node",
+   "match": [
+    "\\bsplit nodes?\\b"
+   ],
+   "exclude": [],
+   "definition": "a node that still asks a yes/no question and sends each row left (yes) or right (no).",
+   "lesson": 1
+  },
+  {
+   "term": "child node",
+   "match": [
+    "\\bchild(ren)?\\b"
+   ],
+   "exclude": [],
+   "definition": "a node directly below another one; every split node has exactly two, a left child and a right child.",
+   "lesson": 1
+  },
+  {
+   "term": "split",
+   "match": [
+    "\\bsplits?\\b",
+    "\\bsplitting\\b"
+   ],
+   "exclude": [
+    "\\bsplit nodes?\\b",
+    "train_test_split",
+    "\\bsplit (a|the) dataset\\b",
+    "\\bsplit the dataset\\b"
+   ],
+   "definition": "one yes/no question of a tree, such as \"is petal length at most 2.45 cm?\", which divides the rows at a node into two groups.",
+   "lesson": 1
+  },
+  {
+   "term": "threshold",
+   "match": [
+    "\\bthresholds?\\b"
+   ],
+   "exclude": [],
+   "definition": "the number a split compares a feature against, such as the 2.45 in \"petal length at most 2.45 cm\".",
+   "lesson": 1
+  },
+  {
+   "term": "Gini impurity",
+   "match": [
+    "\\bgini\\b"
+   ],
+   "exclude": [],
+   "definition": "a score from 0 to below 1 for how mixed the classes are at a node: 0 means every row there is the same class; higher means more mixed. Equation 6-1 shows how it is computed.",
+   "lesson": 2
+  },
+  {
+   "term": "impurity",
+   "match": [
+    "\\bimpur(e|ity)\\b"
+   ],
+   "exclude": [
+    "\\bgini impurity\\b"
+   ],
+   "definition": "how mixed the classes are in a group of rows. A group of one class only is \"pure\" (impurity 0).",
+   "lesson": 1
+  },
+  {
+   "term": "pure",
+   "match": [
+    "\\bpure\\b"
+   ],
+   "exclude": [
+    "\\bimpure\\b"
+   ],
+   "definition": "a node or group whose rows all belong to one class; its impurity is 0.",
+   "lesson": 1
+  },
+  {
+   "term": "samples (on a node)",
+   "match": [
+    "\\bsamples\\b"
+   ],
+   "exclude": [
+    "\\bn_samples\\b",
+    "\\bmin_samples_\\w+",
+    "max_samples"
+   ],
+   "definition": "the number printed on a node: how many training rows reached that node.",
+   "lesson": 2
+  },
+  {
+   "term": "value (on a node)",
+   "match": [
+    "\\bvalue = \\[",
+    "\\bvalue\\b(?= (breaks|is a number|list))"
+   ],
+   "exclude": [],
+   "definition": "the list printed on a node: how many of the rows at that node belong to each class, e.g. [0, 49, 5].",
+   "lesson": 2
+  },
+  {
+   "term": "binary tree",
+   "match": [
+    "\\bbinary trees?\\b",
+    "\\bbinary-only\\b"
+   ],
+   "exclude": [],
+   "definition": "a tree whose every question has exactly two answers (yes/no), so every split node has exactly two children.",
+   "lesson": 2
+  },
+  {
+   "term": "ID3",
+   "match": [
+    "\\bID3\\b"
+   ],
+   "exclude": [],
+   "definition": "an older tree-growing recipe, not in Scikit-Learn, that can split a node into more than two branches.",
+   "lesson": 2
+  },
+  {
+   "term": "white box model",
+   "match": [
+    "\\bwhite[- ]box\\b"
+   ],
+   "exclude": [],
+   "definition": "a model whose reasoning you can read and check by hand, like a small decision tree.",
+   "lesson": 2
+  },
+  {
+   "term": "neural network",
+   "match": [
+    "\\bneural (net|nets|network|networks)\\b"
+   ],
+   "exclude": [],
+   "definition": "a large model built from many layers of simple calculations; very accurate on images and text, but not readable by hand. Chapter 10 starts on them.",
+   "lesson": 2
+  },
+  {
+   "term": "interpretable ML",
+   "match": [
+    "\\binterpretable ML\\b",
+    "\\binterpretability\\b"
+   ],
+   "exclude": [],
+   "definition": "the field of methods for explaining why a model made a prediction.",
+   "lesson": 2
+  },
+  {
+   "term": "probability",
+   "match": [
+    "\\bprobabilit(y|ies)\\b",
+    "\\bpredict_proba\\b"
+   ],
+   "exclude": [],
+   "definition": "a number from 0 to 1 (0% to 100%) for how likely something is. `predict_proba()` returns one probability per class.",
+   "lesson": 3
+  },
+  {
+   "term": "step function",
+   "match": [
+    "\\bstep function\\b",
+    "\\bstaircase\\b"
+   ],
+   "exclude": [],
+   "definition": "a function that stays flat across a whole range and then jumps, like a staircase, instead of changing smoothly.",
+   "lesson": 3
+  },
+  {
+   "term": "decision boundary",
+   "match": [
+    "\\bdecision boundar(y|ies)\\b",
+    "\\bboundar(y|ies)\\b"
+   ],
+   "exclude": [],
+   "definition": "the line (or edge) in the picture of the data where the model's answer changes from one class to another.",
+   "lesson": 2
+  },
+  {
+   "term": "logistic regression",
+   "match": [
+    "\\blogistic regression\\b"
+   ],
+   "exclude": [],
+   "definition": "a model for classification (despite its name) that turns the features into a smooth probability; the book's Chapter 4 covers it.",
+   "lesson": 3
+  },
+  {
+   "term": "greedy",
+   "match": [
+    "\\bgreedy\\b",
+    "\\bgreedi(ly|ness)\\b"
+   ],
+   "exclude": [],
+   "definition": "a search that takes the best-looking option at each step and never goes back to reconsider it.",
+   "lesson": 4
+  },
+  {
+   "term": "cost function",
+   "match": [
+    "\\bcost function\\b"
+   ],
+   "exclude": [],
+   "definition": "the one number a training algorithm tries to make as small as possible; for CART it is the size-weighted impurity of a split (Equation 6-2).",
+   "lesson": 4
+  },
+  {
+   "term": "weighted average",
+   "match": [
+    "\\bweighted[- ]average\\b",
+    "\\bweighted (Gini|impurity|MSE|sum)\\b",
+    "\\bsize-weighted\\b"
+   ],
+   "exclude": [],
+   "definition": "an average where bigger groups count more: each group's number is multiplied by its share of the rows before adding up.",
+   "lesson": 4
+  },
+  {
+   "term": "NP-complete",
+   "match": [
+    "\\bNP-complete(ness)?\\b"
+   ],
+   "exclude": [],
+   "definition": "a family of problems for which no fast method is known: the only known guaranteed method tries so many options that the time grows explosively (exponentially) with the input size.",
+   "lesson": 4
+  },
+  {
+   "term": "exponential growth",
+   "match": [
+    "\\bexponential(ly)?\\b"
+   ],
+   "exclude": [
+    "\\bexponential function\\b"
+   ],
+   "definition": "growth that multiplies instead of adding: each extra row multiplies the work, so it gets out of hand very fast.",
+   "lesson": 4
+  },
+  {
+   "term": "min_samples_leaf",
+   "match": [
+    "\\bmin_samples_leaf\\b"
+   ],
+   "exclude": [],
+   "definition": "a hyperparameter: every leaf must hold at least this many training rows, so the tree cannot carve out a leaf for one odd row.",
+   "lesson": 4
+  },
+  {
+   "term": "min_samples_split",
+   "match": [
+    "\\bmin_samples_split\\b"
+   ],
+   "exclude": [],
+   "definition": "a hyperparameter: a node needs at least this many rows before it is allowed to split.",
+   "lesson": 4
+  },
+  {
+   "term": "max_leaf_nodes",
+   "match": [
+    "\\bmax_leaf_nodes\\b"
+   ],
+   "exclude": [],
+   "definition": "a hyperparameter: the tree may have at most this many leaves.",
+   "lesson": 4
+  },
+  {
+   "term": "max_features",
+   "match": [
+    "\\bmax_features\\b"
+   ],
+   "exclude": [],
+   "definition": "a hyperparameter: how many features are tried at each split (all of them, by default).",
+   "lesson": 6
+  },
+  {
+   "term": "min_weight_fraction_leaf",
+   "match": [
+    "\\bmin_weight_fraction_leaf\\b"
+   ],
+   "exclude": [],
+   "definition": "the same rule as min_samples_leaf, written as a share of all training rows instead of a count.",
+   "lesson": 4
+  },
+  {
+   "term": "binary logarithm",
+   "match": [
+    "\\blog₂",
+    "\\blog2\\b",
+    "\\bbinary logarithm\\b",
+    "\\bbase-2 log",
+    "\\blog base 2\\b"
+   ],
+   "exclude": [],
+   "definition": "log₂(m) = how many times you can halve m before reaching 1. log₂(8) = 3 because 8 → 4 → 2 → 1; log₂(150) ≈ 7.2.",
+   "lesson": 4
+  },
+  {
+   "term": "balanced tree",
+   "match": [
+    "\\bbalanced\\b"
+   ],
+   "exclude": [],
+   "definition": "a tree whose leaves all sit at about the same depth, so no path from the top to a leaf is much longer than the others.",
+   "lesson": 4
+  },
+  {
+   "term": "computational complexity",
+   "match": [
+    "\\bcomplexity\\b",
+    "\\bO\\(",
+    "\\bcosts roughly\\b"
+   ],
+   "exclude": [],
+   "definition": "how the running time grows as the data grows. \"O(m × log₂(m))\" reads \"grows like m times log₂ of m\"; the letter O just means \"roughly proportional to\".",
+   "lesson": 4
+  },
+  {
+   "term": "entropy",
+   "match": [
+    "\\bentropy\\b"
+   ],
+   "exclude": [],
+   "definition": "a second measure of how mixed the classes at a node are: 0 when all rows are one class, larger when mixed. b05 explains where it comes from and compares it with Gini impurity.",
+   "lesson": 4
+  },
+  {
+   "term": "information theory",
+   "match": [
+    "\\binformation theory\\b"
+   ],
+   "exclude": [],
+   "definition": "the mathematics of messages and surprise, founded by Claude Shannon in 1948; it measures information in bits.",
+   "lesson": 5
+  },
+  {
+   "term": "thermodynamics",
+   "match": [
+    "\\bthermodynamics\\b"
+   ],
+   "exclude": [],
+   "definition": "the branch of physics about heat and disorder in matter, where the word entropy was first used.",
+   "lesson": 5
+  },
+  {
+   "term": "bit",
+   "match": [
+    "\\bbits?\\b"
+   ],
+   "exclude": [],
+   "definition": "the unit of information: the amount carried by the answer to one fair yes/no question.",
+   "lesson": 5
+  },
+  {
+   "term": "criterion",
+   "match": [
+    "\\bcriterion\\b"
+   ],
+   "exclude": [],
+   "definition": "the hyperparameter that picks the impurity measure a tree uses: \"gini\" (the default) or \"entropy\".",
+   "lesson": 4
+  },
+  {
+   "term": "parametric model",
+   "match": [
+    "\\bparametric\\b"
+   ],
+   "exclude": [
+    "\\bnonparametric\\b",
+    "\\bnon-parametric\\b"
+   ],
+   "definition": "a model whose number of learned numbers is fixed before training, e.g. a straight line always has one slope per feature plus one intercept.",
+   "lesson": 6
+  },
+  {
+   "term": "nonparametric model",
+   "match": [
+    "\\bnon-?parametric\\b"
+   ],
+   "exclude": [],
+   "definition": "a model whose number of learned numbers is NOT fixed in advance; it grows with the data, as a tree's number of nodes does.",
+   "lesson": 6
+  },
+  {
+   "term": "pruning",
+   "match": [
+    "\\bprun(e|es|ed|ing)\\b"
+   ],
+   "exclude": [],
+   "definition": "growing a tree fully, then cutting back the branches that do not earn their place.",
+   "lesson": 6
+  },
+  {
+   "term": "chi-squared test",
+   "match": [
+    "\\bchi-squared\\b"
+   ],
+   "exclude": [],
+   "definition": "a standard statistics test for whether a pattern in counts could plausibly be chance.",
+   "lesson": 6
+  },
+  {
+   "term": "moons dataset",
+   "match": [
+    "\\bmoons\\b",
+    "\\bmake_moons\\b"
+   ],
+   "exclude": [],
+   "definition": "a made-up two-feature dataset from Scikit-Learn's `make_moons()`: two interlocking crescent shapes, one per class, with some random scatter (noise).",
+   "lesson": 6
+  },
+  {
+   "term": "accuracy",
+   "match": [
+    "\\baccura(cy|te)\\b"
+   ],
+   "exclude": [],
+   "definition": "the share of rows a classifier gets right: 0.92 means 92 rows out of 100.",
+   "lesson": 1
+  },
+  {
+   "term": "score",
+   "match": [
+    "\\.score\\b",
+    "\\bscore\\("
+   ],
+   "exclude": [],
+   "definition": "`model.score(X, y)` predicts every row of X and compares with y; for a classifier it returns the accuracy.",
+   "lesson": 6
+  },
+  {
+   "term": "mean squared error",
+   "match": [
+    "\\bMSE\\b",
+    "\\bmean squared error\\b",
+    "\\bsquared error\\b"
+   ],
+   "exclude": [],
+   "definition": "MSE: take each row's miss (prediction minus the true value), square it, then average. It is RMSE before the square root.",
+   "lesson": 4
+  },
+  {
+   "term": "regression tree",
+   "match": [
+    "\\bregression trees?\\b",
+    "\\bDecisionTreeRegressor\\b"
+   ],
+   "exclude": [
+    "DecisionTreeRegressor fit the California",
+    "And Regression Trees?"
+   ],
+   "definition": "a decision tree that predicts a number: each leaf holds the average target of its training rows.",
+   "lesson": 4
+  },
+  {
+   "term": "extrapolate",
+   "match": [
+    "\\bextrapolat(e|es|ion)\\b"
+   ],
+   "exclude": [],
+   "definition": "predict for inputs outside the range the model was trained on.",
+   "lesson": 7
+  },
+  {
+   "term": "perpendicular",
+   "match": [
+    "\\bperpendicular\\b",
+    "\\borthogonal\\b",
+    "\\baxis-aligned\\b"
+   ],
+   "exclude": [],
+   "definition": "at a right angle. A tree's cuts are perpendicular to one axis: straight up-and-down or straight across in a plot, never diagonal.",
+   "lesson": 8
+  },
+  {
+   "term": "axis",
+   "match": [
+    "\\baxis\\b",
+    "\\baxes\\b"
+   ],
+   "exclude": [],
+   "definition": "one direction of a plot, one per feature; with petal length across and petal width up there are two axes.",
+   "lesson": 8
+  },
+  {
+   "term": "linearly separable",
+   "match": [
+    "\\blinearly[- ]separable\\b"
+   ],
+   "exclude": [],
+   "definition": "two classes that one straight line (or flat plane) can separate completely.",
+   "lesson": 8
+  },
+  {
+   "term": "principal component analysis",
+   "match": [
+    "\\bPCA\\b",
+    "\\bprincipal component"
+   ],
+   "exclude": [],
+   "definition": "PCA: a method that finds new axes pointing along the directions in which the data spreads out most, and re-writes every row on those axes. The book's Chapter 8 covers it.",
+   "lesson": 8
+  },
+  {
+   "term": "rotation",
+   "match": [
+    "\\brotat(e|ed|es|ing|ion)\\b"
+   ],
+   "exclude": [],
+   "definition": "turning the whole cloud of points around the middle, without stretching it; distances between points stay the same.",
+   "lesson": 8
+  },
+  {
+   "term": "derived feature",
+   "match": [
+    "\\bderived feature\\b"
+   ],
+   "exclude": [],
+   "definition": "a new column computed from existing ones, e.g. 0.707 × length + 0.707 × width.",
+   "lesson": 8
+  },
+  {
+   "term": "linear combination",
+   "match": [
+    "\\blinear combination\\b"
+   ],
+   "exclude": [],
+   "definition": "a weighted sum of columns: each column times a fixed number, then added.",
+   "lesson": 8
+  },
+  {
+   "term": "bias (of a model)",
+   "match": [
+    "\\bbias\\b"
+   ],
+   "exclude": [],
+   "definition": "error that comes from the model being too simple, so it is wrong in the same way every time, whatever sample it was trained on.",
+   "lesson": 9
+  },
+  {
+   "term": "stochastic",
+   "match": [
+    "\\bstochastic\\b"
+   ],
+   "exclude": [],
+   "definition": "using random choices while it runs, so two runs can differ unless the seed is fixed.",
+   "lesson": 9
+  },
+  {
+   "term": "random_state",
+   "match": [
+    "\\brandom_state\\b"
+   ],
+   "exclude": [],
+   "definition": "the argument that fixes the seed of a Scikit-Learn object's random choices, so every run gives the same result.",
+   "lesson": 1
+  },
+  {
+   "term": "tie",
+   "match": [
+    "\\bties?\\b",
+    "\\btie-breaking\\b"
+   ],
+   "exclude": [],
+   "definition": "two options that score exactly the same, so something else (here a random choice) must decide between them.",
+   "lesson": 1
+  },
+  {
+   "term": "calibration",
+   "match": [
+    "\\bcalibrat(ed|ion)\\b"
+   ],
+   "exclude": [],
+   "definition": "adjusting a model's probabilities so that, among rows given 80%, about 80% really are that class.",
+   "lesson": 3
+  },
+  {
+   "term": "oblique tree",
+   "match": [
+    "\\boblique trees?\\b"
+   ],
+   "exclude": [],
+   "definition": "a kind of decision tree whose questions test a weighted sum of several features, so its cuts can be diagonal. Scikit-Learn does not have one.",
+   "lesson": 8
+  },
+  {
+   "term": "train_test_split",
+   "match": [
+    "\\btrain_test_split\\b"
+   ],
+   "exclude": [],
+   "definition": "the Scikit-Learn function that cuts a dataset's rows at random into a training part and a test part.",
+   "lesson": 10
+  },
+  {
+   "term": "ShuffleSplit",
+   "match": [
+    "\\bShuffleSplit\\b"
+   ],
+   "exclude": [],
+   "definition": "a Scikit-Learn helper that draws many random subsets of the rows, one after another.",
+   "lesson": 10
+  },
+  {
+   "term": "majority vote",
+   "match": [
+    "\\bmajority[- ]vote\\b"
+   ],
+   "exclude": [],
+   "definition": "combining several models' answers by taking the answer most of them gave.",
+   "lesson": 10
+  },
+  {
+   "term": "mode (most frequent value)",
+   "match": [
+    "\\bmode\\(\\)",
+    "\\bmost frequent prediction\\b"
+   ],
+   "exclude": [],
+   "definition": "the value that occurs most often in a list; SciPy's `mode()` returns it.",
+   "lesson": 10
+  },
+  {
+   "term": "cost-complexity pruning",
+   "match": [
+    "\\bCost-Complexity Pruning\\b",
+    "\\bccp_alpha\\b"
+   ],
+   "exclude": [],
+   "definition": "Scikit-Learn's own way of pruning a grown tree: `ccp_alpha` sets how much each extra leaf must improve the tree to be kept.",
+   "lesson": 6
+  },
+  {
+   "term": "discriminant analysis",
+   "match": [
+    "\\bDiscriminant Analysis\\b"
+   ],
+   "exclude": [],
+   "definition": "a family of models that, unlike PCA, use the labels to find the directions that best separate the classes.",
+   "lesson": 8
+  },
+  {
+   "term": "gradient boosting",
+   "match": [
+    "\\bgradient boosting\\b",
+    "\\bgradient-boosted\\b"
+   ],
+   "exclude": [],
+   "definition": "an ensemble that trains many small trees one after another, each new tree fixing the errors the earlier ones still make. Chapter 7 teaches it.",
+   "lesson": 1
+  }
+ ]
+}

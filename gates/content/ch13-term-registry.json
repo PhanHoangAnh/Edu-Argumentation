@@ -1,0 +1,1043 @@
+{
+ "chapter": 13,
+ "flow": [
+  "Get the data",
+  "Set aside a test set",
+  "Explore",
+  "Prepare the data",
+  "Train",
+  "Evaluate",
+  "Fine-tune",
+  "Launch"
+ ],
+ "known": [
+  "ch02-term-registry.json"
+ ],
+ "generated_by": "ml/study/geron-lab/ch13-notes (chapter_build.py)",
+ "terms": [
+  {
+   "term": "TensorFlow",
+   "match": [
+    "\\btensorflow\\b(?! Hub| Datasets)",
+    "\\btf\\.(?!data)",
+    "\\bTF\\b"
+   ],
+   "exclude": [],
+   "definition": "Google's deep-learning library; tf.data, Keras and the preprocessing layers of this chapter are parts of it.",
+   "lesson": 1
+  },
+  {
+   "term": "tf.data",
+   "match": [
+    "\\btf\\.data\\b",
+    "\\bData API\\b"
+   ],
+   "exclude": [],
+   "definition": "TensorFlow's library for building input pipelines: read, transform, shuffle and batch data on its way to a model.",
+   "lesson": 1
+  },
+  {
+   "term": "dataset (tf.data)",
+   "match": [
+    "\\bdatasets?\\b"
+   ],
+   "exclude": [
+    "\\bTensorFlow Datasets\\b",
+    "\\btfds\\b"
+   ],
+   "definition": "in this chapter, a tf.data.Dataset: a described stream of items that a model can read one batch at a time (not a table in memory).",
+   "lesson": 1
+  },
+  {
+   "term": "tensor",
+   "match": [
+    "\\btensors?\\b"
+   ],
+   "exclude": [],
+   "definition": "TensorFlow's array: a number, a list, a table or a stack of tables, all of one type.",
+   "lesson": 1
+  },
+  {
+   "term": "lazy",
+   "match": [
+    "\\blaz(y|ily)\\b"
+   ],
+   "exclude": [],
+   "definition": "describe the work now, do it only when the result is asked for: a tf.data chain reads nothing until you loop over it.",
+   "lesson": 1
+  },
+  {
+   "term": "batch",
+   "match": [
+    "\\bbatch(es|ed|ing)?\\b",
+    "\\bmini-?batch(es)?\\b"
+   ],
+   "exclude": [],
+   "definition": "a small group of items processed together; batch(7) packs 7 consecutive items into one tensor.",
+   "lesson": 1
+  },
+  {
+   "term": "CPU",
+   "match": [
+    "\\bCPUs?\\b"
+   ],
+   "exclude": [],
+   "definition": "the computer's ordinary processor; in this chapter it prepares the data.",
+   "lesson": 1
+  },
+  {
+   "term": "GPU",
+   "match": [
+    "\\bGPUs?\\b"
+   ],
+   "exclude": [],
+   "definition": "graphics processor: a chip that runs the model's arithmetic very fast; in this chapter it trains while the CPU prepares data.",
+   "lesson": 1
+  },
+  {
+   "term": "thread",
+   "match": [
+    "\\bthreads?\\b",
+    "\\bmultithread\\w*"
+   ],
+   "exclude": [],
+   "definition": "one line of work a CPU runs; several threads run at the same time on several CPU cores.",
+   "lesson": 1
+  },
+  {
+   "term": "buffer",
+   "match": [
+    "\\bbuffers?\\b"
+   ],
+   "exclude": [],
+   "definition": "a small holding area in memory where items wait between two steps.",
+   "lesson": 1
+  },
+  {
+   "term": "AUTOTUNE",
+   "match": [
+    "\\bAUTOTUNE\\b"
+   ],
+   "exclude": [],
+   "definition": "tf.data.AUTOTUNE: let TensorFlow choose the number (of threads, of prefetched batches) from the machine it runs on.",
+   "lesson": 1
+  },
+  {
+   "term": "bottleneck",
+   "match": [
+    "\\bbottlenecks?\\b"
+   ],
+   "exclude": [],
+   "definition": "the slowest step of a chain; it decides the speed of the whole chain.",
+   "lesson": 1
+  },
+  {
+   "term": "prefetch",
+   "match": [
+    "\\bprefetch\\w*"
+   ],
+   "exclude": [],
+   "definition": "prefetch(1): keep the next batch ready while the model trains on the current one.",
+   "lesson": 1
+  },
+  {
+   "term": "shuffle",
+   "match": [
+    "\\bshuffl(e|es|ed|ing)\\b"
+   ],
+   "exclude": [],
+   "definition": "put items in random order; shuffle(buffer_size) does it with a moving window of buffer_size items.",
+   "lesson": 1
+  },
+  {
+   "term": "reduce_sum",
+   "match": [
+    "\\breduce_sum\\b",
+    "\\breduce\\b"
+   ],
+   "exclude": [],
+   "definition": "tf.reduce_sum(x): add up all the numbers in a tensor into one number.",
+   "lesson": 1
+  },
+  {
+   "term": "tf.function",
+   "match": [
+    "\\btf\\.function\\b",
+    "\\bTF function\\b"
+   ],
+   "exclude": [],
+   "definition": "TensorFlow's way of turning a Python function into a fast graph; map() needs functions it can convert.",
+   "lesson": 1
+  },
+  {
+   "term": "epoch",
+   "match": [
+    "\\bepochs?\\b"
+   ],
+   "exclude": [],
+   "definition": "one full pass over the training data.",
+   "lesson": 2
+  },
+  {
+   "term": "gradient descent",
+   "match": [
+    "\\bgradient descent\\b",
+    "\\bgradients?\\b"
+   ],
+   "exclude": [],
+   "definition": "the training method: nudge every weight a little in the direction that lowers the error, batch after batch.",
+   "lesson": 2
+  },
+  {
+   "term": "i.i.d.",
+   "match": [
+    "\\bindependent and identically distributed\\b",
+    "\\bi\\.i\\.d\\.?\\b"
+   ],
+   "exclude": [],
+   "definition": "independent and identically distributed: knowing one row tells you nothing about the next, and all rows come from the same population.",
+   "lesson": 2
+  },
+  {
+   "term": "interleave",
+   "match": [
+    "\\binterleav(e|es|ed|ing)\\b"
+   ],
+   "exclude": [],
+   "definition": "read several files at once and take one line from each in turn, so their lines are mixed.",
+   "lesson": 2
+  },
+  {
+   "term": "header",
+   "match": [
+    "\\bheaders?\\b"
+   ],
+   "exclude": [],
+   "definition": "the first line of a CSV file, holding the column names instead of data.",
+   "lesson": 3
+  },
+  {
+   "term": "I/O",
+   "match": [
+    "\\bI/O\\b"
+   ],
+   "exclude": [],
+   "definition": "input/output: reading from and writing to disk or network.",
+   "lesson": 3
+  },
+  {
+   "term": "TextLineDataset",
+   "match": [
+    "\\bTextLineDataset\\b"
+   ],
+   "exclude": [],
+   "definition": "a dataset that yields the lines of a text file, one line (as a byte string) per item.",
+   "lesson": 3
+  },
+  {
+   "term": "cycle_length",
+   "match": [
+    "\\bcycle_length\\b"
+   ],
+   "exclude": [],
+   "definition": "how many files interleave() keeps open and reads from at the same time.",
+   "lesson": 3
+  },
+  {
+   "term": "num_parallel_calls",
+   "match": [
+    "\\bnum_parallel_calls\\b",
+    "\\bnum_parallel_reads\\b"
+   ],
+   "exclude": [],
+   "definition": "how many threads a step of the pipeline (such as map) may use at the same time.",
+   "lesson": 1
+  },
+  {
+   "term": "byte string",
+   "match": [
+    "\\bbyte strings?\\b",
+    "\\bbytes\\b"
+   ],
+   "exclude": [],
+   "definition": "raw bytes, shown by Python as b'...'; what a file line is before it is decoded into numbers.",
+   "lesson": 3
+  },
+  {
+   "term": "decode_csv",
+   "match": [
+    "\\bdecode_csv\\b"
+   ],
+   "exclude": [],
+   "definition": "tf.io.decode_csv: splits one CSV line on commas and returns one tensor per column, typed by record_defaults.",
+   "lesson": 4
+  },
+  {
+   "term": "record_defaults",
+   "match": [
+    "\\brecord_defaults\\b",
+    "\\brecord defaults\\b"
+   ],
+   "exclude": [],
+   "definition": "the list telling decode_csv each column's type and its fallback value; an empty tensor means the column is required.",
+   "lesson": 4
+  },
+  {
+   "term": "scalar",
+   "match": [
+    "\\bscalars?\\b"
+   ],
+   "exclude": [],
+   "definition": "a single number (a tensor with no dimensions).",
+   "lesson": 4
+  },
+  {
+   "term": "tf.stack",
+   "match": [
+    "\\btf\\.stack\\b",
+    "\\bstack(s|ed)?\\b"
+   ],
+   "exclude": [
+    "\\bstack of\\b",
+    "\\bstraight stack\\b"
+   ],
+   "definition": "glues several tensors of the same shape into one bigger tensor, e.g. 8 scalars into one vector of 8.",
+   "lesson": 4
+  },
+  {
+   "term": "schema",
+   "match": [
+    "\\bschemas?\\b"
+   ],
+   "exclude": [],
+   "definition": "the declared structure of data: which fields, with which types.",
+   "lesson": 4
+  },
+  {
+   "term": "converge",
+   "match": [
+    "\\bconverg(e|es|ed|ing|ence)\\b"
+   ],
+   "exclude": [],
+   "definition": "training converges when it settles on good parameter values instead of bouncing around.",
+   "lesson": 4
+  },
+  {
+   "term": "preprocess",
+   "match": [
+    "\\bpreprocess(ing|ed|es)?\\b",
+    "\\bpre-processing\\b"
+   ],
+   "exclude": [],
+   "definition": "prepare raw data for the model: parse it, scale it, encode it.",
+   "lesson": 1
+  },
+  {
+   "term": "cache()",
+   "match": [
+    "\\bcache(d|s)?\\b",
+    "\\bcaching\\b"
+   ],
+   "exclude": [],
+   "definition": "cache(): keep the items in memory after the first pass, so later epochs skip reading and parsing them.",
+   "lesson": 5
+  },
+  {
+   "term": "utilization",
+   "match": [
+    "\\butili[sz]ation\\b",
+    "\\butili[sz]ed\\b"
+   ],
+   "exclude": [],
+   "definition": "the share of time a piece of hardware is actually busy.",
+   "lesson": 5
+  },
+  {
+   "term": "Keras",
+   "match": [
+    "\\bkeras\\b"
+   ],
+   "exclude": [],
+   "definition": "the part of TensorFlow for building and training models.",
+   "lesson": 1
+  },
+  {
+   "term": "layer",
+   "match": [
+    "\\blayers?\\b"
+   ],
+   "exclude": [],
+   "definition": "one step of a Keras model: it takes a tensor and gives back a transformed tensor.",
+   "lesson": 1
+  },
+  {
+   "term": "Sequential",
+   "match": [
+    "\\bSequential\\(",
+    "\\bSequential (model|API|is)\\b",
+    "\\bkeras\\.(models\\.)?Sequential\\b"
+   ],
+   "exclude": [],
+   "definition": "Keras's simplest model: a plain list of layers, each feeding the next.",
+   "lesson": 6
+  },
+  {
+   "term": "Dense layer",
+   "match": [
+    "\\bDense\\(",
+    "\\bDense layers?\\b"
+   ],
+   "exclude": [],
+   "definition": "a layer in which every output is computed from every input by learned weights; Dense(1) outputs one number.",
+   "lesson": 6
+  },
+  {
+   "term": "compile",
+   "match": [
+    "\\bcompile(s|d)?\\b"
+   ],
+   "exclude": [],
+   "definition": "Keras's step that attaches the loss and the optimizer to a model before fit().",
+   "lesson": 6
+  },
+  {
+   "term": "loss",
+   "match": [
+    "\\bloss(es)?\\b"
+   ],
+   "exclude": [],
+   "definition": "the number training makes small: how wrong the predictions are; \"mse\" = mean squared error.",
+   "lesson": 6
+  },
+  {
+   "term": "optimizer",
+   "match": [
+    "\\boptimi[sz]ers?\\b",
+    "\\\"sgd\\\"",
+    "\\bSGD\\b",
+    "\\bnadam\\b"
+   ],
+   "exclude": [],
+   "definition": "the rule that turns each batch's error into weight changes; \"sgd\" (stochastic gradient descent) and \"nadam\" are two.",
+   "lesson": 6
+  },
+  {
+   "term": "callback",
+   "match": [
+    "\\bcallbacks?\\b",
+    "\\bon_batch_\\w*"
+   ],
+   "exclude": [],
+   "definition": "an object Keras calls at fixed moments of fit() (after each batch, each epoch) to do extra work.",
+   "lesson": 6
+  },
+  {
+   "term": "steps_per_execution",
+   "match": [
+    "\\bsteps_per_execution\\b"
+   ],
+   "exclude": [],
+   "definition": "compile() setting: how many batches fit() runs per call of its compiled training function (default 1).",
+   "lesson": 6
+  },
+  {
+   "term": "inference",
+   "match": [
+    "\\binference\\b"
+   ],
+   "exclude": [],
+   "definition": "using a trained model to predict (no learning).",
+   "lesson": 6
+  },
+  {
+   "term": "TFRecord",
+   "match": [
+    "\\bTFRecords?\\b"
+   ],
+   "exclude": [],
+   "definition": "TensorFlow's binary file format: a sequence of records, each any bytes, each guarded by checksums.",
+   "lesson": 4
+  },
+  {
+   "term": "binary format",
+   "match": [
+    "\\bbinary\\b"
+   ],
+   "exclude": [],
+   "definition": "stored as raw bytes rather than readable text: smaller and faster to read, not human-readable.",
+   "lesson": 4
+  },
+  {
+   "term": "checksum",
+   "match": [
+    "\\bchecksums?\\b",
+    "\\bCRC\\b"
+   ],
+   "exclude": [],
+   "definition": "a short number computed from some bytes; recompute it on read, and a mismatch means the bytes were damaged (CRC is one kind).",
+   "lesson": 4
+  },
+  {
+   "term": "GZIP",
+   "match": [
+    "\\bGZIP\\b",
+    "\\bcompress(ed|ion|ing|es)?\\b"
+   ],
+   "exclude": [],
+   "definition": "a common compression method: files get smaller, reading and writing cost a little CPU.",
+   "lesson": 7
+  },
+  {
+   "term": "protocol buffer",
+   "match": [
+    "\\bprotocol buffers?\\b",
+    "\\bprotobufs?\\b"
+   ],
+   "exclude": [],
+   "definition": "Google's format for structured data: a schema (.proto file) plus a compact binary encoding any language can read.",
+   "lesson": 7
+  },
+  {
+   "term": "serialize",
+   "match": [
+    "\\bseriali[sz](e|es|ed|ation|ing)\\b",
+    "\\bSerializeToString\\b"
+   ],
+   "exclude": [],
+   "definition": "turn an object into a string of bytes you can store or send (parse: turn the bytes back into the object).",
+   "lesson": 7
+  },
+  {
+   "term": "protoc",
+   "match": [
+    "\\bprotoc\\b"
+   ],
+   "exclude": [],
+   "definition": "the protobuf compiler: turns a .proto schema into ready-made classes for your language (person_pb2.py for Python).",
+   "lesson": 8
+  },
+  {
+   "term": "repeated field",
+   "match": [
+    "\\brepeated (fields?|string)\\b",
+    "\\bA repeated\\b"
+   ],
+   "exclude": [],
+   "definition": "protobuf's name for a field that holds a list (email can hold several addresses).",
+   "lesson": 8
+  },
+  {
+   "term": "field tag",
+   "match": [
+    "\\btags?\\b"
+   ],
+   "exclude": [
+    "\\btaking turns\\b"
+   ],
+   "definition": "the number each protobuf field gets in the schema (name = 1); the binary data stores the number, not the name.",
+   "lesson": 8
+  },
+  {
+   "term": "tf.py_function",
+   "match": [
+    "\\bpy_function\\b"
+   ],
+   "exclude": [],
+   "definition": "wraps ordinary Python code so a tf.data pipeline can call it; slower, and the pipeline then needs Python to run.",
+   "lesson": 8
+  },
+  {
+   "term": "Example protobuf",
+   "match": [
+    "\\btf\\.train\\.Example\\b",
+    "\\bExample\\(",
+    "\\bExample (message|protobufs?|protocol|objects?|records?|definition|contains|wraps|rather|is|as)\\b",
+    "\\b(an|one|standard|plain) Example\\b"
+   ],
+   "exclude": [],
+   "definition": "tf.train.Example: TensorFlow's ready-made protobuf for one row: a dictionary of named features.",
+   "lesson": 7
+  },
+  {
+   "term": "Feature (protobuf)",
+   "match": [
+    "\\bFeature\\(",
+    "\\bFeature (objects?|can|holds?|wraps?)\\b",
+    "\\bFeatures (message|object)\\b"
+   ],
+   "exclude": [],
+   "definition": "one named value of an Example; it holds exactly one of BytesList, FloatList or Int64List.",
+   "lesson": 9
+  },
+  {
+   "term": "BytesList",
+   "match": [
+    "\\bBytesList\\b",
+    "\\bFloatList\\b",
+    "\\bInt64List\\b"
+   ],
+   "exclude": [],
+   "definition": "the three list types an Example feature can hold: bytes, floating-point numbers, or 64-bit integers.",
+   "lesson": 9
+  },
+  {
+   "term": "packed encoding",
+   "match": [
+    "\\bpacked\\b"
+   ],
+   "exclude": [],
+   "definition": "storing a list of numbers as one run of bytes, without a tag in front of each number.",
+   "lesson": 9
+  },
+  {
+   "term": "FixedLenFeature",
+   "match": [
+    "\\bFixedLenFeature\\b",
+    "\\bVarLenFeature\\b"
+   ],
+   "exclude": [],
+   "definition": "descriptions used when parsing: FixedLenFeature = always this many values (gives a dense tensor); VarLenFeature = any number (gives a sparse tensor).",
+   "lesson": 10
+  },
+  {
+   "term": "sparse tensor",
+   "match": [
+    "\\bsparse tensors?\\b",
+    "\\bsparse\\b(?= here)"
+   ],
+   "exclude": [],
+   "definition": "a tensor that stores only the positions that hold values, with their values.",
+   "lesson": 10
+  },
+  {
+   "term": "dense tensor",
+   "match": [
+    "\\bdense tensors?\\b"
+   ],
+   "exclude": [],
+   "definition": "an ordinary tensor: a full rectangle of values.",
+   "lesson": 10
+  },
+  {
+   "term": "SequenceExample",
+   "match": [
+    "\\bSequenceExample\\b"
+   ],
+   "exclude": [],
+   "definition": "a protobuf for rows that contain lists of lists: a flat context part plus named sequences (feature_lists).",
+   "lesson": 10
+  },
+  {
+   "term": "ragged tensor",
+   "match": [
+    "\\bragged\\b",
+    "\\bRaggedTensor\\b"
+   ],
+   "exclude": [],
+   "definition": "a tensor whose rows may have different lengths, like sentences with different numbers of words.",
+   "lesson": 10
+  },
+  {
+   "term": "vocabulary",
+   "match": [
+    "\\bvocabular(y|ies)\\b"
+   ],
+   "exclude": [],
+   "definition": "the list of known words or categories, each with its own number.",
+   "lesson": 11
+  },
+  {
+   "term": "preprocessing mismatch",
+   "match": [
+    "\\bmismatch(es)?\\b"
+   ],
+   "exclude": [
+    "\\ba mismatch means\\b"
+   ],
+   "definition": "training data prepared one way and production data another way, so the model receives inputs it was not trained on.",
+   "lesson": 12
+  },
+  {
+   "term": "Normalization layer",
+   "match": [
+    "\\bNormalization\\b"
+   ],
+   "exclude": [],
+   "definition": "a Keras layer that standardizes each input column (mean 0, variance 1) with statistics it measures in adapt().",
+   "lesson": 12
+  },
+  {
+   "term": "adapt()",
+   "match": [
+    "\\badapt(s|ed|ing|ation)?\\b"
+   ],
+   "exclude": [],
+   "definition": "the method that lets a preprocessing layer look at data once and store what it needs (means, a vocabulary); no training.",
+   "lesson": 12
+  },
+  {
+   "term": "neural network",
+   "match": [
+    "\\bneural net(work)?s?\\b"
+   ],
+   "exclude": [],
+   "definition": "a model made of layers; each layer's output is the next layer's input.",
+   "lesson": 12
+  },
+  {
+   "term": "Discretization layer",
+   "match": [
+    "\\bDiscretization\\b"
+   ],
+   "exclude": [],
+   "definition": "a Keras layer that turns a number into a bin index (which range it falls in).",
+   "lesson": 13
+  },
+  {
+   "term": "bin",
+   "match": [
+    "\\bbins?\\b",
+    "\\bbucket(s|ing)?\\b"
+   ],
+   "exclude": [
+    "\\bbin/\\b"
+   ],
+   "definition": "one range of values; every value inside it gets the same index.",
+   "lesson": 13
+  },
+  {
+   "term": "multimodal",
+   "match": [
+    "\\bmultimodal\\b"
+   ],
+   "exclude": [],
+   "definition": "a distribution with more than one peak (two or three humps).",
+   "lesson": 13
+  },
+  {
+   "term": "CategoryEncoding",
+   "match": [
+    "\\bCategoryEncoding\\b"
+   ],
+   "exclude": [],
+   "definition": "a Keras layer that turns category integers into 0/1 columns (one-hot, multi-hot) or counts.",
+   "lesson": 14
+  },
+  {
+   "term": "multi-hot",
+   "match": [
+    "\\bmulti-hot\\b"
+   ],
+   "exclude": [],
+   "definition": "a 0/1 vector with a 1 for every category present (one-hot has exactly one 1).",
+   "lesson": 14
+  },
+  {
+   "term": "ordinal",
+   "match": [
+    "\\bordinal\\b"
+   ],
+   "exclude": [],
+   "definition": "having a real order and spacing (1 < 2 < 3 with equal gaps); category IDs do not.",
+   "lesson": 14
+  },
+  {
+   "term": "num_tokens",
+   "match": [
+    "\\bnum_tokens\\b"
+   ],
+   "exclude": [],
+   "definition": "CategoryEncoding's setting: how many 0/1 columns (how many categories) there are.",
+   "lesson": 14
+  },
+  {
+   "term": "StringLookup",
+   "match": [
+    "\\bStringLookup\\b"
+   ],
+   "exclude": [],
+   "definition": "a Keras layer that maps each text category to an integer index, most frequent first; unknown text gets the out-of-vocabulary index.",
+   "lesson": 15
+  },
+  {
+   "term": "out-of-vocabulary",
+   "match": [
+    "\\bout-of-vocabulary\\b",
+    "\\bOOV\\b",
+    "\\bnum_oov_indices\\b"
+   ],
+   "exclude": [],
+   "definition": "not in the vocabulary the layer learned (OOV); such values go to a reserved index, usually 0.",
+   "lesson": 15
+  },
+  {
+   "term": "hash collision",
+   "match": [
+    "\\bcollisions?\\b",
+    "\\bhashing trick\\b",
+    "\\bHashing\\b"
+   ],
+   "exclude": [
+    "\\bthe collision you get\\b"
+   ],
+   "definition": "two different values that the hash function sends to the same bucket, so the model cannot tell them apart.",
+   "lesson": 15
+  },
+  {
+   "term": "embedding",
+   "match": [
+    "\\bembeddings?\\b",
+    "\\bEmbedding\\b"
+   ],
+   "exclude": [],
+   "definition": "a small vector of learned numbers standing for one category (or word); similar ones end up close together.",
+   "lesson": 14
+  },
+  {
+   "term": "high-cardinality",
+   "match": [
+    "\\bhigh-cardinality\\b",
+    "\\bcardinality\\b"
+   ],
+   "exclude": [],
+   "definition": "having very many distinct values (e.g. 50,000 categories).",
+   "lesson": 16
+  },
+  {
+   "term": "backpropagation",
+   "match": [
+    "\\bbackpropagation\\b"
+   ],
+   "exclude": [],
+   "definition": "the pass that works out, for every weight, how much it contributed to the error, so gradient descent can adjust it.",
+   "lesson": 16
+  },
+  {
+   "term": "weight",
+   "match": [
+    "\\bweights?\\b"
+   ],
+   "exclude": [],
+   "definition": "a number a layer learns in training.",
+   "lesson": 2
+  },
+  {
+   "term": "representation learning",
+   "match": [
+    "\\brepresentation learning\\b"
+   ],
+   "exclude": [],
+   "definition": "the model finding its own useful numbers for the inputs (e.g. embeddings) while it trains.",
+   "lesson": 16
+  },
+  {
+   "term": "activation function",
+   "match": [
+    "\\bactivation function\\b",
+    "\\bactivation\\b"
+   ],
+   "exclude": [],
+   "definition": "the small function a layer applies to its outputs (e.g. ReLU); \"no activation\" means the outputs pass unchanged.",
+   "lesson": 16
+  },
+  {
+   "term": "TextVectorization",
+   "match": [
+    "\\bTextVectorization\\b"
+   ],
+   "exclude": [],
+   "definition": "a Keras layer that turns raw text into word indices (or TF-IDF weights): lowercase, strip punctuation, split, look up.",
+   "lesson": 17
+  },
+  {
+   "term": "token",
+   "match": [
+    "\\btokens?\\b"
+   ],
+   "exclude": [
+    "\\bnum_tokens\\b"
+   ],
+   "definition": "one unit of text, here one word.",
+   "lesson": 17
+  },
+  {
+   "term": "padding",
+   "match": [
+    "\\bpadd(ing|ed)\\b"
+   ],
+   "exclude": [],
+   "definition": "filling short rows with 0s so every row of a batch has the same length.",
+   "lesson": 10
+  },
+  {
+   "term": "TF-IDF",
+   "match": [
+    "\\bTF-IDF\\b",
+    "\\btf_idf\\b"
+   ],
+   "exclude": [],
+   "definition": "term frequency x inverse document frequency: a word's count weighted down if it appears in many documents.",
+   "lesson": 17
+  },
+  {
+   "term": "bag-of-words",
+   "match": [
+    "\\bbag-of-words\\b"
+   ],
+   "exclude": [],
+   "definition": "a text representation that keeps which words appear (and how often) but not their order.",
+   "lesson": 17
+  },
+  {
+   "term": "homonym",
+   "match": [
+    "\\bhomonyms?\\b"
+   ],
+   "exclude": [],
+   "definition": "one spelling with two meanings, like \"bear\".",
+   "lesson": 17
+  },
+  {
+   "term": "subword",
+   "match": [
+    "\\bsubword\\b"
+   ],
+   "exclude": [],
+   "definition": "a piece of a word (\"evolution\" + \"ary\"); subword tokenizers split words into such pieces.",
+   "lesson": 17
+  },
+  {
+   "term": "TensorFlow Hub",
+   "match": [
+    "\\bTensorFlow Hub\\b",
+    "\\bhub\\.KerasLayer\\b",
+    "\\bTF Hub\\b"
+   ],
+   "exclude": [],
+   "definition": "a library and website of pretrained model parts you can download and use as a Keras layer.",
+   "lesson": 18
+  },
+  {
+   "term": "pretrained",
+   "match": [
+    "\\bpre-?trained\\b"
+   ],
+   "exclude": [],
+   "definition": "already trained by someone else, ready to reuse.",
+   "lesson": 18
+  },
+  {
+   "term": "sentence embedding",
+   "match": [
+    "\\bsentence embeddings?\\b"
+   ],
+   "exclude": [],
+   "definition": "one vector standing for a whole sentence.",
+   "lesson": 18
+  },
+  {
+   "term": "Rescaling",
+   "match": [
+    "\\bRescaling\\b"
+   ],
+   "exclude": [],
+   "definition": "a Keras layer that multiplies every pixel by scale and adds offset.",
+   "lesson": 19
+  },
+  {
+   "term": "CenterCrop",
+   "match": [
+    "\\bCenterCrop\\b",
+    "\\bResizing\\b"
+   ],
+   "exclude": [],
+   "definition": "CenterCrop keeps a fixed-size rectangle from the middle of each image; Resizing changes an image's height and width.",
+   "lesson": 19
+  },
+  {
+   "term": "data augmentation",
+   "match": [
+    "\\baugmentation\\b",
+    "\\bRandomFlip\\b",
+    "\\bRandomRotation\\b"
+   ],
+   "exclude": [],
+   "definition": "randomly flipping, rotating or shifting training images so the model sees more variety; switched off outside training.",
+   "lesson": 19
+  },
+  {
+   "term": "pixel",
+   "match": [
+    "\\bpixels?\\b"
+   ],
+   "exclude": [],
+   "definition": "one dot of an image; here a number from 0 (dark) to 255 (bright).",
+   "lesson": 19
+  },
+  {
+   "term": "TensorFlow Datasets",
+   "match": [
+    "\\bTensorFlow Datasets\\b",
+    "\\bTFDS\\b",
+    "\\btfds\\b"
+   ],
+   "exclude": [],
+   "definition": "a library that downloads standard datasets and returns them as tf.data datasets.",
+   "lesson": 20
+  },
+  {
+   "term": "MNIST",
+   "match": [
+    "\\bMNIST\\b"
+   ],
+   "exclude": [],
+   "definition": "70,000 small greyscale images of handwritten digits 0-9, 28 x 28 pixels, the classic first image dataset.",
+   "lesson": 20
+  },
+  {
+   "term": "as_supervised",
+   "match": [
+    "\\bas_supervised\\b"
+   ],
+   "exclude": [],
+   "definition": "tfds.load() setting that returns each item as an (input, label) pair instead of a dictionary.",
+   "lesson": 20
+  },
+  {
+   "term": "Fashion MNIST",
+   "match": [
+    "\\bfashion[ _-]mnist\\b"
+   ],
+   "exclude": [],
+   "definition": "an image set of 70,000 small grey photos of clothes, 28 x 28 pixels, in 10 classes such as T-shirt, trouser and ankle boot (60,000 for training, 10,000 for testing).",
+   "lesson": 21
+  },
+  {
+   "term": "TensorBoard",
+   "match": [
+    "\\btensorboard\\b"
+   ],
+   "exclude": [],
+   "definition": "TensorFlow's web page of training charts (loss and accuracy per epoch) that can also show profiling data: where each training step spends its time.",
+   "lesson": 21
+  },
+  {
+   "term": "IMDb review dataset",
+   "match": [
+    "\\bIMDb\\b"
+   ],
+   "exclude": [],
+   "definition": "the Large Movie Review Dataset: 50,000 film reviews from the Internet Movie Database (IMDb), each labelled positive or negative (25,000 to train on, 25,000 to test on).",
+   "lesson": 21
+  },
+  {
+   "term": "rescaled mean embedding",
+   "match": [
+    "\\brescaled (mean )?embedding"
+   ],
+   "exclude": [],
+   "definition": "the average of a review's word embeddings multiplied by the square root of its number of words (the book's exercise 10e; Chapter 16 explains why).",
+   "lesson": 21
+  }
+ ]
+}

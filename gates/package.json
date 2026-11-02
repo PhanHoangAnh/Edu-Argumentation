@@ -1,0 +1,17 @@
+{
+  "name": "edu-argumentation-gates",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Portable browser gate suite for the Edu-Argumentation study app. Sibling of aws-quiz-app/ — NEVER inside it (that tree is rsync --delete'd to production).",
+  "type": "module",
+  "scripts": {
+    "gates": "bash run-gates.sh",
+    "gate-routes": "node gate-routes.mjs",
+    "selector-contract": "node gen-selector-contract.mjs",
+    "selector-contract:check": "node gen-selector-contract.mjs --check",
+    "postinstall-note": "run ./node_modules/.bin/playwright install chromium  (NEVER npx)"
+  },
+  "dependencies": {
+    "playwright": "1.61.1"
+  }
+}

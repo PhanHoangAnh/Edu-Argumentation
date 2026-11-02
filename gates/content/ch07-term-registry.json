@@ -1,0 +1,839 @@
+{
+ "chapter": 7,
+ "flow": [
+  "Get the data",
+  "Set aside a test set",
+  "Explore",
+  "Prepare the data",
+  "Train",
+  "Evaluate",
+  "Fine-tune",
+  "Launch"
+ ],
+ "generated_by": "ml/study/geron-lab/ch07-notes/build_ch07.py",
+ "known_from": "ch02-term-registry.json (terms defined there count as known in every chapter)",
+ "terms": [
+  {
+   "term": "wisdom of the crowd",
+   "match": [
+    "\\bwisdom of the crowd\\b"
+   ],
+   "exclude": [],
+   "definition": "the observation that the combined answer of many people is often better than one expert's answer.",
+   "lesson": 1
+  },
+  {
+   "term": "classifier",
+   "match": [
+    "\\bclassifiers?\\b"
+   ],
+   "exclude": [
+    "\\b\\w+Classifier\\b"
+   ],
+   "definition": "a model that predicts a class (a category) rather than a number.",
+   "lesson": 1
+  },
+  {
+   "term": "class",
+   "match": [
+    "\\bclass(es)?\\b"
+   ],
+   "exclude": [],
+   "definition": "one of the categories a classifier chooses between; in the moons data, class 0 or class 1. Careful: Python also says \"class\" for a blueprint objects are made from (each Scikit-Learn model type, such as `VotingClassifier`, is one); the sentence always shows which.",
+   "lesson": 1
+  },
+  {
+   "term": "combining (aggregating)",
+   "match": [
+    "\\baggregat(e|es|ed|ing|ion)\\b"
+   ],
+   "exclude": [],
+   "definition": "turning the members' answers into one answer, e.g. by majority vote or by averaging.",
+   "lesson": 1
+  },
+  {
+   "term": "Netflix Prize",
+   "match": [
+    "\\bNetflix\\b"
+   ],
+   "exclude": [],
+   "definition": "a 2006–2009 public competition to predict film ratings; the winning teams combined many models.",
+   "lesson": 1
+  },
+  {
+   "term": "hard voting",
+   "match": [
+    "\\bhard voting\\b",
+    "\\bhard-voting\\b"
+   ],
+   "exclude": [],
+   "definition": "each member names one class; the class with the most votes wins.",
+   "lesson": 2
+  },
+  {
+   "term": "soft voting",
+   "match": [
+    "\\bsoft voting\\b",
+    "\\bvoting=.soft.\\b"
+   ],
+   "exclude": [],
+   "definition": "each member gives a probability for each class; the probabilities are averaged, and the class with the highest average wins.",
+   "lesson": 3
+  },
+  {
+   "term": "majority vote",
+   "match": [
+    "\\bmajority\\b"
+   ],
+   "exclude": [],
+   "definition": "the answer given by more than half of the voters (or, with several choices, by the most voters).",
+   "lesson": 1
+  },
+  {
+   "term": "logistic regression",
+   "match": [
+    "\\blogistic regression\\b",
+    "\\bLogisticRegression\\b"
+   ],
+   "exclude": [],
+   "definition": "a model for classification (despite its name) that outputs a probability for each class; the book's Chapter 4 covers it.",
+   "lesson": 1
+  },
+  {
+   "term": "SVM",
+   "match": [
+    "\\bSVM\\b",
+    "\\bSVC\\b"
+   ],
+   "exclude": [],
+   "definition": "support vector machine (chapter 5): a model that separates the classes with the widest possible street; `SVC` is Scikit-Learn's SVM classifier.",
+   "lesson": 1
+  },
+  {
+   "term": "weak learner",
+   "match": [
+    "\\bweak learners?\\b"
+   ],
+   "exclude": [],
+   "definition": "a model only slightly better than random guessing, e.g. right 51% of the time on a yes/no question.",
+   "lesson": 2
+  },
+  {
+   "term": "strong learner",
+   "match": [
+    "\\bstrong learners?\\b"
+   ],
+   "exclude": [],
+   "definition": "a model that reaches high accuracy.",
+   "lesson": 2
+  },
+  {
+   "term": "probability",
+   "match": [
+    "\\bprobabilit(y|ies)\\b",
+    "\\bpredict_proba\\b"
+   ],
+   "exclude": [],
+   "definition": "a number from 0 to 1 (0% to 100%) for how likely something is.",
+   "lesson": 1
+  },
+  {
+   "term": "law of large numbers",
+   "match": [
+    "\\blaw of large numbers\\b"
+   ],
+   "exclude": [],
+   "definition": "the rule that the average over many independent tries settles close to the true rate: toss a 51% coin enough times and the share of heads settles near 51%.",
+   "lesson": 2
+  },
+  {
+   "term": "independent",
+   "match": [
+    "\\bindependen(t|tly|ce)\\b"
+   ],
+   "exclude": [],
+   "definition": "said of two sources whose mistakes are unrelated: one being wrong tells you nothing about whether the other is wrong.",
+   "lesson": 1
+  },
+  {
+   "term": "correlated errors",
+   "match": [
+    "\\bcorrelated\\b",
+    "\\bdecorrelat\\w+\\b"
+   ],
+   "exclude": [],
+   "definition": "mistakes that come together: when one member is wrong on a row, the others tend to be wrong on that same row.",
+   "lesson": 2
+  },
+  {
+   "term": "diversity",
+   "match": [
+    "\\bdivers(e|ity)\\b"
+   ],
+   "exclude": [],
+   "definition": "how differently the members of an ensemble make their mistakes; the more different, the more the vote helps.",
+   "lesson": 2
+  },
+  {
+   "term": "accuracy",
+   "match": [
+    "\\baccura(cy|te)\\b",
+    "\\baccuracy_score\\b"
+   ],
+   "exclude": [],
+   "definition": "the share of rows a classifier gets right: 0.912 means 91.2 rows out of 100.",
+   "lesson": 1
+  },
+  {
+   "term": "moons dataset",
+   "match": [
+    "\\bmoons\\b",
+    "\\bmake_moons\\b"
+   ],
+   "exclude": [],
+   "definition": "a made-up two-feature dataset from Scikit-Learn's `make_moons()`: two interlocking crescent shapes, one per class, with some random scatter (noise).",
+   "lesson": 1
+  },
+  {
+   "term": "VotingClassifier",
+   "match": [
+    "\\bVotingClassifier\\b"
+   ],
+   "exclude": [],
+   "definition": "the Scikit-Learn class that wraps several classifiers into one voting ensemble.",
+   "lesson": 1
+  },
+  {
+   "term": "train_test_split",
+   "match": [
+    "\\btrain_test_split\\b"
+   ],
+   "exclude": [],
+   "definition": "the Scikit-Learn function that cuts the rows at random into a training part and a test part (75% and 25% by default).",
+   "lesson": 3
+  },
+  {
+   "term": "clone",
+   "match": [
+    "\\bclon(e|es|ed|ing)\\b"
+   ],
+   "exclude": [],
+   "definition": "a fresh, untrained copy of a model with the same settings.",
+   "lesson": 3
+  },
+  {
+   "term": "calibrated",
+   "match": [
+    "\\bcalibrat(ed|ion|e)\\b"
+   ],
+   "exclude": [],
+   "definition": "said of probabilities that can be taken at face value: among rows given 80%, about 80% really are that class.",
+   "lesson": 3
+  },
+  {
+   "term": "bagging",
+   "match": [
+    "\\bbagg(ing|ed)\\b",
+    "\\bbootstrap aggregating\\b",
+    "\\bBaggingClassifier\\b",
+    "\\bBaggingRegressor\\b"
+   ],
+   "exclude": [
+    "Ensembles: Gradient boosting, random forests, bagging, voting, stacking"
+   ],
+   "definition": "bootstrap aggregating: train the same algorithm many times, each copy on its own random sample of the rows drawn WITH replacement, then combine their answers.",
+   "lesson": 4
+  },
+  {
+   "term": "pasting",
+   "match": [
+    "\\bpasting\\b"
+   ],
+   "exclude": [],
+   "definition": "the same as bagging, but the sample for each copy is drawn WITHOUT replacement (no row twice in one sample).",
+   "lesson": 4
+  },
+  {
+   "term": "with replacement",
+   "match": [
+    "\\bwith(out)? replacement\\b"
+   ],
+   "exclude": [],
+   "definition": "drawing rows so that each drawn row goes back into the pool and can be drawn again; \"without replacement\" means it cannot.",
+   "lesson": 4
+  },
+  {
+   "term": "bootstrap",
+   "match": [
+    "\\bbootstrap\\b"
+   ],
+   "exclude": [
+    "\\bbootstrap aggregating\\b"
+   ],
+   "definition": "a random sample of rows drawn with replacement; in Scikit-Learn, `bootstrap=True` switches this on.",
+   "lesson": 4
+  },
+  {
+   "term": "bias (of a model)",
+   "match": [
+    "\\bbias\\b"
+   ],
+   "exclude": [],
+   "definition": "error that comes from the model being too simple for the problem, so it is wrong in the same way whatever sample it trained on.",
+   "lesson": 4
+  },
+  {
+   "term": "variance (of a model)",
+   "match": [
+    "\\bvariance\\b"
+   ],
+   "exclude": [],
+   "definition": "how much a model's answers would swing if you trained it again on a different sample of the same data. (Chapter 2's variance is a number for how spread out one column's values are; here the word describes a model.)",
+   "lesson": 1
+  },
+  {
+   "term": "CPU core",
+   "match": [
+    "\\bCPU cores?\\b",
+    "\\bcores?\\b"
+   ],
+   "exclude": [
+    "\\bcore idea\\b",
+    "\\bcore decision\\b"
+   ],
+   "definition": "one of the processors inside a computer's CPU; separate cores can run separate work at the same time.",
+   "lesson": 4
+  },
+  {
+   "term": "parallel",
+   "match": [
+    "\\bparallel(ize|ise|ized|ised|izes)?\\b"
+   ],
+   "exclude": [],
+   "definition": "run at the same time, on different cores or machines.",
+   "lesson": 4
+  },
+  {
+   "term": "decision boundary",
+   "match": [
+    "\\bdecision boundar(y|ies)\\b",
+    "\\bboundar(y|ies)\\b"
+   ],
+   "exclude": [],
+   "definition": "the line where the model's answer changes from one class to the other.",
+   "lesson": 3
+  },
+  {
+   "term": "n_estimators",
+   "match": [
+    "\\bn_estimators\\b"
+   ],
+   "exclude": [],
+   "definition": "the setting for how many member models an ensemble trains.",
+   "lesson": 5
+  },
+  {
+   "term": "max_samples",
+   "match": [
+    "\\bmax_samples\\b"
+   ],
+   "exclude": [],
+   "definition": "the setting for how many rows each member draws for training.",
+   "lesson": 5
+  },
+  {
+   "term": "n_jobs",
+   "match": [
+    "\\bn_jobs\\b"
+   ],
+   "exclude": [],
+   "definition": "how many CPU cores to use; -1 means all of them.",
+   "lesson": 5
+  },
+  {
+   "term": "statistical mode",
+   "match": [
+    "\\bmode\\b"
+   ],
+   "exclude": [
+    "\\bsoft mode\\b"
+   ],
+   "definition": "the value that occurs most often in a list.",
+   "lesson": 5
+  },
+  {
+   "term": "out-of-bag evaluation",
+   "match": [
+    "\\bout-of-bag\\b",
+    "\\bOOB\\b",
+    "\\boob_\\w+"
+   ],
+   "exclude": [],
+   "definition": "scoring each training row with only the members that never drew it, which gives an accuracy estimate without a separate validation set.",
+   "lesson": 6
+  },
+  {
+   "term": "pessimistic",
+   "match": [
+    "\\bpessimistic\\b"
+   ],
+   "exclude": [],
+   "definition": "an estimate that comes out lower (worse) than the real result.",
+   "lesson": 6
+  },
+  {
+   "term": "out-of-sample",
+   "match": [
+    "\\bout-of-sample\\b"
+   ],
+   "exclude": [],
+   "definition": "a prediction for a row made by a model that was trained without that row.",
+   "lesson": 12
+  },
+  {
+   "term": "random patches",
+   "match": [
+    "\\brandom patches\\b"
+   ],
+   "exclude": [],
+   "definition": "bagging that samples both rows and features for each member.",
+   "lesson": 7
+  },
+  {
+   "term": "random subspaces",
+   "match": [
+    "\\brandom subspaces?\\b"
+   ],
+   "exclude": [],
+   "definition": "bagging that keeps every row but samples the features for each member.",
+   "lesson": 7
+  },
+  {
+   "term": "max_features",
+   "match": [
+    "\\bmax_features\\b"
+   ],
+   "exclude": [],
+   "definition": "how many features each split (or each member) may look at.",
+   "lesson": 7
+  },
+  {
+   "term": "bootstrap_features",
+   "match": [
+    "\\bbootstrap_features\\b"
+   ],
+   "exclude": [],
+   "definition": "whether features are sampled with replacement (the column version of `bootstrap`).",
+   "lesson": 7
+  },
+  {
+   "term": "high-dimensional",
+   "match": [
+    "\\bhigh-dimensional\\b"
+   ],
+   "exclude": [],
+   "definition": "having very many columns, e.g. one per pixel of an image.",
+   "lesson": 7
+  },
+  {
+   "term": "split",
+   "match": [
+    "\\bsplits?\\b"
+   ],
+   "exclude": [
+    "\\bdefault split\\b",
+    "train_test_split",
+    "\\bvalidation split\\b",
+    "\\bsplit the dataset\\b",
+    "\\bsplits? (it|the) (training|dataset|data)\\b",
+    "\\bsplitting and cross-validation\\b",
+    "\\bsplit into\\b"
+   ],
+   "definition": "one yes/no question inside a decision tree, such as \"is x1 at most 0.35?\", which divides the rows at a node into two groups.",
+   "lesson": 5
+  },
+  {
+   "term": "node",
+   "match": [
+    "\\bnodes?\\b"
+   ],
+   "exclude": [],
+   "definition": "one box of a decision tree: it either asks a yes/no question or, at the bottom, gives the answer.",
+   "lesson": 5
+  },
+  {
+   "term": "leaf",
+   "match": [
+    "\\bleaf\\b",
+    "\\bleaves\\b"
+   ],
+   "exclude": [
+    "\\bleaves your\\b"
+   ],
+   "definition": "a node at the bottom of a tree: it holds the answer for every row that reaches it.",
+   "lesson": 5
+  },
+  {
+   "term": "square root",
+   "match": [
+    "\\bsquare root\\b",
+    "√"
+   ],
+   "exclude": [],
+   "definition": "the number that, multiplied by itself, gives the original: √100 = 10, √2 ≈ 1.41.",
+   "lesson": 7
+  },
+  {
+   "term": "RandomForestClassifier",
+   "match": [
+    "\\bRandomForestClassifier\\b"
+   ],
+   "exclude": [],
+   "definition": "Scikit-Learn's random forest for classification.",
+   "lesson": 3
+  },
+  {
+   "term": "max_leaf_nodes",
+   "match": [
+    "\\bmax_leaf_nodes\\b"
+   ],
+   "exclude": [],
+   "definition": "a tree setting: each tree may have at most this many leaves.",
+   "lesson": 7
+  },
+  {
+   "term": "threshold",
+   "match": [
+    "\\bthresholds?\\b"
+   ],
+   "exclude": [],
+   "definition": "the number a tree's split compares a feature against, e.g. the 0.35 in \"x1 at most 0.35\".",
+   "lesson": 7
+  },
+  {
+   "term": "extra-trees",
+   "match": [
+    "\\bextra-?trees\\b",
+    "\\bExtraTrees\\w*\\b",
+    "\\bextremely randomized\\b"
+   ],
+   "exclude": [],
+   "definition": "extremely randomized trees: a random forest whose trees pick each split's threshold at random instead of searching for the best one.",
+   "lesson": 8
+  },
+  {
+   "term": "impurity",
+   "match": [
+    "\\bimpur(e|ity)\\b"
+   ],
+   "exclude": [],
+   "definition": "how mixed the classes are among the rows at a node: 0 when they are all one class (\"pure\").",
+   "lesson": 8
+  },
+  {
+   "term": "MNIST",
+   "match": [
+    "\\bMNIST\\b"
+   ],
+   "exclude": [],
+   "definition": "a dataset of 70,000 small (28 × 28 pixel) images of handwritten digits, from the book's Chapter 3.",
+   "lesson": 8
+  },
+  {
+   "term": "boosting",
+   "match": [
+    "\\bboost(ing|ed|er|ers)?\\b"
+   ],
+   "exclude": [
+    "\\bAdaBoost\\w*\\b",
+    "\\bgradient boost\\w*",
+    "\\bGradientBoosting\\w*\\b",
+    "\\bHistGradientBoosting\\w*\\b"
+   ],
+   "definition": "training members one after another, each one focused on what the ones before it still get wrong.",
+   "lesson": 2
+  },
+  {
+   "term": "AdaBoost",
+   "match": [
+    "\\bAdaBoost\\w*\\b"
+   ],
+   "exclude": [],
+   "definition": "adaptive boosting: after each member, raise the weight of the rows it got wrong, so the next member pays more attention to them.",
+   "lesson": 2
+  },
+  {
+   "term": "instance weight",
+   "match": [
+    "\\bweights?\\b"
+   ],
+   "exclude": [
+    "\\boperational weight\\b",
+    "\\bweight vector\\b"
+   ],
+   "definition": "a number per training row saying how much that row counts during training; in AdaBoost all rows start equal.",
+   "lesson": 2
+  },
+  {
+   "term": "decision stump",
+   "match": [
+    "\\bstumps?\\b"
+   ],
+   "exclude": [],
+   "definition": "a decision tree with a single question (max_depth=1).",
+   "lesson": 9
+  },
+  {
+   "term": "learning rate",
+   "match": [
+    "\\blearning[_ ]rate\\b"
+   ],
+   "exclude": [],
+   "definition": "a number that scales how big each correction is: smaller means more cautious steps.",
+   "lesson": 9
+  },
+  {
+   "term": "logarithm",
+   "match": [
+    "\\blog\\b",
+    "\\blogarithm\\b"
+   ],
+   "exclude": [],
+   "definition": "log(x) answers \"e to what power gives x?\" (e ≈ 2.718); log(1) = 0, log of a number above 1 is positive, below 1 negative.",
+   "lesson": 9
+  },
+  {
+   "term": "exp",
+   "match": [
+    "\\bexp\\b"
+   ],
+   "exclude": [],
+   "definition": "exp(x) = e to the power x (e ≈ 2.718); always positive. exp(−1) ≈ 0.37, exp(0) = 1, exp(0.754) ≈ 2.125.",
+   "lesson": 6
+  },
+  {
+   "term": "normalize",
+   "match": [
+    "\\bnormali[sz](e|es|ed|ing|ation)\\b"
+   ],
+   "exclude": [],
+   "definition": "divide every weight by their total, so they add up to 1 again.",
+   "lesson": 9
+  },
+  {
+   "term": "argmax",
+   "match": [
+    "\\bargmax\\b",
+    "\\barg max\\b"
+   ],
+   "exclude": [],
+   "definition": "\"the choice that makes this biggest\": argmax over k returns the class k with the biggest total, not the total itself.",
+   "lesson": 9
+  },
+  {
+   "term": "SAMME",
+   "match": [
+    "\\bSAMME\\b"
+   ],
+   "exclude": [],
+   "definition": "the multi-class version of AdaBoost that Scikit-Learn runs; with two classes it is the same as the equations shown.",
+   "lesson": 9
+  },
+  {
+   "term": "gradient boosting",
+   "match": [
+    "\\bgradient boost\\w*",
+    "\\bGradientBoosting\\w*\\b",
+    "\\bGBRT\\b"
+   ],
+   "exclude": [
+    "Ensembles: Gradient boosting, random forests, bagging, voting, stacking",
+    "\\bHistGradientBoosting\\w*\\b"
+   ],
+   "definition": "boosting where each new tree is trained on the leftover errors (residuals) of all the trees before it, and the predictions are added up. GBRT = gradient boosted regression trees.",
+   "lesson": 10
+  },
+  {
+   "term": "residual",
+   "match": [
+    "\\bresiduals?\\b"
+   ],
+   "exclude": [],
+   "definition": "what is left over: the true value minus the prediction so far. Truth 3.0, prediction 2.6: residual 0.4.",
+   "lesson": 10
+  },
+  {
+   "term": "shrinkage",
+   "match": [
+    "\\bshrinkage\\b"
+   ],
+   "exclude": [],
+   "definition": "using a small learning rate so each tree's contribution is shrunk; it needs more trees but usually generalizes better.",
+   "lesson": 10
+  },
+  {
+   "term": "generalize",
+   "match": [
+    "\\bgenerali[sz](e|es|ed|ing|ation)\\b"
+   ],
+   "exclude": [
+    "\\bgeneralization error\\b"
+   ],
+   "definition": "to work well on new rows the model has never seen, not only on its training rows.",
+   "lesson": 2
+  },
+  {
+   "term": "early stopping",
+   "match": [
+    "\\bearly stopping\\b",
+    "\\bstops? early\\b",
+    "\\bn_iter_no_change\\b"
+   ],
+   "exclude": [],
+   "definition": "stop adding trees (or training rounds) as soon as the score on held-out rows stops improving.",
+   "lesson": 10
+  },
+  {
+   "term": "stochastic gradient boosting",
+   "match": [
+    "\\bstochastic gradient boosting\\b",
+    "\\bsubsample\\b"
+   ],
+   "exclude": [],
+   "definition": "gradient boosting where each tree trains on a random fraction of the rows (the `subsample` setting).",
+   "lesson": 10
+  },
+  {
+   "term": "histogram-based gradient boosting",
+   "match": [
+    "\\bhistogram-based\\b",
+    "\\bHGB\\b",
+    "\\bHistGradientBoosting\\w*\\b"
+   ],
+   "exclude": [],
+   "definition": "HGB: gradient boosting that first puts every feature's values into at most 255 buckets (bins), which makes training much faster on big tables.",
+   "lesson": 11
+  },
+  {
+   "term": "binning",
+   "match": [
+    "\\bbin(s|ning|ned)?\\b",
+    "\\bmax_bins\\b",
+    "\\bbuckets?\\b"
+   ],
+   "exclude": [],
+   "definition": "replacing each value with the number of the bucket (bin) it falls into, e.g. every income between 3.10 and 3.15 becomes bucket 87.",
+   "lesson": 11
+  },
+  {
+   "term": "OrdinalEncoder",
+   "match": [
+    "\\bOrdinalEncoder\\b",
+    "\\bordinal encoding\\b"
+   ],
+   "exclude": [],
+   "definition": "a Scikit-Learn transformer that replaces each text category with a whole number: <1H OCEAN → 0, INLAND → 1, and so on.",
+   "lesson": 11
+  },
+  {
+   "term": "column transformer",
+   "match": [
+    "\\bmake_column_transformer\\b",
+    "\\bcolumn transformer\\b",
+    "\\bColumnTransformer\\b"
+   ],
+   "exclude": [],
+   "definition": "a Scikit-Learn tool that applies a transformation to chosen columns only; `remainder=\"passthrough\"` passes the other columns through unchanged.",
+   "lesson": 11
+  },
+  {
+   "term": "categorical_features",
+   "match": [
+    "\\bcategorical_features\\b"
+   ],
+   "exclude": [],
+   "definition": "the HGB setting that says which columns hold categories (not quantities).",
+   "lesson": 11
+  },
+  {
+   "term": "stacking",
+   "match": [
+    "\\bstack(ing|ed)\\b",
+    "\\bStacking\\w*\\b"
+   ],
+   "exclude": [
+    "Ensembles: Gradient boosting, random forests, bagging, voting, stacking"
+   ],
+   "definition": "stacked generalization: instead of voting, train a final model (the blender) to combine the members' predictions.",
+   "lesson": 2
+  },
+  {
+   "term": "blender",
+   "match": [
+    "\\bblend(er|ers|ing)\\b",
+    "\\bmeta[- ]learner\\b"
+   ],
+   "exclude": [],
+   "definition": "the final model in stacking: its inputs are the other models' predictions, and it learns how to combine them.",
+   "lesson": 2
+  },
+  {
+   "term": "cross_val_predict",
+   "match": [
+    "\\bcross_val_predict\\b"
+   ],
+   "exclude": [],
+   "definition": "a Scikit-Learn function that gives a prediction for every training row from a copy of the model trained without that row (cross-validation).",
+   "lesson": 12
+  },
+  {
+   "term": "final_estimator",
+   "match": [
+    "\\bfinal_estimator\\b"
+   ],
+   "exclude": [],
+   "definition": "the StackingClassifier setting that chooses the blender.",
+   "lesson": 12
+  },
+  {
+   "term": "precision",
+   "match": [
+    "\\bprecision\\b"
+   ],
+   "exclude": [
+    "\\bprecision loss\\b"
+   ],
+   "definition": "of a classifier's \"yes\" answers, the share that are correct (the book's Chapter 3).",
+   "lesson": 11
+  },
+  {
+   "term": "high-cardinality",
+   "match": [
+    "\\bhigh-cardinality\\b",
+    "\\bcardinality\\b"
+   ],
+   "exclude": [],
+   "definition": "a column is high-cardinality when it has many distinct values (a price column has thousands; a yes/no column has two).",
+   "lesson": 8
+  },
+  {
+   "term": "loss",
+   "match": [
+    "\\bloss\\b",
+    "\\blosses\\b"
+   ],
+   "exclude": [],
+   "definition": "the one number training tries to make small: how wrong the predictions are overall. For a regression tree here it is the squared error.",
+   "lesson": 10
+  },
+  {
+   "term": "gradient descent",
+   "match": [
+    "\\bgradient descent\\b"
+   ],
+   "exclude": [],
+   "definition": "a way to train a model: repeatedly take a small step in the direction that makes the loss smaller fastest (the book's chapter 4).",
+   "lesson": 10
+  }
+ ]
+}

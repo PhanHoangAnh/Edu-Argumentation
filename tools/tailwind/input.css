@@ -1,0 +1,7 @@
+/* Build input for aws-quiz-app. Replaces https://cdn.tailwindcss.com?plugins=typography.
+   The CDN generated these three layers at runtime by watching the DOM; a real build emits
+   them once by SCANNING SOURCE — which is why a class name assembled at runtime is invisible
+   to it (see tailwind.config.js). */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;

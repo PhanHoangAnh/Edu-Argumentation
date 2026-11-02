@@ -1,0 +1,1714 @@
+{
+ "chapter": 16,
+ "flow": [
+  "Get the data",
+  "Set aside a test set",
+  "Explore",
+  "Prepare the data",
+  "Train",
+  "Evaluate",
+  "Fine-tune",
+  "Launch"
+ ],
+ "known": [
+  "ch02-term-registry.json"
+ ],
+ "generated_by": "ml/study/geron-lab/ch16-notes/build_chapter.py",
+ "terms": [
+  {
+   "term": "neural network",
+   "match": [
+    "\\bneural net(work)?s?\\b",
+    "\\bnetworks?\\b"
+   ],
+   "exclude": [],
+   "definition": "a model built from many small parts (neurons) arranged in layers; each part does a little arithmetic and passes its result on.",
+   "lesson": 1
+  },
+  {
+   "term": "neuron",
+   "match": [
+    "\\bneurons?\\b"
+   ],
+   "exclude": [],
+   "definition": "one small part of a neural network: it multiplies each input by a learned weight, adds them up, and passes the sum through a fixed curve.",
+   "lesson": 1
+  },
+  {
+   "term": "weight",
+   "match": [
+    "\\bweights?\\b",
+    "\\bweighted\\b"
+   ],
+   "exclude": [],
+   "definition": "a number the network learns; each input is multiplied by its weight, so the weight says how much that input counts.",
+   "lesson": 1
+  },
+  {
+   "term": "layer",
+   "match": [
+    "\\blayers?\\b"
+   ],
+   "exclude": [],
+   "definition": "a group of neurons that work side by side on the same input; a network is several layers, each feeding the next.",
+   "lesson": 1
+  },
+  {
+   "term": "token",
+   "match": [
+    "\\btokens?\\b"
+   ],
+   "exclude": [],
+   "definition": "one piece of text the model reads: here a single character; later in the chapter a word or a piece of a word.",
+   "lesson": 1
+  },
+  {
+   "term": "sequence",
+   "match": [
+    "\\bsequen(ce|ces|tial|tially)\\b"
+   ],
+   "exclude": [],
+   "definition": "a list of items where the order matters, like the characters of a sentence.",
+   "lesson": 1
+  },
+  {
+   "term": "time step",
+   "match": [
+    "\\btime[- ]steps?\\b"
+   ],
+   "exclude": [],
+   "definition": "one position in a sequence; in a character model, one character.",
+   "lesson": 1
+  },
+  {
+   "term": "TensorFlow",
+   "match": [
+    "\\bTensorFlow\\b",
+    "\\btf\\.(?!data)"
+   ],
+   "exclude": [],
+   "definition": "Google's Python library for building and training neural networks; code calls it tf.",
+   "lesson": 1
+  },
+  {
+   "term": "Keras",
+   "match": [
+    "\\bKeras\\b"
+   ],
+   "exclude": [],
+   "definition": "the part of TensorFlow used to build networks from ready-made layers, as tf.keras.",
+   "lesson": 1
+  },
+  {
+   "term": "TextVectorization",
+   "match": [
+    "\\bTextVectorization\\b",
+    "\\bvectori[sz]er\\b"
+   ],
+   "exclude": [],
+   "definition": "a Keras layer that learns a vocabulary from text and then turns text into lists of integer IDs, one per token.",
+   "lesson": 1
+  },
+  {
+   "term": "vocabulary",
+   "match": [
+    "\\bvocabular(y|ies)\\b"
+   ],
+   "exclude": [],
+   "definition": "the list of all distinct tokens the model knows, each with its own ID.",
+   "lesson": 1
+  },
+  {
+   "term": "padding",
+   "match": [
+    "\\bpadd(ing|ed)\\b",
+    "\\bpads?\\b"
+   ],
+   "exclude": [],
+   "definition": "filler (ID 0) added to the end of short sequences so that every row of a batch has the same length.",
+   "lesson": 1
+  },
+  {
+   "term": "unknown token",
+   "match": [
+    "\\bunknown tokens?\\b",
+    "\\[UNK\\]"
+   ],
+   "exclude": [],
+   "definition": "the single ID (1) given to any token that is not in the vocabulary.",
+   "lesson": 1
+  },
+  {
+   "term": "dimension table",
+   "match": [
+    "\\bdimension table\\b"
+   ],
+   "exclude": [],
+   "definition": "a lookup table of descriptions, one row per key, that other tables are joined to.",
+   "lesson": 1
+  },
+  {
+   "term": "surrogate key",
+   "match": [
+    "\\bsurrogate keys?\\b"
+   ],
+   "exclude": [],
+   "definition": "a meaningless integer ID given to each row of a table, e.g. 0, 1, 2 …",
+   "lesson": 1
+  },
+  {
+   "term": "window",
+   "match": [
+    "\\bwindows?\\b"
+   ],
+   "exclude": [],
+   "definition": "a fixed-length slice of consecutive items, e.g. 101 characters; each window becomes one training example.",
+   "lesson": 1
+  },
+  {
+   "term": "projection",
+   "match": [
+    "\\bprojection\\b"
+   ],
+   "exclude": [],
+   "definition": "in SQL, choosing which columns to keep (SELECT a, b).",
+   "lesson": 1
+  },
+  {
+   "term": "tf.data",
+   "match": [
+    "\\btf\\.data\\b"
+   ],
+   "exclude": [],
+   "definition": "TensorFlow's tool for feeding data to training: a Dataset hands out the examples batch by batch.",
+   "lesson": 1
+  },
+  {
+   "term": "shuffle",
+   "match": [
+    "\\bshuffl(e|es|ed|ing)\\b"
+   ],
+   "exclude": [],
+   "definition": "put the examples in a random order.",
+   "lesson": 1
+  },
+  {
+   "term": "batch",
+   "match": [
+    "\\bbatch(es|ed|ing)?\\b"
+   ],
+   "exclude": [
+    "\\bbatch learning\\b",
+    "batch_size",
+    "batch_input_shape"
+   ],
+   "definition": "a group of examples handed to the model together, e.g. 32 windows. (Not ch02's \"batch learning\".)",
+   "lesson": 1
+  },
+  {
+   "term": "gradient descent",
+   "match": [
+    "\\bgradient descent\\b"
+   ],
+   "exclude": [],
+   "definition": "the training method: again and again, nudge every weight a little in the direction that makes the error smaller.",
+   "lesson": 1
+  },
+  {
+   "term": "GPU",
+   "match": [
+    "\\bGPUs?\\b"
+   ],
+   "exclude": [],
+   "definition": "graphics processing unit: a chip that does many multiplications at once, which makes training much faster.",
+   "lesson": 1
+  },
+  {
+   "term": "CPU",
+   "match": [
+    "\\bCPUs?\\b"
+   ],
+   "exclude": [],
+   "definition": "the computer's ordinary processor.",
+   "lesson": 1
+  },
+  {
+   "term": "language model",
+   "match": [
+    "\\blanguage models?\\b"
+   ],
+   "exclude": [],
+   "definition": "a model trained to predict the next token of a text.",
+   "lesson": 1
+  },
+  {
+   "term": "epoch",
+   "match": [
+    "\\bepochs?\\b"
+   ],
+   "exclude": [],
+   "definition": "one full pass of training over every training example.",
+   "lesson": 1
+  },
+  {
+   "term": "validation curve",
+   "match": [
+    "\\bvalidation curve\\b"
+   ],
+   "exclude": [],
+   "definition": "a plot of the validation score after every epoch.",
+   "lesson": 1
+  },
+  {
+   "term": "Char-RNN",
+   "match": [
+    "\\bchar-RNN\\b"
+   ],
+   "exclude": [],
+   "definition": "a recurrent neural network that reads text one character at a time and predicts the next character.",
+   "lesson": 1
+  },
+  {
+   "term": "RNN",
+   "match": [
+    "\\bRNNs?\\b",
+    "recurrent neural networks?"
+   ],
+   "exclude": [
+    "char-RNN"
+   ],
+   "definition": "recurrent neural network: a network whose layer reads a sequence one step at a time and carries a memory (its state) from each step to the next.",
+   "lesson": 1
+  },
+  {
+   "term": "recurrent",
+   "match": [
+    "\\brecurren(t|ce)\\b"
+   ],
+   "exclude": [],
+   "definition": "looping back: a recurrent layer feeds what it computed at one step into its work at the next step.",
+   "lesson": 1
+  },
+  {
+   "term": "state",
+   "match": [
+    "\\b(hidden )?states?\\b"
+   ],
+   "exclude": [
+    "\\bstatement"
+   ],
+   "definition": "the numbers a recurrent layer carries from one step to the next: its memory.",
+   "lesson": 1
+  },
+  {
+   "term": "feedforward network",
+   "match": [
+    "\\bfeed-?forward\\b"
+   ],
+   "exclude": [],
+   "definition": "a network where data flows one way, from inputs to output, with no memory between inputs.",
+   "lesson": 2
+  },
+  {
+   "term": "embedding",
+   "match": [
+    "\\bembeddings?\\b",
+    "\\bEmbedding\\b"
+   ],
+   "exclude": [],
+   "definition": "a short list of learned numbers standing in for one token; an Embedding layer is the lookup table holding one such row per token ID.",
+   "lesson": 2
+  },
+  {
+   "term": "dense vector",
+   "match": [
+    "\\bdense vectors?\\b"
+   ],
+   "exclude": [],
+   "definition": "a list of numbers where every position holds a real value (no mostly-zeros).",
+   "lesson": 2
+  },
+  {
+   "term": "GRU",
+   "match": [
+    "\\bGRUs?\\b",
+    "gated recurrent unit"
+   ],
+   "exclude": [],
+   "definition": "gated recurrent unit: a kind of recurrent layer whose memory can last many steps.",
+   "lesson": 2
+  },
+  {
+   "term": "Dense layer",
+   "match": [
+    "\\bDense\\b",
+    "\\bfully connected\\b"
+   ],
+   "exclude": [
+    "dense vectors?"
+   ],
+   "definition": "an ordinary layer where every input feeds every neuron. (ch02's \"dense\" was about storing every cell of a table.)",
+   "lesson": 2
+  },
+  {
+   "term": "activation function",
+   "match": [
+    "\\bactivations?\\b",
+    "\\bactivation functions?\\b"
+   ],
+   "exclude": [],
+   "definition": "a fixed curve applied to a neuron's sum before it is passed on.",
+   "lesson": 2
+  },
+  {
+   "term": "softmax",
+   "match": [
+    "\\bsoftmax\\b"
+   ],
+   "exclude": [],
+   "definition": "turns a row of scores into positive numbers that add up to 1, so they can be read as probabilities.",
+   "lesson": 2
+  },
+  {
+   "term": "return_sequences",
+   "match": [
+    "return_sequences"
+   ],
+   "exclude": [],
+   "definition": "a Keras recurrent-layer option: True = give an output at EVERY step; False (default) = only after the last step.",
+   "lesson": 2
+  },
+  {
+   "term": "unit",
+   "match": [
+    "\\bunits?\\b"
+   ],
+   "exclude": [
+    "recurrent unit",
+    "processing unit"
+   ],
+   "definition": "Keras's word for a neuron: a layer with 128 units has 128 neurons.",
+   "lesson": 2
+  },
+  {
+   "term": "loss",
+   "match": [
+    "\\bloss(es)?\\b"
+   ],
+   "exclude": [],
+   "definition": "the one number that says how wrong the predictions are; training changes the weights to make it smaller.",
+   "lesson": 1
+  },
+  {
+   "term": "cross-entropy",
+   "match": [
+    "crossentropy",
+    "cross-entropy"
+   ],
+   "exclude": [],
+   "definition": "the usual classification loss: small when the model gave the right answer a high probability. \"sparse\" = the answers are plain IDs, not one-hot rows.",
+   "lesson": 2
+  },
+  {
+   "term": "compile",
+   "match": [
+    "\\bcompil(e|es|ed|ing)\\b"
+   ],
+   "exclude": [],
+   "definition": "in Keras, fix a model's loss, optimizer and metrics before training.",
+   "lesson": 2
+  },
+  {
+   "term": "optimizer",
+   "match": [
+    "\\boptimi[sz](er|ers)\\b"
+   ],
+   "exclude": [],
+   "definition": "the algorithm that changes the weights during training, e.g. Adam.",
+   "lesson": 2
+  },
+  {
+   "term": "Nadam",
+   "match": [
+    "\\bnadam\\b",
+    "\\bAdam\\b"
+   ],
+   "exclude": [],
+   "definition": "Adam is a popular optimizer that adapts each weight's step size; Nadam is Adam with Nesterov momentum added.",
+   "lesson": 2
+  },
+  {
+   "term": "momentum",
+   "match": [
+    "\\bmomentum\\b"
+   ],
+   "exclude": [],
+   "definition": "carrying part of the previous weight update into the next one, which smooths training.",
+   "lesson": 2
+  },
+  {
+   "term": "lambda",
+   "match": [
+    "\\blambda\\b"
+   ],
+   "exclude": [],
+   "definition": "in Python, lambda x: … writes a small unnamed function in one line; Keras's Lambda layer wraps such a function as a layer.",
+   "lesson": 1
+  },
+  {
+   "term": "argmax",
+   "match": [
+    "\\bargmax\\b"
+   ],
+   "exclude": [],
+   "definition": "the position of the largest value in a list.",
+   "lesson": 2
+  },
+  {
+   "term": "cardinality",
+   "match": [
+    "\\bcardinality\\b"
+   ],
+   "exclude": [],
+   "definition": "how many distinct values a column has; high-cardinality = very many.",
+   "lesson": 2
+  },
+  {
+   "term": "serving",
+   "match": [
+    "\\bserving\\b"
+   ],
+   "exclude": [],
+   "definition": "running a trained model for real users; \"training/serving mismatch\" = the two treat data differently.",
+   "lesson": 2
+  },
+  {
+   "term": "callback",
+   "match": [
+    "\\bcallbacks?\\b"
+   ],
+   "exclude": [],
+   "definition": "an object Keras calls at fixed moments during training, e.g. at the start of each epoch.",
+   "lesson": 4
+  },
+  {
+   "term": "greedy decoding",
+   "match": [
+    "\\bgreedy\\b"
+   ],
+   "exclude": [],
+   "definition": "always choosing the single most probable next token.",
+   "lesson": 3
+  },
+  {
+   "term": "sampling",
+   "match": [
+    "\\bsampl(e|es|ed|ing)\\b"
+   ],
+   "exclude": [
+    "\\bsampled softmax\\b",
+    "sampling bias"
+   ],
+   "definition": "drawing items at random; when generating text, drawing the next token at random so that more probable tokens come up more often.",
+   "lesson": 1
+  },
+  {
+   "term": "temperature",
+   "match": [
+    "\\btemperatures?\\b"
+   ],
+   "exclude": [],
+   "definition": "the number the logits are divided by before sampling: low = safe and repetitive, high = wild.",
+   "lesson": 3
+  },
+  {
+   "term": "logit",
+   "match": [
+    "\\blogits?\\b"
+   ],
+   "exclude": [],
+   "definition": "a raw score before it is turned into a probability; here the logarithm of a probability.",
+   "lesson": 3
+  },
+  {
+   "term": "deterministic",
+   "match": [
+    "\\bdeterministic\\b"
+   ],
+   "exclude": [],
+   "definition": "always giving the same output for the same input.",
+   "lesson": 3
+  },
+  {
+   "term": "beam search",
+   "match": [
+    "\\bbeam search\\b"
+   ],
+   "exclude": [],
+   "definition": "keeping the k most probable partial sentences at every step instead of only the best one (b11).",
+   "lesson": 3
+  },
+  {
+   "term": "nucleus sampling",
+   "match": [
+    "\\bnucleus sampling\\b",
+    "\\btop k\\b"
+   ],
+   "exclude": [],
+   "definition": "sampling only among the most probable tokens (top k, or those whose probabilities add up to a threshold).",
+   "lesson": 3
+  },
+  {
+   "term": "stateful RNN",
+   "match": [
+    "\\bstateful\\b"
+   ],
+   "exclude": [],
+   "definition": "an RNN that keeps its state from one batch to the next instead of resetting it. (ch02's \"stateful\" meant a Scikit-Learn tool that learns something in fit.)",
+   "lesson": 4
+  },
+  {
+   "term": "stateless RNN",
+   "match": [
+    "\\bstateless\\b"
+   ],
+   "exclude": [],
+   "definition": "the normal kind: the state is reset to zeros at the start of every batch.",
+   "lesson": 4
+  },
+  {
+   "term": "backpropagation",
+   "match": [
+    "\\bbackprop(agat(e|es|ed|ing|ion))?\\b"
+   ],
+   "exclude": [],
+   "definition": "how a network learns: after a prediction, the error is passed backward through the network to work out how each weight should change.",
+   "lesson": 4
+  },
+  {
+   "term": "gradient",
+   "match": [
+    "\\bgradients?\\b"
+   ],
+   "exclude": [],
+   "definition": "for one weight, how much and in which direction the loss changes when that weight changes.",
+   "lesson": 1
+  },
+  {
+   "term": "incremental load",
+   "match": [
+    "\\bincremental load\\b"
+   ],
+   "exclude": [],
+   "definition": "updating a table by adding only the new rows on each run.",
+   "lesson": 4
+  },
+  {
+   "term": "watermark",
+   "match": [
+    "\\bwatermark\\b"
+   ],
+   "exclude": [],
+   "definition": "the saved position (e.g. last timestamp) where the previous incremental load stopped.",
+   "lesson": 4
+  },
+  {
+   "term": "partition",
+   "match": [
+    "\\bpartitions?\\b"
+   ],
+   "exclude": [],
+   "definition": "one slice of a big table or job that is stored or processed on its own.",
+   "lesson": 4
+  },
+  {
+   "term": "throughput",
+   "match": [
+    "\\bthroughput\\b"
+   ],
+   "exclude": [],
+   "definition": "how much work gets done per second.",
+   "lesson": 4
+  },
+  {
+   "term": "parallelism",
+   "match": [
+    "\\bparallel(ism|ise|ize)?\\b"
+   ],
+   "exclude": [],
+   "definition": "doing several pieces of work at the same time.",
+   "lesson": 4
+  },
+  {
+   "term": "sentiment analysis",
+   "match": [
+    "\\bsentiment\\b"
+   ],
+   "exclude": [],
+   "definition": "deciding whether a text is positive or negative, e.g. a film review.",
+   "lesson": 5
+  },
+  {
+   "term": "IMDb",
+   "match": [
+    "\\bIMDb\\b"
+   ],
+   "exclude": [],
+   "definition": "the Internet Movie Database; its 50,000 labelled film reviews are a standard test set for sentiment analysis.",
+   "lesson": 5
+  },
+  {
+   "term": "TensorFlow Datasets",
+   "match": [
+    "\\bTensorFlow Datasets\\b",
+    "\\btfds\\b",
+    "tensorflow_datasets"
+   ],
+   "exclude": [],
+   "definition": "a library that downloads well-known datasets ready for tf.data (imported as tfds).",
+   "lesson": 5
+  },
+  {
+   "term": "tokenize",
+   "match": [
+    "\\btokeni[sz](e|es|ed|ing|ation|er|ers)\\b"
+   ],
+   "exclude": [],
+   "definition": "cut text into tokens (characters, words or word pieces).",
+   "lesson": 2
+  },
+  {
+   "term": "sigmoid",
+   "match": [
+    "\\bsigmoid\\b",
+    "\\blogistic\\b"
+   ],
+   "exclude": [],
+   "definition": "the S-shaped curve that turns any number into a number between 0 and 1.",
+   "lesson": 5
+  },
+  {
+   "term": "binary",
+   "match": [
+    "\\bbinary\\b"
+   ],
+   "exclude": [],
+   "definition": "with two possible values, here 0 (negative) and 1 (positive).",
+   "lesson": 5
+  },
+  {
+   "term": "matrix",
+   "match": [
+    "\\bmatri(x|ces)\\b"
+   ],
+   "exclude": [],
+   "definition": "a grid of numbers in rows and columns.",
+   "lesson": 5
+  },
+  {
+   "term": "subword tokenization",
+   "match": [
+    "\\bsubwords?\\b"
+   ],
+   "exclude": [],
+   "definition": "cutting text into word pieces (\"smart\" + \"est\") instead of whole words.",
+   "lesson": 5
+  },
+  {
+   "term": "BPE",
+   "match": [
+    "\\bBPE\\b",
+    "byte pair encoding"
+   ],
+   "exclude": [],
+   "definition": "byte pair encoding: start from single characters and keep merging the most frequent neighbouring pair into one token.",
+   "lesson": 5
+  },
+  {
+   "term": "adapt",
+   "match": [
+    "\\badapt(s|ed|ing)?\\b"
+   ],
+   "exclude": [],
+   "definition": "TextVectorization's learning step: read the text once and build the vocabulary.",
+   "lesson": 1
+  },
+  {
+   "term": "accuracy",
+   "match": [
+    "\\baccuracy\\b"
+   ],
+   "exclude": [],
+   "definition": "the share of examples the model gets right.",
+   "lesson": 2
+  },
+  {
+   "term": "masking",
+   "match": [
+    "\\bmask(s|ed|ing)?\\b",
+    "\\bmask_zero\\b"
+   ],
+   "exclude": [
+    "<mask>",
+    "attention_mask",
+    "masked language model"
+   ],
+   "definition": "marking padding positions so that the layers skip them; the mask is a list of True (real) and False (padding).",
+   "lesson": 1
+  },
+  {
+   "term": "boolean",
+   "match": [
+    "\\bbooleans?\\b"
+   ],
+   "exclude": [],
+   "definition": "True or False.",
+   "lesson": 6
+  },
+  {
+   "term": "sequence-to-sequence",
+   "match": [
+    "\\bsequence-to-sequence\\b"
+   ],
+   "exclude": [],
+   "definition": "a model that takes a sequence in and gives a sequence out: in b01 a window of characters in and the next character at every position out; in b08–b12 an English sentence in and a Spanish one out.",
+   "lesson": 1
+  },
+  {
+   "term": "functional API",
+   "match": [
+    "\\bfunctional API\\b"
+   ],
+   "exclude": [],
+   "definition": "the Keras way of wiring layers by calling them on each other's outputs, allowing several inputs.",
+   "lesson": 6
+  },
+  {
+   "term": "convolution",
+   "match": [
+    "\\bconvolution(s|al)?\\b",
+    "\\bCNNs?\\b"
+   ],
+   "exclude": [],
+   "definition": "a layer that slides a small learned pattern-detector along the data; CNN = convolutional neural network.",
+   "lesson": 6
+  },
+  {
+   "term": "dropout",
+   "match": [
+    "\\bdropout\\b"
+   ],
+   "exclude": [],
+   "definition": "during training, randomly set some values to 0 so the model cannot lean on any single one.",
+   "lesson": 6
+  },
+  {
+   "term": "ragged tensor",
+   "match": [
+    "\\bragged\\b"
+   ],
+   "exclude": [],
+   "definition": "a table of numbers whose rows have different lengths.",
+   "lesson": 5
+  },
+  {
+   "term": "bucketing",
+   "match": [
+    "\\bbucket(s|ing)?\\b"
+   ],
+   "exclude": [],
+   "definition": "grouping sequences of similar length into the same batch so little padding is needed.",
+   "lesson": 6
+  },
+  {
+   "term": "tensor",
+   "match": [
+    "\\btensors?\\b"
+   ],
+   "exclude": [
+    "ragged tensors?"
+   ],
+   "definition": "TensorFlow's array: numbers with a fixed shape, e.g. [32, 100].",
+   "lesson": 1
+  },
+  {
+   "term": "scalar",
+   "match": [
+    "\\bscalars?\\b"
+   ],
+   "exclude": [],
+   "definition": "a single value, not a list.",
+   "lesson": 6
+  },
+  {
+   "term": "pretrained",
+   "match": [
+    "\\bpre-?train(ed|ing)?\\b"
+   ],
+   "exclude": [],
+   "definition": "already trained by someone else, usually on a huge amount of data, and downloaded for reuse.",
+   "lesson": 7
+  },
+  {
+   "term": "word embedding",
+   "match": [
+    "\\bword embeddings?\\b",
+    "\\bWord2vec\\b",
+    "\\bGloVe\\b"
+   ],
+   "exclude": [],
+   "definition": "an embedding for a whole word; Word2vec and GloVe are famous downloadable sets of them.",
+   "lesson": 7
+  },
+  {
+   "term": "corpus",
+   "match": [
+    "\\bcorp(us|ora)\\b"
+   ],
+   "exclude": [],
+   "definition": "a large collection of text.",
+   "lesson": 7
+  },
+  {
+   "term": "contextualized embedding",
+   "match": [
+    "\\bcontextuali[sz]ed\\b",
+    "\\bcontextual\\b"
+   ],
+   "exclude": [],
+   "definition": "an embedding computed from the whole sentence, so one word gets different numbers in different sentences.",
+   "lesson": 7
+  },
+  {
+   "term": "bidirectional",
+   "match": [
+    "\\bbidirectional\\b",
+    "\\bBidirectional\\b"
+   ],
+   "exclude": [],
+   "definition": "reading a sequence both forwards and backwards.",
+   "lesson": 7
+  },
+  {
+   "term": "fine-tuning (pretrained model)",
+   "match": [
+    "\\bfine-?tun(ed|ing)\\b"
+   ],
+   "exclude": [],
+   "definition": "continuing to train a pretrained model on your own, smaller, labelled task. (In ch02, \"fine-tune\" meant trying settings.)",
+   "lesson": 7
+  },
+  {
+   "term": "self-supervised learning",
+   "match": [
+    "\\bself-supervis(ed|ion)\\b"
+   ],
+   "exclude": [],
+   "definition": "training where the labels come from the data itself, e.g. the next word of a text.",
+   "lesson": 7
+  },
+  {
+   "term": "state of the art",
+   "match": [
+    "\\bstate of the art\\b",
+    "\\bstate-of-the-art\\b"
+   ],
+   "exclude": [],
+   "definition": "the best published result so far.",
+   "lesson": 7
+  },
+  {
+   "term": "TensorFlow Hub",
+   "match": [
+    "\\bTensorFlow Hub\\b",
+    "\\bTF Hub\\b",
+    "tensorflow_hub",
+    "\\bhub\\."
+   ],
+   "exclude": [],
+   "definition": "a website of pretrained models that load into TensorFlow in one line.",
+   "lesson": 7
+  },
+  {
+   "term": "environment variable",
+   "match": [
+    "\\benvironment variables?\\b",
+    "os\\.environ"
+   ],
+   "exclude": [],
+   "definition": "a named setting the operating system hands to a running program.",
+   "lesson": 7
+  },
+  {
+   "term": "trainable",
+   "match": [
+    "\\btrainable\\b"
+   ],
+   "exclude": [],
+   "definition": "allowed to change during training; trainable=False freezes a layer's weights.",
+   "lesson": 2
+  },
+  {
+   "term": "learning rate",
+   "match": [
+    "\\blearning[_ ]rates?\\b"
+   ],
+   "exclude": [],
+   "definition": "how big each weight update is.",
+   "lesson": 5
+  },
+  {
+   "term": "polysemous",
+   "match": [
+    "\\bpolysemous\\b"
+   ],
+   "exclude": [],
+   "definition": "one spelling with several meanings, like \"right\".",
+   "lesson": 7
+  },
+  {
+   "term": "error rate",
+   "match": [
+    "\\berror rates?\\b"
+   ],
+   "exclude": [],
+   "definition": "the share of examples the model gets wrong.",
+   "lesson": 7
+  },
+  {
+   "term": "machine translation",
+   "match": [
+    "\\bmachine translation\\b",
+    "\\bNMT\\b"
+   ],
+   "exclude": [],
+   "definition": "translating text from one language to another with a model.",
+   "lesson": 5
+  },
+  {
+   "term": "encoder",
+   "match": [
+    "\\bencoders?\\b"
+   ],
+   "exclude": [],
+   "definition": "the network that reads the whole input sentence and summarises it.",
+   "lesson": 7
+  },
+  {
+   "term": "decoder",
+   "match": [
+    "\\bdecoders?\\b"
+   ],
+   "exclude": [],
+   "definition": "the network that writes the output sentence, one word at a time, from the encoder's summary.",
+   "lesson": 8
+  },
+  {
+   "term": "teacher forcing",
+   "match": [
+    "\\bteacher forcing\\b"
+   ],
+   "exclude": [],
+   "definition": "during training, feeding the decoder the CORRECT previous word instead of its own guess.",
+   "lesson": 8
+  },
+  {
+   "term": "inference",
+   "match": [
+    "\\binference\\b"
+   ],
+   "exclude": [],
+   "definition": "using a trained model to make predictions (as opposed to training it).",
+   "lesson": 2
+  },
+  {
+   "term": "ground truth",
+   "match": [
+    "\\bground[- ]truth\\b"
+   ],
+   "exclude": [],
+   "definition": "the known correct answer.",
+   "lesson": 8
+  },
+  {
+   "term": "autoregressive",
+   "match": [
+    "\\bautoregressive\\b"
+   ],
+   "exclude": [],
+   "definition": "producing a sequence by feeding each output back in as the next input.",
+   "lesson": 9
+  },
+  {
+   "term": "LSTM",
+   "match": [
+    "\\bLSTMs?\\b",
+    "long short-term memory"
+   ],
+   "exclude": [],
+   "definition": "long short-term memory: a recurrent layer that carries TWO states, a short-term one (its output) and a long-term one (its memory).",
+   "lesson": 7
+  },
+  {
+   "term": "sampled softmax",
+   "match": [
+    "\\bsampled softmax\\b",
+    "sampled_softmax"
+   ],
+   "exclude": [],
+   "definition": "a training shortcut for huge vocabularies: compute the loss from the correct word and a random sample of wrong ones only.",
+   "lesson": 9
+  },
+  {
+   "term": "convergence",
+   "match": [
+    "\\bconverge(s|d|nce)?\\b"
+   ],
+   "exclude": [],
+   "definition": "training settling on good weights.",
+   "lesson": 8
+  },
+  {
+   "term": "causal",
+   "match": [
+    "\\bcausal(ity)?\\b"
+   ],
+   "exclude": [],
+   "definition": "a model is causal if each output depends only on earlier and current inputs, never later ones.",
+   "lesson": 10
+  },
+  {
+   "term": "concatenate",
+   "match": [
+    "\\bconcatenat(e|ed|es|ing|ion)\\b",
+    "\\bConcatenate\\b"
+   ],
+   "exclude": [],
+   "definition": "join lists or tables of numbers side by side.",
+   "lesson": 10
+  },
+  {
+   "term": "beam width",
+   "match": [
+    "\\bbeam width\\b"
+   ],
+   "exclude": [],
+   "definition": "k, the number of partial sentences beam search keeps.",
+   "lesson": 11
+  },
+  {
+   "term": "conditional probability",
+   "match": [
+    "\\bconditional probabilit(y|ies)\\b"
+   ],
+   "exclude": [],
+   "definition": "the probability of something GIVEN what came before.",
+   "lesson": 11
+  },
+  {
+   "term": "BLEU",
+   "match": [
+    "\\bBLEU\\b"
+   ],
+   "exclude": [],
+   "definition": "a score for translations: how many word sequences they share with human translations.",
+   "lesson": 11
+  },
+  {
+   "term": "attention",
+   "match": [
+    "\\battention\\b",
+    "\\battend(s|ed|ing)?\\b"
+   ],
+   "exclude": [
+    "attention_mask"
+   ],
+   "definition": "a layer that, at each step, scores every position of another sequence, turns the scores into weights with softmax, and returns the weighted sum.",
+   "lesson": 4
+  },
+  {
+   "term": "alignment score",
+   "match": [
+    "\\balignment (model|score|scores)\\b"
+   ],
+   "exclude": [],
+   "definition": "the raw score saying how relevant one encoder output is to the current decoder step.",
+   "lesson": 12
+  },
+  {
+   "term": "context vector",
+   "match": [
+    "\\bcontext vectors?\\b"
+   ],
+   "exclude": [],
+   "definition": "the numbers that summarise the input sentence for the decoder: in b08–b09 the encoder's final state; with attention (b12), a weighted sum of all the encoder's outputs, recomputed at every step.",
+   "lesson": 8
+  },
+  {
+   "term": "dot product",
+   "match": [
+    "\\bdot[- ]products?\\b"
+   ],
+   "exclude": [],
+   "definition": "multiply two lists of numbers position by position and add the results: one number.",
+   "lesson": 12
+  },
+  {
+   "term": "query, key, value",
+   "match": [
+    "\\bquer(y|ies)\\b",
+    "\\bkeys? and values?\\b",
+    "\\bkey/value\\b"
+   ],
+   "exclude": [
+    "query plan"
+   ],
+   "definition": "attention works like a lookup: the query is what is being looked for, each key is what a candidate is matched on, each value is what that candidate returns.",
+   "lesson": 12
+  },
+  {
+   "term": "query plan",
+   "match": [
+    "\\bquery plan\\b"
+   ],
+   "exclude": [],
+   "definition": "the list of steps a database works out before it runs an SQL statement.",
+   "lesson": 11
+  },
+  {
+   "term": "differentiable",
+   "match": [
+    "\\bdifferentiable\\b"
+   ],
+   "exclude": [],
+   "definition": "has a gradient, so it can be trained by backpropagation.",
+   "lesson": 12
+  },
+  {
+   "term": "transpose",
+   "match": [
+    "\\btranspos(e|ed|ing)\\b"
+   ],
+   "exclude": [],
+   "definition": "flip a matrix on its side: rows become columns.",
+   "lesson": 8
+  },
+  {
+   "term": "Bahdanau and Luong attention",
+   "match": [
+    "\\bBahdanau\\b",
+    "\\bLuong\\b"
+   ],
+   "exclude": [],
+   "definition": "the two classic ways of scoring alignment: a small trainable network (Bahdanau) or a dot product (Luong).",
+   "lesson": 12
+  },
+  {
+   "term": "Transformer (network)",
+   "match": [
+    "\\btransformers?\\b"
+   ],
+   "exclude": [
+    "Hugging Face Transformers",
+    "transformers library",
+    "from transformers",
+    "Transformers library"
+   ],
+   "definition": "a network built only from attention layers, with no recurrent layers (2017). Not ch02's Scikit-Learn transformer.",
+   "lesson": 12
+  },
+  {
+   "term": "positional encoding",
+   "match": [
+    "\\bpositional (encodings?|embeddings?)\\b"
+   ],
+   "exclude": [],
+   "definition": "a vector added to each token's embedding that says where in the sequence the token sits.",
+   "lesson": 13
+  },
+  {
+   "term": "multi-head attention",
+   "match": [
+    "\\bmulti-head attention\\b",
+    "MultiHeadAttention"
+   ],
+   "exclude": [],
+   "definition": "several attention calculations run side by side on different learned views of the same data.",
+   "lesson": 13
+  },
+  {
+   "term": "self-attention",
+   "match": [
+    "\\bself-attention\\b"
+   ],
+   "exclude": [],
+   "definition": "attention where a sequence looks up its own positions: every word scores every other word of the same sentence.",
+   "lesson": 13
+  },
+  {
+   "term": "cross-attention",
+   "match": [
+    "\\bcross-attention\\b"
+   ],
+   "exclude": [],
+   "definition": "attention where the decoder's queries look up the encoder's keys and values.",
+   "lesson": 13
+  },
+  {
+   "term": "residual connection",
+   "match": [
+    "\\bresidual\\b",
+    "\\bskip connections?\\b"
+   ],
+   "exclude": [],
+   "definition": "a shortcut that adds a layer's input straight onto its output (also called a skip connection).",
+   "lesson": 13
+  },
+  {
+   "term": "layer normalization",
+   "match": [
+    "\\blayer normali[sz]ation\\b"
+   ],
+   "exclude": [],
+   "definition": "rescaling the numbers of one token so they average 0 with a typical size of 1.",
+   "lesson": 13
+  },
+  {
+   "term": "sine and cosine",
+   "match": [
+    "\\bsin(e|es)?\\b",
+    "\\bcos(ine|ines)?\\b"
+   ],
+   "exclude": [
+    "since"
+   ],
+   "definition": "two wave functions that go smoothly up and down between −1 and +1, a quarter wave apart.",
+   "lesson": 14
+  },
+  {
+   "term": "frequency",
+   "match": [
+    "\\bfrequenc(y|ies)\\b"
+   ],
+   "exclude": [
+    "most frequent",
+    "word frequency"
+   ],
+   "definition": "how fast a wave repeats.",
+   "lesson": 14
+  },
+  {
+   "term": "broadcasting",
+   "match": [
+    "\\bbroadcast(s|ing)?\\b"
+   ],
+   "exclude": [],
+   "definition": "NumPy's rule for adding a smaller array to a bigger one by repeating it along the missing axis.",
+   "lesson": 14
+  },
+  {
+   "term": "scaled dot-product attention",
+   "match": [
+    "\\bscaled dot-product\\b"
+   ],
+   "exclude": [],
+   "definition": "attention whose scores are dot products divided by the square root of the key width.",
+   "lesson": 12
+  },
+  {
+   "term": "linear transformation",
+   "match": [
+    "\\blinear (transformations?|layers?|projections?)\\b"
+   ],
+   "exclude": [],
+   "definition": "a learned matrix multiply with no activation function.",
+   "lesson": 13
+  },
+  {
+   "term": "subspace",
+   "match": [
+    "\\bsubspaces?\\b"
+   ],
+   "exclude": [],
+   "definition": "a smaller set of directions picked out of a longer vector.",
+   "lesson": 15
+  },
+  {
+   "term": "head",
+   "match": [
+    "\\bheads?\\b"
+   ],
+   "exclude": [
+    "head start",
+    "head of"
+   ],
+   "definition": "one of the parallel attention calculations in multi-head attention; also the small last layer that gives a model its task (\"output head\").",
+   "lesson": 13
+  },
+  {
+   "term": "saturate",
+   "match": [
+    "\\bsaturat(e|es|ed|ing|ion)\\b"
+   ],
+   "exclude": [],
+   "definition": "when softmax gets huge inputs, one output is almost 1 and the rest almost 0, and learning stalls.",
+   "lesson": 15
+  },
+  {
+   "term": "cursor",
+   "match": [
+    "\\bcursors?\\b"
+   ],
+   "exclude": [],
+   "definition": "in SQL, a loop that handles one row at a time.",
+   "lesson": 13
+  },
+  {
+   "term": "set-based",
+   "match": [
+    "\\bset-based\\b"
+   ],
+   "exclude": [],
+   "definition": "in SQL, one statement that handles all rows together.",
+   "lesson": 13
+  },
+  {
+   "term": "BERT",
+   "match": [
+    "\\bBERT\\b",
+    "\\bDistilBERT\\b"
+   ],
+   "exclude": [],
+   "definition": "a pretrained transformer encoder from Google (2018); DistilBERT is a smaller copy of it.",
+   "lesson": 16
+  },
+  {
+   "term": "masked language model",
+   "match": [
+    "\\bmasked language model\\b",
+    "\\bMLM\\b"
+   ],
+   "exclude": [],
+   "definition": "the pretraining task of guessing hidden (masked) words of a sentence.",
+   "lesson": 16
+  },
+  {
+   "term": "next sentence prediction",
+   "match": [
+    "\\bnext sentence prediction\\b",
+    "\\bNSP\\b"
+   ],
+   "exclude": [],
+   "definition": "the pretraining task of saying whether sentence B really follows sentence A.",
+   "lesson": 16
+  },
+  {
+   "term": "segment embedding",
+   "match": [
+    "\\bsegment embeddings?\\b"
+   ],
+   "exclude": [],
+   "definition": "an extra vector added to each token saying whether it belongs to sentence A or B.",
+   "lesson": 16
+  },
+  {
+   "term": "Vision Transformer",
+   "match": [
+    "\\bVision Transformers?\\b",
+    "\\bViTs?\\b"
+   ],
+   "exclude": [],
+   "definition": "a transformer that reads an image as a sequence of small square patches.",
+   "lesson": 17
+  },
+  {
+   "term": "patch",
+   "match": [
+    "\\bpatch(es)?\\b"
+   ],
+   "exclude": [
+    "are the patch"
+   ],
+   "definition": "a small square piece of an image, e.g. 16 × 16 pixels.",
+   "lesson": 17
+  },
+  {
+   "term": "inductive bias",
+   "match": [
+    "\\binductive bias(es)?\\b"
+   ],
+   "exclude": [],
+   "definition": "an assumption built into a model's design instead of learned from data.",
+   "lesson": 17
+  },
+  {
+   "term": "translation invariance",
+   "match": [
+    "\\btranslation invarian(t|ce)\\b"
+   ],
+   "exclude": [],
+   "definition": "a pattern means the same thing wherever it appears in the image.",
+   "lesson": 17
+  },
+  {
+   "term": "channel",
+   "match": [
+    "\\bchannels?\\b"
+   ],
+   "exclude": [
+    "width channel",
+    "each channel"
+   ],
+   "definition": "one of the colour layers of an image: red, green or blue.",
+   "lesson": 17
+  },
+  {
+   "term": "knowledge distillation",
+   "match": [
+    "\\bdistill(ation|ed)\\b"
+   ],
+   "exclude": [],
+   "definition": "training a new model to copy a strong existing model's outputs.",
+   "lesson": 17
+  },
+  {
+   "term": "explainability",
+   "match": [
+    "\\bexplainability\\b"
+   ],
+   "exclude": [],
+   "definition": "being able to see why a model gave its answer.",
+   "lesson": 17
+  },
+  {
+   "term": "Perceiver",
+   "match": [
+    "\\bPerceiver\\b"
+   ],
+   "exclude": [],
+   "definition": "a 2021 DeepMind transformer that reads very long inputs through a small fixed set of latent tokens.",
+   "lesson": 17
+  },
+  {
+   "term": "latent representation",
+   "match": [
+    "\\blatent\\b"
+   ],
+   "exclude": [],
+   "definition": "the model's own internal summary vectors.",
+   "lesson": 17
+  },
+  {
+   "term": "multimodal",
+   "match": [
+    "\\bmultimodal\\b"
+   ],
+   "exclude": [],
+   "definition": "handling several kinds of input (text, images, sound) in one model.",
+   "lesson": 17
+  },
+  {
+   "term": "Hugging Face",
+   "match": [
+    "\\bHugging Face\\b",
+    "\\bHub\\b"
+   ],
+   "exclude": [
+    "TensorFlow Hub",
+    "TF Hub",
+    "\\bhub layer",
+    "\\bhub\\."
+   ],
+   "definition": "a company and website hosting thousands of pretrained models; its Python library is called transformers.",
+   "lesson": 18
+  },
+  {
+   "term": "pipeline()",
+   "match": [
+    "\\bpipeline\\(\\)",
+    "pipeline\\(\\\"task"
+   ],
+   "exclude": [],
+   "definition": "the Hugging Face function that downloads a model and runs text through it in one call. Not ch02's Scikit-Learn pipeline.",
+   "lesson": 18
+  },
+  {
+   "term": "natural language inference",
+   "match": [
+    "\\bnatural[- ]language inference\\b",
+    "\\bMNLI\\b",
+    "\\bentail(ment|s)?\\b",
+    "\\bcontradiction\\b"
+   ],
+   "exclude": [],
+   "definition": "deciding whether sentence B follows from sentence A (entailment), contradicts it, or neither (neutral).",
+   "lesson": 18
+  },
+  {
+   "term": "attention mask",
+   "match": [
+    "attention_mask",
+    "\\battention mask\\b"
+   ],
+   "exclude": [],
+   "definition": "the tokenizer's list of 1s (real tokens) and 0s (padding).",
+   "lesson": 18
+  },
+  {
+   "term": "checkpoint",
+   "match": [
+    "\\bcheckpoints?\\b"
+   ],
+   "exclude": [],
+   "definition": "a saved copy of a model's weights.",
+   "lesson": 18
+  },
+  {
+   "term": "bias term",
+   "match": [
+    "\\bbias terms?\\b"
+   ],
+   "exclude": [],
+   "definition": "a neuron's own extra number, added to its weighted sum; it is learned like a weight, and a layer has one per neuron.",
+   "lesson": 2
+  },
+  {
+   "term": "bias (in a model's answers)",
+   "match": [
+    "\\bbias(ed|es)?\\b"
+   ],
+   "exclude": [
+    "inductive bias(es)?",
+    "\\bbias terms?\\b"
+   ],
+   "definition": "a systematic lean of a model's answers in one direction; in b18, treating some groups of people unfairly because of what was in its training data.",
+   "lesson": 11
+  },
+  {
+   "term": "counterfactual test",
+   "match": [
+    "\\bcounterfactual\\b"
+   ],
+   "exclude": [],
+   "definition": "change one attribute of an input (e.g. a country's name) and check the prediction does not change.",
+   "lesson": 18
+  },
+  {
+   "term": "model card",
+   "match": [
+    "\\bmodel cards?\\b"
+   ],
+   "exclude": [],
+   "definition": "a document published with a model saying what it is for and its known limits.",
+   "lesson": 18
+  },
+  {
+   "term": "Reber grammar",
+   "match": [
+    "\\bReber\\b"
+   ],
+   "exclude": [],
+   "definition": "a small state machine (a diagram of states joined by arrows, each arrow labelled with a letter) that decides which letter strings are valid: a string is valid if you can walk it from the start state to the end state; used to test sequence models.",
+   "lesson": 19
+  },
+  {
+   "term": "dual encoder",
+   "match": [
+    "\\bdual encoder\\b"
+   ],
+   "exclude": [],
+   "definition": "two encoders (e.g. one for images, one for text) trained so that matching pairs get similar vectors.",
+   "lesson": 19
+  },
+  {
+   "term": "ELMo and ULMFiT",
+   "match": [
+    "\\bELMo\\b",
+    "\\bULMFiT\\b"
+   ],
+   "exclude": [],
+   "definition": "two early (2018) pretrained language models built from recurrent layers.",
+   "lesson": 7
+  },
+  {
+   "term": "Universal Sentence Encoder",
+   "match": [
+    "\\bUniversal Sentence Encoder\\b",
+    "universal-sentence-encoder"
+   ],
+   "exclude": [],
+   "definition": "a pretrained Google model that turns a whole sentence into one vector of 512 numbers.",
+   "lesson": 7
+  },
+  {
+   "term": "image captioning",
+   "match": [
+    "\\bimage caption(ing)?\\b",
+    "\\bcaptioning\\b"
+   ],
+   "exclude": [],
+   "definition": "writing a text description of an image.",
+   "lesson": 17
+  },
+  {
+   "term": "morphologically rich",
+   "match": [
+    "\\bmorpholog(y|ical|ically)\\b"
+   ],
+   "exclude": [],
+   "definition": "said of languages where one word takes many forms (endings, prefixes).",
+   "lesson": 5
+  },
+  {
+   "term": "named entity",
+   "match": [
+    "\\bnamed entit(y|ies)\\b"
+   ],
+   "exclude": [],
+   "definition": "a name of a person, place or company.",
+   "lesson": 5
+  },
+  {
+   "term": "class",
+   "match": [
+    "\\bclass(es)?\\b",
+    "\\bsubclass(ing|es)?\\b"
+   ],
+   "exclude": [
+    "\\bclassif",
+    "two-class",
+    "class indices",
+    "class index"
+   ],
+   "definition": "in Python, a blueprint for objects: the data an object holds plus the functions (methods) it can run; a subclass is a class built from another one.",
+   "lesson": 4
+  },
+  {
+   "term": "kwargs",
+   "match": [
+    "kwargs"
+   ],
+   "exclude": [],
+   "definition": "**kwargs collects any extra named arguments so they can be passed on unchanged.",
+   "lesson": 14
+  },
+  {
+   "term": "sentinel",
+   "match": [
+    "\\bsentinels?\\b"
+   ],
+   "exclude": [],
+   "definition": "a special value that marks a boundary, like startofseq and endofseq.",
+   "lesson": 8
+  },
+  {
+   "term": "PyTorch",
+   "match": [
+    "\\bPyTorch\\b"
+   ],
+   "exclude": [],
+   "definition": "another deep-learning library (from Meta), the main alternative to TensorFlow.",
+   "lesson": 18
+  }
+ ]
+}

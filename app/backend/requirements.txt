@@ -1,0 +1,23 @@
+# Pins measured on nn 2026-09-21 against ~/edu-importer-venv. nn's system Python is
+# 3.10.12 — nothing here may require newer.
+#
+# ⚠ starlette is pinned EXPLICITLY at 1.6.0. fastapi 0.141.1 declares starlette>=0.46.0
+# with no upper cap, so an unpinned install silently resolves to whatever is current and
+# the reference this program claims to have measured stops being the one it runs. That
+# matters from Phase 3 onward, where the API surface is the whole job.
+fastapi==0.141.1
+starlette==1.6.0
+uvicorn==0.52.0
+pydantic==2.13.5
+# ⚑ Phase 06a (23-09-26): the per-account store is PostgreSQL (edu_study on nn:5432). Same pins
+#   as the CoreX console (platform/console/main/requirements-fastapi.txt:90-91): the pure-Python
+#   frontend plus the compiled libpq backend, as two flat lines. Installed into
+#   /home/ubuntu/edu-study-venv on 23-09-26 and measured: psycopg 3.2.12, impl "binary".
+psycopg==3.2.12
+psycopg-binary==3.2.12
+# ⚑ study-rooms-qna P3 (30-09-26): live quiz rooms over WebSocket. uvicorn 0.52 needs
+#   websockets>=13.0 and auto-selects its sans-I/O implementation, which honours the unit's
+#   --ws-max-size / --ws-per-message-deflate / --ws-ping-interval (measured, M20). 16.1.1 is the
+#   newest for nn's Python 3.10. Installed ONLY by deploy-study.sh --install-unit, which then
+#   asserts `import websockets` before the restart.
+websockets==16.1.1

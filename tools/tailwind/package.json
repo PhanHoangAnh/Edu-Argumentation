@@ -1,0 +1,13 @@
+{
+  "name": "edu-tailwind-build",
+  "private": true,
+  "version": "1.0.0",
+  "description": "Tailwind BUILD toolchain for aws-quiz-app. Lives OUTSIDE aws-quiz-app/ on purpose: deploy.sh rsyncs that whole tree to nn, so a node_modules/ there would ship ~100 MB of build tooling to the study host.",
+  "scripts": {
+    "build": "tailwindcss -c ../../aws-quiz-app/tailwind.config.js -i ./input.css -o ./out/app.css --minify"
+  },
+  "devDependencies": {
+    "tailwindcss": "3.4.19",
+    "@tailwindcss/typography": "0.5.19"
+  }
+}

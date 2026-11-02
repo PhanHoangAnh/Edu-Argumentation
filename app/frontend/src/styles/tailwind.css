@@ -1,0 +1,23 @@
+/* THE TAILWIND BUILD ENTRY for :8792 — item A, 22-09-26.
+ *
+ * Replaces <script src="https://cdn.tailwindcss.com?plugins=typography"> in index.html.
+ * The CDN generated these three layers at RUNTIME by watching the DOM; a real build emits
+ * them once by SCANNING SOURCE (see tailwind.config.js's PURGE LANDMINE header).
+ *
+ * ⚠ CASCADE ORDER IS LOAD-BEARING AND IS WHY THIS FILE IMPORTS app.css RATHER THAN
+ *   main.tsx IMPORTING BOTH.
+ *   In the legacy app the hand-written <style> block sits AFTER the Tailwind block so its
+ *   body / scrollbar / print / #tutorial-content.prose overrides WIN. Under the CDN that
+ *   ordering was accidental — the CDN injected at runtime, so it always lost to a static
+ *   sheet whatever the import order. With a real build both are static CSS in one file and
+ *   SOURCE ORDER DECIDES. `@import` here guarantees app.css lands after `@tailwind
+ *   utilities`, preserving the legacy cascade exactly.
+ *   ⛔ Do not move this import back into main.tsx: Vite would then emit app.css as a
+ *      separate chunk with no ordering guarantee against this one.
+ *
+ * ⛔ KaTeX CSS deliberately stays a CDN <link>/@import (index.html + rich-text-viewer.js's
+ *    shadow style). Offline KaTeX is a Phase 05 item, not this one.
+ */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;

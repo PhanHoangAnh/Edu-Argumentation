@@ -1,0 +1,46 @@
+# Lab — edit and run a lesson's code (ruling R27). Installed by
+# ml/study/Edu-Argumentation/lab/deploy/deploy-lab.sh. Do not edit on the box.
+#
+# Two doors (24-09-26, user report "the Lab button opens the platform page"): nginx's public 443
+# server proxies /lab/ to 127.0.0.1:8798, AND the VPN reader on http://<nn>:8767 is sent to
+# http://<nn>:8798 directly — so the service binds 0.0.0.0. ufw admits 8798 only from the VPN
+# (10.10.100.0/24) plus the cluster LAN's blanket 192.168.100.0/24 rule, exactly like :8767.
+# Port 8798 was measured free; 8793/8794 are Airflow's log servers and must never be used.
+# The unit makes the study stores READ-ONLY for this process (plan D1, gate T2-ro-unit):
+# Lab has no write path to the book files, the progress store or the study web root.
+[Unit]
+Description=FoxAI Edu Lab (run lesson code on the shared runner, :8798)
+After=network.target foxai-edu-study.service
+StartLimitIntervalSec=60
+StartLimitBurst=5
+
+[Service]
+Type=simple
+User=ubuntu
+WorkingDirectory=/srv/foxai/edu-lab/backend
+# Holds EDU_RUNNER_KEY (copied from .68 over a pipe, never argv) + EDU_LAB_RUNNER_URL. 600.
+EnvironmentFile=/home/ubuntu/.config/foxai/edu-lab.env
+Environment=EDU_LAB_ENV_FILE=/home/ubuntu/.config/foxai/edu-lab.env
+Environment=EDU_LIBRARY_DIR=/home/ubuntu/foxai-data/edu-argumentation/library
+Environment=EDU_LEGACY_DATA_DIR=/srv/foxai/edu-study/web/data
+Environment=EDU_LAB_WEB_DIR=/srv/foxai/edu-lab/web
+Environment=EDU_LAB_AUTH_URL=http://127.0.0.1:8767/api/auth/me
+Environment=PYTHONDONTWRITEBYTECODE=1
+Environment=PYTHONUNBUFFERED=1
+ExecStart=/home/ubuntu/edu-lab-venv/bin/uvicorn lab_server:app --host 0.0.0.0 --port 8798 --workers 1 --no-server-header --proxy-headers --forwarded-allow-ips 127.0.0.1
+Restart=always
+RestartSec=3
+MemoryHigh=200M
+MemoryMax=256M
+CPUQuota=100%
+TasksMax=64
+
+NoNewPrivileges=yes
+ProtectSystem=strict
+ReadOnlyPaths=/home/ubuntu/foxai-data /srv/foxai/edu-study
+PrivateTmp=yes
+StandardOutput=journal
+StandardError=journal
+
+[Install]
+WantedBy=multi-user.target

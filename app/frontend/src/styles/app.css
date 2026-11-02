@@ -1,0 +1,310 @@
+/* Seam 9 (shell) — THE APP STYLESHEET. Slice A4/B, 22-09-26.
+ *
+ * ⛔⛔ THIS FILE DID NOT EXIST BEFORE THIS SLICE, AND THAT WAS THE REAL STATE OF STEP B.
+ *     Slices A1-A3 ported markup and state. Every one of B1, B2, B3 and B6 is a CSS
+ *     obligation, and the React app shipped ZERO stylesheets — so each of those traps was
+ *     not "at risk", it was simply ABSENT. Four gates would have gone red on a build that
+ *     typechecked cleanly, which is exactly why "tsc exits 0" is Tier 1 and proves nothing.
+ *
+ * PORTED FROM: aws-quiz-app/index.html's hand-written <style> block (lines 52-169), the
+ * one BELOW the Tailwind block. Copied rule-for-rule, not reinterpreted. Where a rule is
+ * omitted it is named below with the reason.
+ *
+ * ⚠ CASCADE ORDER, stated because it is the one thing that can silently break this file.
+ *   In the legacy app the hand-written <style> sits AFTER the Tailwind block on purpose, so
+ *   its body/scrollbar/print overrides win. Here Tailwind is still the CDN (v3 JIT), which
+ *   appends its generated <style> to <head> AT RUNTIME — i.e. possibly after this bundle's
+ *   stylesheet. So nothing in this file may rely on source order to win. Every rule below
+ *   wins on SPECIFICITY (an id, or a tag+class) or carries an explicit !important that the
+ *   legacy already carried. Do not add a bare single-class rule here that fights a Tailwind
+ *   utility — it will work on one build and lose on the next.
+ *   ⚠ UNVERIFIED: the actual injected order on :8792. Nothing is deployed by this slice;
+ *     this is a reasoned precaution, not a measurement.
+ *
+ * NOT PORTED, each on purpose:
+ *   · .hero-bg      — it fetches a 1920px photo from images.unsplash.com. Phase 03 is
+ *                     read-only, not offline-only, so this is not a violation; it is simply
+ *                     not a trap and not in this slice's scope. The class is unused in the
+ *                     React tree today.
+ *   · .service-card / .glass-header / ::-webkit-scrollbar — appearance only, Tier 4, and no
+ *                     gate in this phase reads them. Listed so the omission is a decision.
+ *
+ * ⚑ `@media print` WAS the one named gap here and it is now CLOSED — ported 22-09-26 by
+ *   slice E at the END of this file (see that block's own header for why the position
+ *   matters). Slice A4/B deliberately left it out rather than write a half-remembered copy;
+ *   it was instead copied rule-for-rule from index.html and diffed byte-for-byte against
+ *   the source. ⛔ Its GATE is still slice E2's and is NOT written yet.
+ */
+
+/* --- THE PAGE ITSELF (ported 22-09-26, EVL fix 003) --------------------------
+   ⛔⛔ THIS RULE WAS NOT PORTED AND THAT IS WHY THE APP WAS WHITE.
+       aws-quiz-app/index.html's <style> opens with exactly this line. Without it the page
+       falls back to the UA default — MEASURED on the deployed :8792 before this fix:
+         getComputedStyle(document.body).backgroundColor === 'rgba(0, 0, 0, 0)'
+         getComputedStyle(document.body).color           === 'rgb(0, 0, 0)'
+       Every `text-white` heading then rendered white-on-white and READ AS MISSING DATA:
+       #welcome-title held the book's full title the whole time and was simply invisible.
+       The reader looked fine only because #content-section carries its own `bg-gray-900`.
+   ⚠ A BARE `body` TAG RULE IS SAFE HERE even though this file may lose the source-order
+     race with the CDN's injected <style> (see the CASCADE ORDER note at the top): Tailwind
+     v3's Preflight sets only `margin` and `line-height` on `body`, never background-color or
+     color, so there is no utility at this specificity to lose to. Do NOT extend this rule
+     with a property a `bg-*`/`text-*` utility also sets. */
+body { background-color: #111827; color: #cbd5e1; -webkit-font-smoothing: antialiased; }
+
+/* --- #root — THE ELEMENT THE LEGACY APP DOES NOT HAVE -----------------------
+   ⛔⛔ D-1: THIS IS WHERE THE READER'S HEIGHT CHAIN BROKE, AND SCROLLING WAS DEAD.
+       The legacy is a static page: <body> contains <header> and #app-container directly, so
+       B3's chain is body -> #app-container -> #tutorial-screen -> #tutorial-article. React
+       mounts into an EXTRA element, #root, that the ported CSS knew nothing about. It
+       defaulted to `display: block` with auto height, so #app-container's `flex-grow` had
+       nothing to grow inside and every box below grew to its content instead.
+
+       MEASURED at 1440x1000 on the deployed :8792, ch2/b7, BEFORE this fix:
+         #tutorial-article  clientHeight 4805 == scrollHeight 4805   (should be ~880)
+         #root              clientHeight 4927   display: block       <-- THE BREAK
+         body.reader-mode   height 1000         overflow: hidden
+       body clips at 1000px and the pane never becomes a scroll container, so NOTHING
+       scrolls anywhere: a 3000px wheel left window.scrollY at 0 and article.scrollTop at 0.
+       The learner could only ever see the first screenful of a block.
+
+   ⚠ TWO rules, and both are needed:
+     · the unconditional one re-creates on #root exactly what `min-h-screen flex flex-col`
+       does on the legacy's <body>, so #app-container has a flex parent on EVERY screen;
+     · the reader-mode one swaps the min-height floor for a hard `height: 100%` cap, because
+       under `body.reader-mode` the requirement inverts — the shell must not be ALLOWED to
+       exceed the viewport, or the pane has no bounded parent to scroll inside.
+       `min-height: 0` is the same flex-child rule as `body.reader-mode #app-container`
+       below: without it a flex item refuses to shrink under its content.
+   ⚑ Proved by the gate suite, not asserted: adding this turns R-B3 (pane capped at the
+     viewport) and R-B7 (scroll reset, which needs a scrollable pane to be observable at
+     all) from RED to GREEN. */
+#root { min-height: 100vh; display: flex; flex-direction: column; }
+body.reader-mode #root { height: 100%; min-height: 0; }
+
+/* --- Page chrome ported with the body rule (22-09-26) -----------------------
+   These three were listed at the top of this file as "NOT PORTED — appearance only, Tier 4,
+   and no gate in this phase reads them". That reasoning held while the phase was porting
+   STRUCTURE. It stopped holding the moment a browser was pointed at the result: the header
+   rendered as a transparent strip over a white page (MEASURED: header background-color
+   `rgba(0, 0, 0, 0)`), and the library cards had no card. Ported rule-for-rule from
+   aws-quiz-app/index.html's <style>, hexes untouched.
+   ⚠ `.hero-bg` is STILL NOT PORTED and that is still deliberate — it fetches a 1920px photo
+     from images.unsplash.com and the class is unused in the React tree. */
+.glass-header { background: rgba(17, 24, 39, 0.75); backdrop-filter: blur(12px); border-bottom: 1px solid rgba(255, 255, 255, 0.05); }
+.service-card { border: 1px solid #374151; background-color: #1f2937; transition: all 0.3s; }
+.service-card:hover:not(:disabled) { border-color: #ef5b5b; box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3); }
+.service-card:hover:not(:disabled) .icon-circle { border-color: #ef5b5b; color: #ef5b5b; }
+/* ── OVERLAY SCROLLBARS, APP-WIDE (25-09-26, user; ported from the CoreX console index.css) ──
+   Invisible at rest; a thumb fades in PER AXIS while that axis is scrolled or while the pointer
+   is on that bar's own strip — classes from overlayScrollbars (JS). Vertical AND horizontal.
+   Brand red everywhere; code (pre / the Lab editor) keeps a quiet grey. Track always transparent. */
+* { scrollbar-width: thin; scrollbar-color: transparent transparent; }
+*::-webkit-scrollbar { width: 8px; height: 8px; }
+*::-webkit-scrollbar-track, *::-webkit-scrollbar-corner { background: transparent; }
+*::-webkit-scrollbar-thumb {
+  background-color: transparent; border-radius: 999px;
+  border: 2px solid transparent; background-clip: padding-box;
+  transition: background-color 220ms ease;
+}
+.is-scrolling-y::-webkit-scrollbar-thumb:vertical, .is-scroll-hover-y::-webkit-scrollbar-thumb:vertical,
+.is-scrolling-x::-webkit-scrollbar-thumb:horizontal, .is-scroll-hover-x::-webkit-scrollbar-thumb:horizontal { background-color: #ef5b5b; }
+.is-scroll-hover-y::-webkit-scrollbar-thumb:vertical:hover, .is-scroll-hover-x::-webkit-scrollbar-thumb:horizontal:hover { background-color: #f87171; }
+.is-scrolling-y, .is-scrolling-x, .is-scroll-hover-y, .is-scroll-hover-x { scrollbar-color: #ef5b5b transparent; } /* Firefox: no per-axis API */
+pre.is-scrolling-y::-webkit-scrollbar-thumb:vertical, pre.is-scroll-hover-y::-webkit-scrollbar-thumb:vertical,
+pre.is-scrolling-x::-webkit-scrollbar-thumb:horizontal, pre.is-scroll-hover-x::-webkit-scrollbar-thumb:horizontal,
+#lab-editor.is-scrolling-y::-webkit-scrollbar-thumb:vertical, #lab-editor.is-scroll-hover-y::-webkit-scrollbar-thumb:vertical,
+#lab-editor.is-scrolling-x::-webkit-scrollbar-thumb:horizontal, #lab-editor.is-scroll-hover-x::-webkit-scrollbar-thumb:horizontal { background-color: #6b7280; }
+pre.is-scrolling-y, pre.is-scrolling-x, pre.is-scroll-hover-y, pre.is-scroll-hover-x,
+#lab-editor.is-scrolling-y, #lab-editor.is-scrolling-x, #lab-editor.is-scroll-hover-y, #lab-editor.is-scroll-hover-x { scrollbar-color: #6b7280 transparent; }
+@media (prefers-reduced-motion: reduce) { *::-webkit-scrollbar-thumb { transition: none; } }
+/* ⚑ 23-09-26 (user): "the page moves a bit" when going to Learn or Account. Measured: the window
+   scrollbar (8px) exists on Home/Settings/Account and NOT on Learn (body.reader-mode is a 100dvh,
+   overflow-hidden shell), and on any page short enough not to scroll. The fixed header is sized to
+   the viewport MINUS the scrollbar, so its right edge — and every centred column — jumped 8px
+   whenever the scrollbar came or went. Reserving the gutter on the root keeps the layout width
+   constant on every page. Overlay scrollbars (phones, macOS default) reserve nothing, so this is
+   a no-op there. gate-r-style R-S-NOSHIFT measures header edges + logo x across the top-bar pages. */
+html { scrollbar-gutter: stable; }
+
+/* --- Screen hiding ---------------------------------------------------------
+   ⛔ The single most load-bearing rule in the app. Screens stay MOUNTED and hide
+      with this class (shell/Screen.tsx). Without the rule every screen renders at
+      once, and the failure reads as "the port is broken" rather than "one CSS
+      declaration is missing". !important is the legacy's, kept verbatim. */
+.hidden-view { display: none !important; }
+
+/* --- B6 · the quiz action bar ----------------------------------------------
+   ⛔ B6: the bar is fixed but stays INSIDE #quiz-screen. `position: fixed` escapes
+      LAYOUT but NOT `display: none` — that is the whole reason the markup nesting
+      (not this file) is the assertion. See quiz/QuizScreen.tsx.
+   ⚑ Both rules below are LOAD-BEARING, not decoration:
+      · #quiz-screen's pb-32 reserves the bar's height, or the bar covers the last
+        option and the page shifts when it appears;
+      · scroll-padding-bottom keeps a keyboard focus ring from landing underneath it
+        — WCAG 2.2 AA, Focus Not Obscured (Minimum). */
+.glass-bar {
+  background: rgba(17, 24, 39, 0.92);
+  backdrop-filter: blur(12px);
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
+}
+html { scroll-padding-bottom: 7rem; }
+@media (prefers-reduced-motion: no-preference) {
+  #action-container:not(.hidden-view) .action-bar-inner { animation: actionBarIn 200ms ease-out; }
+}
+/* Review reminder (quiz/ReviewReminder.tsx, 01-11-26): shakes while cards are due, still when none are. */
+@media (prefers-reduced-motion: no-preference) {
+  #review-reminder.is-due { animation: reviewNudge 3s ease-in-out infinite; }
+}
+@keyframes reviewNudge {
+  0%, 80%, 100% { transform: none; }
+  83% { transform: rotate(-14deg); }
+  86% { transform: rotate(12deg); }
+  89% { transform: rotate(-10deg); }
+  92% { transform: rotate(8deg); }
+  95% { transform: rotate(-4deg); }
+}
+@keyframes actionBarIn {
+  from { opacity: 0; transform: translateY(0.5rem); }
+  to   { opacity: 1; transform: none; }
+}
+
+/* --- Reading scale ---------------------------------------------------------
+   One knob for the whole reading surface; everything else is relative to it, so
+   nothing drifts out of proportion when it changes.
+   ⚠ reader/blocks/TextBlock.tsx sets line-height INLINE from --reading-leading
+     rather than via a Tailwind class, because the prose renders inside
+     <rich-text-viewer>'s shadow DOM whose :host INHERITS line-height. Both halves
+     are needed; neither works alone. */
+:root { --reading-size: 1.1875rem; --reading-leading: 1.8; }
+@media (min-width: 1280px) { :root { --reading-size: 1.25rem; } }
+
+#tutorial-content { font-size: var(--reading-size); line-height: var(--reading-leading); }
+#tutorial-content rich-text-viewer { font-size: inherit; line-height: inherit; }
+#tutorial-content li { line-height: var(--reading-leading); }
+#tutorial-content h2, #tutorial-content h3 { font-size: 1.15em; line-height: 1.35; }
+/* Prose sets its own 1rem; an ID beats it without !important. */
+#tutorial-content.prose :where(p, ul, ol, li, blockquote) { font-size: inherit; line-height: inherit; }
+
+/* --- Figures ---------------------------------------------------------------
+   A diagram SVG carries explicit width/height attributes so its aspect ratio is
+   known; these two rules are what let it scale down on a phone. Plain CSS on
+   purpose — a Tailwind arbitrary variant would put the mobile layout at the mercy
+   of the build. */
+#tutorial-content figure svg { max-width: 100%; height: auto; display: block; }
+#tutorial-content figure img { max-width: 100%; height: auto; }
+#tutorial-content figure { font-size: 1rem; line-height: 1.5; }
+
+#toc-nav button { font-size: 0.95rem; line-height: 1.45; }
+#question-text { font-size: 1.4rem; line-height: 1.5; }
+.option-text { font-size: 1.0625rem; line-height: 1.55; }
+.explanation-text { font-size: 0.975rem; line-height: 1.6; }
+
+/* --- B3 · the reader shell -------------------------------------------------
+   ⛔ The height cap HAS TO START AT <body>. The shell is min-h-screen, so every flex
+      child below it inherits min-height:auto and grows with its content — measured on
+      the legacy app: the article rendered 3367px tall inside an 824px parent and the
+      PAGE scrolled, not the pane. Only the reader takes this; every other screen keeps
+      normal page scrolling.
+   ⛔ The min-h-0 half of the chain lives in the MARKUP (shell/AppShell.tsx's
+      #content-section and reader/ReaderScreen.tsx's #tutorial-screen / #tutorial-article).
+      Break either half and the pane stops scrolling while still LOOKING correct — which
+      is why B7b's scroll gate must first assert scrollHeight > clientHeight + 200 and
+      fail if the fixture cannot scroll at all. On a short block "scrollTop === 0" passes
+      trivially and the gate proves nothing.
+   ⚠ `height: 100vh` then `height: 100dvh` is a deliberate two-line fallback, not a
+      duplicate declaration. Do not "tidy" it to one. */
+body.reader-mode { height: 100vh; height: 100dvh; overflow: hidden; }
+body.reader-mode #app-container { min-height: 0; }
+#content-section.reader-mode { padding: 6px; min-height: 0; }
+
+/* --- B2 · KaTeX stretchy radicals ------------------------------------------
+   ⛔ REQUIRED BY 21 OF 124 EQUATIONS in geron-homl3. Something in the cascade
+      overrides the height KaTeX sets INLINE on its own <svg>, so the sqrt bar rendered
+      1.9px tall over a 70.3px radicand and the fraction appeared OUTSIDE the root —
+      wrong maths on screen, for three days, on a study app.
+      `height: inherit` is KaTeX's OWN declaration; this restores it.
+   ⛔ `!important` is required to win. ⛔ THE RULE MUST STAY .katex-SCOPED: gate A-G18
+      exists precisely because an unscoped `svg { }` rule relayouts the brand logo, the
+      upload icon and the hamburger. The scoping is the fix, not a detail of it.
+   ⚠ It sits BELOW `#tutorial-content figure svg { height: auto }` on purpose — that is
+      the rule it is correcting. Moving either changes which one wins for a KaTeX <svg>
+      that is inside a <figure>, which is every displayed equation in the book. */
+.katex svg { height: inherit !important; }
+
+/* --- B1 · the 0fr -> 1fr explanation reveal --------------------------------
+   ⛔⛔ THE CLOSED STATE IS 41px, NOT 0px, AND THAT IS NOT A BUG.
+       `.explanation-inner` carries `px-6 pb-6 pt-4` (16 + 24 = 40px of vertical padding)
+       and `.explanation-text` a 1px `border-t` => 41px. The row track is 0fr, so the
+       CONTENT collapses; the padding does not.
+   ⛔ THE GATE IS A BAND AND A RATIO, NEVER `=== 41`:
+          35 <= closed <= 45   AND   open > 100   AND   open > 2.5 * closed
+      A literal would turn a correct build red the first time someone changes the padding
+      — the same stale-literal class as F-1 and A-G17's `total === 21`, which this program
+      has now hit four times.
+   ⛔ THE `>= 35` FLOOR IS NOT OPTIONAL. `<= 45` alone passes at 0px, so deleting
+      .explanation-inner's padding entirely would read GREEN. The floor is what makes the
+      gate able to fail in the direction it exists to catch.
+   ⚠ grid-template-rows is the animatable property here. height:auto is not animatable,
+      which is why this is a grid and not a max-height trick. */
+.explanation-text { display: grid; grid-template-rows: 0fr; transition: grid-template-rows 0.4s; }
+.explanation-text.expanded { grid-template-rows: 1fr; }
+.explanation-inner { overflow: hidden; }
+
+/* --- Print (E1b) ------------------------------------------------------------
+   PORTED 22-09-26 (slice E) from aws-quiz-app/index.html's inline <style>, the
+   `@media print` block. Copied RULE FOR RULE from the source file, not rebuilt from
+   a description of it.
+
+   ⛔⛔ WHY THIS BLOCK IS A GATE AND NOT A NICETY. The reader is a fixed-height two-pane
+       shell with its own scrollbars (see B3 above), so it prints as ONE CLIPPED PAGE.
+       Printing has to unpick exactly that: drop the height cap, release the overflow, let
+       the text flow. Without this block a learner who prints a chapter gets page 1 and
+       nothing else.
+
+   ⛔ THE SUPPLEMENTARY 14-ID CHECK IS VACUOUS ON ITS OWN, and that is the trap slice E2
+      must not walk into. All 14 ids below resolve whether or not this block shipped — they
+      are ordinary elements of the app. The PRIMARY assertion is A-G12's own shape, run
+      against the REACT DOM:
+          page.emulateMedia({ media: 'print' }) + getComputedStyle:
+            body.overflow          === 'visible'
+            article overflowY      === 'visible'
+            articleScrollHeight    >   window.innerHeight
+            section padding        === 0
+      RED WHEN this block did not make it out of the inline <style> into the built CSS.
+      ⛔ Do NOT write that gate here — gate files are slice E2's. This is the behaviour it
+         measures.
+
+   The 14 `#id` selectors, enumerated so a future diff is checkable (the 4 colour hexes
+   #fff / #000 / #bbb / #f6f6f6 are NOT selectors and are excluded):
+     #ai-block-status · #block-ai-quiz-btn · #content-section · #next-block-btn ·
+     #prev-block-btn · #progress-container · #toc-backdrop · #toc-panel ·
+     #toc-toggle-btn · #tutorial-article · #tutorial-content · #tutorial-main-title ·
+     #tutorial-screen · #tutorial-to-quiz-btn
+
+   ⚠ POSITION IS LOAD-BEARING, AND IT IS WHY THIS SITS AT THE END OF THE FILE.
+     Almost every declaration below carries the legacy's own `!important` and therefore wins
+     on cascade regardless of order. ONE DOES NOT: `:root { --reading-size: 11.5pt }` has no
+     `!important` and competes at EQUAL SPECIFICITY with the screen `:root` at the top of
+     this file AND with the 1280px `@media` override — and a print page box can be wide
+     enough to match that query. At equal specificity SOURCE ORDER decides, so this block
+     must stay BELOW both or the printed page silently uses the on-screen 1.25rem type
+     scale. Do not relocate it upward. */
+@media print {
+    :root { --reading-size: 11.5pt; --reading-leading: 1.55; }
+    body { background: #fff !important; color: #000 !important; }
+    header, #toc-panel, #toc-backdrop, #progress-container,
+    #prev-block-btn, #next-block-btn, #toc-toggle-btn,
+    #tutorial-to-quiz-btn, #block-ai-quiz-btn, #ai-block-status { display: none !important; }
+    #tutorial-screen { display: block !important; height: auto !important; max-width: none !important; }
+    #tutorial-screen article { height: auto !important; border: 0 !important; box-shadow: none !important;
+                               background: #fff !important; padding: 0 !important; }
+    #tutorial-article { overflow: visible !important; height: auto !important; max-height: none !important; }
+    #tutorial-screen article > div { overflow: visible !important; height: auto !important; padding: 0 !important; }
+    body.reader-mode { height: auto !important; overflow: visible !important; }
+    #content-section, #content-section.reader-mode { padding: 0 !important; display: block !important; }
+    #tutorial-main-title, #tutorial-content, #tutorial-content * { color: #000 !important; }
+    #tutorial-content section { border: 1px solid #bbb !important; background: #f6f6f6 !important;
+                                break-inside: avoid; page-break-inside: avoid; }
+    @page { margin: 16mm; }
+}

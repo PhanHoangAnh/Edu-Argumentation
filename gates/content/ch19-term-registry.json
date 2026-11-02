@@ -1,0 +1,1752 @@
+{
+ "chapter": 19,
+ "flow": [
+  "Get the data",
+  "Set aside a test set",
+  "Explore",
+  "Prepare the data",
+  "Train",
+  "Evaluate",
+  "Fine-tune",
+  "Launch"
+ ],
+ "known": [
+  "ch02-term-registry.json"
+ ],
+ "generated_by": "ml/study/geron-lab/ch19-notes/build_chapter.py",
+ "terms": [
+  {
+   "term": "TensorFlow",
+   "match": [
+    "\\bTensorFlow\\b(?! (Serving|Lite|\\.js))",
+    "\\btf\\.(?!keras|lite|distribute|config|device|io|saved_model)"
+   ],
+   "exclude": [],
+   "definition": "Google's library for neural networks; code calls it tf.",
+   "lesson": 1
+  },
+  {
+   "term": "Keras",
+   "match": [
+    "\\bKeras\\b",
+    "\\btf\\.keras\\b"
+   ],
+   "exclude": [],
+   "definition": "the part of TensorFlow used to build and train neural networks.",
+   "lesson": 1
+  },
+  {
+   "term": "neural network",
+   "match": [
+    "\\bneural net(work)?s?\\b",
+    "\\bnetworks?\\b(?! (interface|API|call|connection|round|protocol|latency|overhead|traffic|transfer))"
+   ],
+   "exclude": [],
+   "definition": "a model built from many small parts (neurons) arranged in layers; each part does a little arithmetic and passes its result on.",
+   "lesson": 1
+  },
+  {
+   "term": "deep learning",
+   "match": [
+    "\\bdeep learning\\b",
+    "\\bdeep neural\\b",
+    "\\bDNNs?\\b"
+   ],
+   "exclude": [],
+   "definition": "machine learning with neural networks of many layers.",
+   "lesson": 9
+  },
+  {
+   "term": "layer",
+   "match": [
+    "\\blayers?\\b"
+   ],
+   "exclude": [],
+   "definition": "a group of neurons working side by side; a network is several layers, each feeding the next.",
+   "lesson": 1
+  },
+  {
+   "term": "weight",
+   "match": [
+    "\\bweights?\\b"
+   ],
+   "exclude": [],
+   "definition": "a number the network learns; each input is multiplied by its weight.",
+   "lesson": 1
+  },
+  {
+   "term": "MNIST",
+   "match": [
+    "\\bMNIST\\b"
+   ],
+   "exclude": [],
+   "definition": "70,000 small (28 × 28 pixel) photos of handwritten digits 0–9, a standard beginner's dataset.",
+   "lesson": 1
+  },
+  {
+   "term": "SavedModel",
+   "match": [
+    "\\bSavedModels?\\b",
+    "\\bsaved model\\b",
+    "saved_model"
+   ],
+   "exclude": [],
+   "definition": "TensorFlow's standard export: a folder holding the computation graph, the weights and the signatures, loadable without your Python code.",
+   "lesson": 1
+  },
+  {
+   "term": "computation graph",
+   "match": [
+    "\\bcomputation(al)? graphs?\\b",
+    "\\bgraphs?\\b"
+   ],
+   "exclude": [],
+   "definition": "the fixed list of operations, in order, that turn an input into an output.",
+   "lesson": 1
+  },
+  {
+   "term": "signature",
+   "match": [
+    "\\bsignatures?\\b",
+    "serving_default"
+   ],
+   "exclude": [],
+   "definition": "the declared name, type and shape of a saved model's inputs and outputs; serving_default is the one Keras creates.",
+   "lesson": 1
+  },
+  {
+   "term": "metagraph",
+   "match": [
+    "\\bmetagraphs?\\b"
+   ],
+   "exclude": [],
+   "definition": "a computation graph plus its signatures, labelled with a tag such as serve.",
+   "lesson": 1
+  },
+  {
+   "term": "export",
+   "match": [
+    "\\bexport(s|ed|ing)?\\b"
+   ],
+   "exclude": [],
+   "definition": "write the trained model to disk in a standard format so another program can use it.",
+   "lesson": 1
+  },
+  {
+   "term": "version folder",
+   "match": [
+    "\\bversion (folder|director(y|ies)|subdirector(y|ies)|number)s?\\b",
+    "\\b000[12]\\b"
+   ],
+   "exclude": [],
+   "definition": "a subfolder named with a zero-padded number (0001, 0002) that holds one version of the exported model.",
+   "lesson": 1
+  },
+  {
+   "term": "preprocessing",
+   "match": [
+    "\\bpreprocess(ing|ed)?\\b"
+   ],
+   "exclude": [],
+   "definition": "the steps that turn raw input into what the model expects, e.g. scaling pixels from 0–255 to 0–1.",
+   "lesson": 1
+  },
+  {
+   "term": "saved_model_cli",
+   "match": [
+    "\\bsaved_model_cli\\b"
+   ],
+   "exclude": [],
+   "definition": "a command-line tool that lists what a SavedModel contains.",
+   "lesson": 1
+  },
+  {
+   "term": "tensor",
+   "match": [
+    "\\btensors?\\b"
+   ],
+   "exclude": [],
+   "definition": "TensorFlow's name for an array of numbers, of any number of dimensions.",
+   "lesson": 1
+  },
+  {
+   "term": "probability",
+   "match": [
+    "\\bprobabilit(y|ies)\\b"
+   ],
+   "exclude": [],
+   "definition": "a number between 0 and 1 saying how likely something is; the model gives one per digit, adding up to 1.",
+   "lesson": 1
+  },
+  {
+   "term": "tf.py_function",
+   "match": [
+    "\\bpy_function\\b"
+   ],
+   "exclude": [],
+   "definition": "a TensorFlow operation that runs ordinary Python code; it cannot be saved in a graph.",
+   "lesson": 1
+  },
+  {
+   "term": "TF Serving",
+   "match": [
+    "\\bTF Serving\\b",
+    "\\bTensorFlow Serving\\b",
+    "tensorflow_model_server",
+    "tensorflow-model-server"
+   ],
+   "exclude": [],
+   "definition": "TensorFlow Serving: a ready-made server program that loads SavedModels from a folder and answers prediction requests over the network.",
+   "lesson": 1
+  },
+  {
+   "term": "server",
+   "match": [
+    "\\bservers?\\b"
+   ],
+   "exclude": [],
+   "definition": "a program (or machine) that waits for requests and answers them.",
+   "lesson": 1
+  },
+  {
+   "term": "client",
+   "match": [
+    "\\bclients?\\b"
+   ],
+   "exclude": [],
+   "definition": "the program that sends a request to a server and uses the answer.",
+   "lesson": 1
+  },
+  {
+   "term": "inference",
+   "match": [
+    "\\binference\\b"
+   ],
+   "exclude": [],
+   "definition": "using a trained model to make predictions (as opposed to training it).",
+   "lesson": 1
+  },
+  {
+   "term": "port",
+   "match": [
+    "\\bports?\\b",
+    "\\b850[01]\\b"
+   ],
+   "exclude": [],
+   "definition": "a numbered door on a computer that a server listens on; TF Serving uses 8500 (gRPC) and 8501 (REST).",
+   "lesson": 2
+  },
+  {
+   "term": "API",
+   "match": [
+    "\\bAPIs?\\b"
+   ],
+   "exclude": [],
+   "definition": "application programming interface: the fixed set of requests a program accepts from other programs.",
+   "lesson": 1
+  },
+  {
+   "term": "REST",
+   "match": [
+    "\\bREST\\b",
+    "\\bRESTful\\b"
+   ],
+   "exclude": [],
+   "definition": "calling a server with ordinary web (HTTP) requests carrying JSON text.",
+   "lesson": 1
+  },
+  {
+   "term": "HTTP",
+   "match": [
+    "\\bHTTP(/1\\.1|/2|S)?\\b"
+   ],
+   "exclude": [],
+   "definition": "the protocol web browsers and servers use to send requests and answers.",
+   "lesson": 1
+  },
+  {
+   "term": "POST request",
+   "match": [
+    "\\bPOST\\b",
+    "requests\\.post"
+   ],
+   "exclude": [],
+   "definition": "an HTTP request that sends data to the server, here the images to predict.",
+   "lesson": 3
+  },
+  {
+   "term": "JSON",
+   "match": [
+    "\\bJSON\\b",
+    "\\bjson\\b"
+   ],
+   "exclude": [],
+   "definition": "a text format for data: lists in [ ], named fields in { }.",
+   "lesson": 1
+  },
+  {
+   "term": "gRPC",
+   "match": [
+    "\\bgRPC\\b",
+    "\\bgrpc\\b"
+   ],
+   "exclude": [],
+   "definition": "a way to call a server that sends compact binary messages instead of JSON text.",
+   "lesson": 2
+  },
+  {
+   "term": "protocol buffer",
+   "match": [
+    "\\bprotocol buffers?\\b",
+    "\\bprotobufs?\\b",
+    "TensorProto",
+    "_pb2\\b"
+   ],
+   "exclude": [],
+   "definition": "a message whose fields are declared in advance in a schema and sent as compact binary.",
+   "lesson": 4
+  },
+  {
+   "term": "stub",
+   "match": [
+    "\\bstubs?\\b"
+   ],
+   "exclude": [],
+   "definition": "a local object whose method calls are turned into network calls to the server.",
+   "lesson": 4
+  },
+  {
+   "term": "synchronous",
+   "match": [
+    "\\bsynchronous(ly)?\\b",
+    "\\bblock(s|ing)?\\b(?! of| diagram)"
+   ],
+   "exclude": [
+    "\\basynchronous"
+   ],
+   "definition": "the caller waits, doing nothing else, until the answer (or a timeout) arrives.",
+   "lesson": 4
+  },
+  {
+   "term": "timeout",
+   "match": [
+    "\\btimeouts?\\b"
+   ],
+   "exclude": [],
+   "definition": "how long a call may wait before it gives up with an error.",
+   "lesson": 4
+  },
+  {
+   "term": "serialization",
+   "match": [
+    "\\bseriali[sz](ation|e|ed|ing|es)\\b",
+    "\\bdeseriali[sz]"
+   ],
+   "exclude": [],
+   "definition": "turning an in-memory value into bytes that can be sent or stored; deserialization is the reverse.",
+   "lesson": 1
+  },
+  {
+   "term": "NumPy array to list",
+   "match": [
+    "\\.tolist\\(\\)"
+   ],
+   "exclude": [],
+   "definition": ".tolist() turns a NumPy array into ordinary Python lists, which JSON can write.",
+   "lesson": 3
+  },
+  {
+   "term": "SSL/TLS",
+   "match": [
+    "\\bSSL\\b",
+    "\\bTLS\\b",
+    "\\binsecure_channel\\b",
+    "\\binsecure\\b"
+   ],
+   "exclude": [],
+   "definition": "encryption for network connections; an insecure channel has none.",
+   "lesson": 4
+  },
+  {
+   "term": "Docker",
+   "match": [
+    "\\bDocker\\b",
+    "\\bdocker\\b"
+   ],
+   "exclude": [],
+   "definition": "a tool that runs a program in a container, isolated from the rest of the computer.",
+   "lesson": 2
+  },
+  {
+   "term": "container",
+   "match": [
+    "\\bcontainers?\\b"
+   ],
+   "exclude": [],
+   "definition": "a packaged program plus everything it needs, run isolated from the host computer.",
+   "lesson": 2
+  },
+  {
+   "term": "container image",
+   "match": [
+    "\\b(container |Docker |serving container )?images? URI\\b",
+    "gcr\\.io"
+   ],
+   "exclude": [],
+   "definition": "the packaged file a container is started from, named by an address such as gcr.io/…",
+   "lesson": 7
+  },
+  {
+   "term": "environment variable",
+   "match": [
+    "\\benvironment variables?\\b",
+    "\\bMODEL_DIR\\b"
+   ],
+   "exclude": [],
+   "definition": "a named setting given to a program by the operating system, outside its code.",
+   "lesson": 2
+  },
+  {
+   "term": "GPG key",
+   "match": [
+    "\\bGPG\\b"
+   ],
+   "exclude": [],
+   "definition": "a signing key that proves downloaded packages come from who they claim to.",
+   "lesson": 2
+  },
+  {
+   "term": "Colab",
+   "match": [
+    "\\bColab\\b",
+    "google\\.colab"
+   ],
+   "exclude": [],
+   "definition": "Google Colab: free notebooks that run on Google's machines in the browser.",
+   "lesson": 2
+  },
+  {
+   "term": "graceful transition",
+   "match": [
+    "\\bgraceful(ly)?\\b",
+    "\\bzero-downtime\\b",
+    "\\bdowntime\\b"
+   ],
+   "exclude": [],
+   "definition": "switching to a new version without dropping a request: new requests go to it, the old one finishes its work first.",
+   "lesson": 2
+  },
+  {
+   "term": "quiesce",
+   "match": [
+    "\\bquiesce[sd]?\\b"
+   ],
+   "exclude": [],
+   "definition": "let a version go idle: it takes no new work and is unloaded after its last request.",
+   "lesson": 5
+  },
+  {
+   "term": "model warmup",
+   "match": [
+    "\\bwarm-?up\\b"
+   ],
+   "exclude": [],
+   "definition": "running a new model on sample inputs before it serves, so the first real requests are not slow.",
+   "lesson": 5
+  },
+  {
+   "term": "rollback",
+   "match": [
+    "\\broll(ing)? ?back\\b",
+    "\\brollbacks?\\b"
+   ],
+   "exclude": [],
+   "definition": "going back to the previous version after a bad release.",
+   "lesson": 1
+  },
+  {
+   "term": "load balancer",
+   "match": [
+    "\\bload[- ]balanc(er|ers|ing|es|ed)\\b"
+   ],
+   "exclude": [],
+   "definition": "a component that shares incoming requests out between several identical servers.",
+   "lesson": 4
+  },
+  {
+   "term": "replica",
+   "match": [
+    "\\breplicas?\\b"
+   ],
+   "exclude": [],
+   "definition": "one of several identical copies (of a server, or of a model during training).",
+   "lesson": 5
+  },
+  {
+   "term": "latency",
+   "match": [
+    "\\blatenc(y|ies)\\b"
+   ],
+   "exclude": [],
+   "definition": "how long one request takes to be answered.",
+   "lesson": 2
+  },
+  {
+   "term": "throughput",
+   "match": [
+    "\\bthroughput\\b"
+   ],
+   "exclude": [],
+   "definition": "how many requests (or examples) are handled per second.",
+   "lesson": 2
+  },
+  {
+   "term": "Google Cloud Platform",
+   "match": [
+    "\\bGCP\\b",
+    "\\bGoogle Cloud\\b(?! Storage| SDK| Shell)"
+   ],
+   "exclude": [],
+   "definition": "Google's rented computing service (GCP): machines, storage and managed services, paid by use.",
+   "lesson": 2
+  },
+  {
+   "term": "Vertex AI",
+   "match": [
+    "\\bVertex( AI)?\\b",
+    "\\baiplatform\\b"
+   ],
+   "exclude": [],
+   "definition": "Google Cloud's managed machine-learning service: it trains, stores and serves models for you.",
+   "lesson": 2
+  },
+  {
+   "term": "project (GCP)",
+   "match": [
+    "\\bproject ID\\b",
+    "\\bproject number\\b",
+    "project_id"
+   ],
+   "exclude": [],
+   "definition": "the container every Google Cloud resource belongs to; its ID is chosen once and never changes.",
+   "lesson": 6
+  },
+  {
+   "term": "billing",
+   "match": [
+    "\\bbill(ing|ed|s)?\\b",
+    "\\bbillable\\b"
+   ],
+   "exclude": [],
+   "definition": "the paid account a cloud project charges its costs to.",
+   "lesson": 3
+  },
+  {
+   "term": "Cloud Shell",
+   "match": [
+    "\\bCloud Shell\\b"
+   ],
+   "exclude": [],
+   "definition": "a free Linux command line in the browser, already set up for Google Cloud.",
+   "lesson": 6
+  },
+  {
+   "term": "Google Cloud SDK",
+   "match": [
+    "\\bGoogle Cloud SDK\\b",
+    "\\bgcloud\\b"
+   ],
+   "exclude": [],
+   "definition": "Google's command-line tools for driving Google Cloud.",
+   "lesson": 6
+  },
+  {
+   "term": "GCS bucket",
+   "match": [
+    "\\bGCS\\b",
+    "\\bbuckets?\\b",
+    "\\bGoogle Cloud Storage\\b",
+    "\\bCloud Storage\\b",
+    "\\bgs://"
+   ],
+   "exclude": [],
+   "definition": "a named container of files in Google Cloud Storage (GCS), addressed as gs://bucket/…",
+   "lesson": 2
+  },
+  {
+   "term": "object storage",
+   "match": [
+    "\\bobject stor(age|e)\\b"
+   ],
+   "exclude": [],
+   "definition": "storage that keeps whole files by name in a flat space, like S3, MinIO or GCS.",
+   "lesson": 7
+  },
+  {
+   "term": "OAuth 2.0",
+   "match": [
+    "\\bOAuth\\b"
+   ],
+   "exclude": [],
+   "definition": "the standard way a person grants a program temporary access to their account.",
+   "lesson": 6
+  },
+  {
+   "term": "service account",
+   "match": [
+    "\\bservice accounts?\\b"
+   ],
+   "exclude": [],
+   "definition": "an identity that belongs to a program rather than a person, with only the permissions its role gives.",
+   "lesson": 6
+  },
+  {
+   "term": "role",
+   "match": [
+    "\\bVertex AI user\\b",
+    "\\broles?\\b(?! of\\b)"
+   ],
+   "exclude": [
+    "\\b(the|a) role (of|in)\\b"
+   ],
+   "definition": "a named set of permissions, e.g. Vertex AI user.",
+   "lesson": 6
+  },
+  {
+   "term": "authentication",
+   "match": [
+    "\\bauthenticat(e|es|ed|ing|ion)\\b",
+    "\\bcredentials?\\b"
+   ],
+   "exclude": [],
+   "definition": "proving who (or which program) is making a request.",
+   "lesson": 4
+  },
+  {
+   "term": "endpoint",
+   "match": [
+    "\\bendpoints?\\b"
+   ],
+   "exclude": [],
+   "definition": "the address clients call for predictions; on Vertex AI, a running service with one or more models behind it.",
+   "lesson": 2
+  },
+  {
+   "term": "auto-scaling",
+   "match": [
+    "\\bauto-?scal(e|es|ed|ing)\\b"
+   ],
+   "exclude": [],
+   "definition": "adding machines automatically when traffic rises and removing them when it falls.",
+   "lesson": 7
+  },
+  {
+   "term": "region",
+   "match": [
+    "\\bregions?\\b",
+    "us-central1"
+   ],
+   "exclude": [],
+   "definition": "the part of the world where cloud machines run, e.g. us-central1.",
+   "lesson": 7
+  },
+  {
+   "term": "machine type",
+   "match": [
+    "\\bmachine[_ ]type\\b",
+    "n1-standard-4"
+   ],
+   "exclude": [],
+   "definition": "the size of a rented cloud machine; n1-standard-4 has 4 virtual CPUs.",
+   "lesson": 7
+  },
+  {
+   "term": "accelerator",
+   "match": [
+    "\\baccelerators?\\b",
+    "\\bK80\\b",
+    "\\bTesla\\b"
+   ],
+   "exclude": [],
+   "definition": "extra hardware, usually a GPU, that speeds up the maths.",
+   "lesson": 7
+  },
+  {
+   "term": "batch prediction",
+   "match": [
+    "\\bbatch predict(ion|ions)?\\b",
+    "batch_predict"
+   ],
+   "exclude": [],
+   "definition": "a job that reads a whole file of inputs, writes all the predictions to files, then stops.",
+   "lesson": 6
+  },
+  {
+   "term": "asynchronous",
+   "match": [
+    "\\basynchronous(ly)?\\b"
+   ],
+   "exclude": [],
+   "definition": "started now, finishing on its own schedule; the caller does not wait for it.",
+   "lesson": 8
+  },
+  {
+   "term": "JSON Lines",
+   "match": [
+    "\\bJSON Lines\\b",
+    "\\.jsonl\\b",
+    "\\bjsonl\\b"
+   ],
+   "exclude": [],
+   "definition": "a text file with one JSON value per line.",
+   "lesson": 8
+  },
+  {
+   "term": "TFRecord",
+   "match": [
+    "\\btf-?record\\b",
+    "\\bTFRecords?\\b"
+   ],
+   "exclude": [],
+   "definition": "TensorFlow's binary file format for a list of examples.",
+   "lesson": 8
+  },
+  {
+   "term": "custom training job",
+   "match": [
+    "\\bCustomTrainingJob\\b",
+    "\\bcustom (training )?jobs?\\b",
+    "\\bCustomJob\\b"
+   ],
+   "exclude": [],
+   "definition": "a Vertex AI job that runs your own training script on machines it rents for you.",
+   "lesson": 19
+  },
+  {
+   "term": "AIP_* variables",
+   "match": [
+    "\\bAIP_[A-Z_]+"
+   ],
+   "exclude": [],
+   "definition": "environment variables Vertex AI sets to tell a training script where to save the model, checkpoints and logs.",
+   "lesson": 19
+  },
+  {
+   "term": "checkpoint",
+   "match": [
+    "\\bcheckpoints?\\b",
+    "\\bcheckpointing\\b"
+   ],
+   "exclude": [],
+   "definition": "a copy of the model saved during training, so a crashed job can resume.",
+   "lesson": 18
+  },
+  {
+   "term": "TensorBoard",
+   "match": [
+    "\\bTensorBoard\\b"
+   ],
+   "exclude": [],
+   "definition": "TensorFlow's tool for viewing training curves and logs.",
+   "lesson": 19
+  },
+  {
+   "term": "callback",
+   "match": [
+    "\\bcallbacks?\\b"
+   ],
+   "exclude": [],
+   "definition": "an object Keras calls at fixed moments during training, e.g. to save a checkpoint.",
+   "lesson": 18
+  },
+  {
+   "term": "tf.io.gfile",
+   "match": [
+    "\\bgfile\\b"
+   ],
+   "exclude": [],
+   "definition": "TensorFlow's file functions; they work on local files and on gs:// paths alike.",
+   "lesson": 18
+  },
+  {
+   "term": "hyperparameter tuning",
+   "match": [
+    "\\bhyperparameter tuning\\b",
+    "\\bHyperparameterTuningJob\\b",
+    "\\btuning service\\b"
+   ],
+   "exclude": [],
+   "definition": "searching automatically for the hyperparameter values that give the best validation score.",
+   "lesson": 19
+  },
+  {
+   "term": "Bayesian optimization",
+   "match": [
+    "\\bBayesian\\b"
+   ],
+   "exclude": [],
+   "definition": "a search that picks each next try where the results so far suggest the most gain.",
+   "lesson": 20
+  },
+  {
+   "term": "trial and study",
+   "match": [
+    "\\btrials?\\b",
+    "\\bstud(y|ies)\\b"
+   ],
+   "exclude": [],
+   "definition": "a trial is one training run with one set of hyperparameters; a study is all the trials of one search.",
+   "lesson": 19
+  },
+  {
+   "term": "hypertune",
+   "match": [
+    "\\bhypertune\\b",
+    "\\bHyperTune\\b"
+   ],
+   "exclude": [],
+   "definition": "a small Google library a training script uses to report its score to the tuning service.",
+   "lesson": 20
+  },
+  {
+   "term": "argparse",
+   "match": [
+    "\\bargparse\\b",
+    "\\bcommand-line arguments?\\b"
+   ],
+   "exclude": [],
+   "definition": "Python's standard way to read settings given on the command line.",
+   "lesson": 19
+  },
+  {
+   "term": "log scale",
+   "match": [
+    "\\blog scale\\b",
+    "scale=\"log\"",
+    "\\blogarithmic\\b"
+   ],
+   "exclude": [],
+   "definition": "a scale where each step multiplies the value (0.001, 0.01, 0.1 …) instead of adding to it.",
+   "lesson": 20
+  },
+  {
+   "term": "Keras Tuner",
+   "match": [
+    "\\bKeras ?Tuner\\b",
+    "\\bKERASTUNER_",
+    "\\boracle\\b"
+   ],
+   "exclude": [],
+   "definition": "a library that runs hyperparameter searches; its chief machine (the oracle) hands out the values to try.",
+   "lesson": 20
+  },
+  {
+   "term": "edge computing",
+   "match": [
+    "\\bedge (computing|devices?)\\b",
+    "\\bembedded\\b"
+   ],
+   "exclude": [],
+   "definition": "running the model on the device where the data is (a phone, a sensor) rather than on a server.",
+   "lesson": 9
+  },
+  {
+   "term": "TensorFlow Lite",
+   "match": [
+    "\\bTFLite\\b",
+    "\\bTensorFlow Lite\\b",
+    "tf\\.lite",
+    "\\.tflite\\b"
+   ],
+   "exclude": [],
+   "definition": "the version of TensorFlow for phones and small devices; it converts models to a compact .tflite file.",
+   "lesson": 9
+  },
+  {
+   "term": "FlatBuffers",
+   "match": [
+    "\\bFlatBuffers?\\b"
+   ],
+   "exclude": [],
+   "definition": "a file format laid out exactly as it is used in memory, so it loads without being parsed.",
+   "lesson": 9
+  },
+  {
+   "term": "fusing operations",
+   "match": [
+    "\\bfus(e|es|ed|ing)\\b"
+   ],
+   "exclude": [],
+   "definition": "replacing two operations by one that does both, e.g. folding batch normalization into the layer before it.",
+   "lesson": 9
+  },
+  {
+   "term": "batch normalization",
+   "match": [
+    "\\bbatch normali[sz]ation\\b"
+   ],
+   "exclude": [],
+   "definition": "a layer that rescales its inputs to a steady range during training.",
+   "lesson": 9
+  },
+  {
+   "term": "quantization",
+   "match": [
+    "\\bquanti[sz](e|es|ed|ing|ation)\\b"
+   ],
+   "exclude": [],
+   "definition": "storing numbers with fewer bits, e.g. 32-bit decimals as 8-bit whole numbers.",
+   "lesson": 9
+  },
+  {
+   "term": "float32 and int8",
+   "match": [
+    "\\b(32|8)-bit\\b",
+    "\\bfloat32\\b",
+    "\\bint8\\b"
+   ],
+   "exclude": [],
+   "definition": "float32 = a decimal number stored in 32 bits (4 bytes); int8 = a whole number from −128 to 127 in 8 bits (1 byte).",
+   "lesson": 3
+  },
+  {
+   "term": "activation (value)",
+   "match": [
+    "\\bactivations\\b"
+   ],
+   "exclude": [],
+   "definition": "the numbers flowing between layers while the model runs.",
+   "lesson": 9
+  },
+  {
+   "term": "calibration",
+   "match": [
+    "\\bcalibrat(e|ion|ed|ing)\\b"
+   ],
+   "exclude": [],
+   "definition": "running sample data through the model to measure the range of its activations.",
+   "lesson": 9
+  },
+  {
+   "term": "quantization-aware training",
+   "match": [
+    "\\bquanti[sz]ation-aware\\b",
+    "\\bfake quanti[sz]ation\\b"
+   ],
+   "exclude": [],
+   "definition": "training with simulated rounding, so the final weights still work once quantized.",
+   "lesson": 9
+  },
+  {
+   "term": "Edge TPU",
+   "match": [
+    "\\bEdge TPU\\b",
+    "\\bTPUs?\\b"
+   ],
+   "exclude": [],
+   "definition": "Google's small chip for running quantized models fast on devices.",
+   "lesson": 9
+  },
+  {
+   "term": "TensorFlow.js",
+   "match": [
+    "\\bTensorFlow\\.js\\b",
+    "\\bTFJS\\b",
+    "@tensorflow"
+   ],
+   "exclude": [],
+   "definition": "the JavaScript version of TensorFlow, which runs models inside a web browser.",
+   "lesson": 10
+  },
+  {
+   "term": "JavaScript",
+   "match": [
+    "\\bJavaScript\\b"
+   ],
+   "exclude": [],
+   "definition": "the programming language web pages run in the browser.",
+   "lesson": 10
+  },
+  {
+   "term": "WebGL",
+   "match": [
+    "\\bWebGL\\b"
+   ],
+   "exclude": [],
+   "definition": "the browser's standard way to use the graphics card.",
+   "lesson": 10
+  },
+  {
+   "term": "MobileNet",
+   "match": [
+    "\\bMobileNet\\b",
+    "\\bmobilenet\\b"
+   ],
+   "exclude": [],
+   "definition": "a small pretrained image classifier, light enough to download into a browser or phone.",
+   "lesson": 10
+  },
+  {
+   "term": "pretrained model",
+   "match": [
+    "\\bpre-?trained\\b"
+   ],
+   "exclude": [],
+   "definition": "a model someone else already trained, ready to use.",
+   "lesson": 10
+  },
+  {
+   "term": "Progressive Web App",
+   "match": [
+    "\\bProgressive Web Apps?\\b",
+    "\\bPWAs?\\b"
+   ],
+   "exclude": [],
+   "definition": "a website that can be installed and opened like a phone or desktop app.",
+   "lesson": 10
+  },
+  {
+   "term": "service worker",
+   "match": [
+    "\\bservice workers?\\b"
+   ],
+   "exclude": [],
+   "definition": "a background browser script that caches files so a web app works offline.",
+   "lesson": 10
+  },
+  {
+   "term": "federated learning",
+   "match": [
+    "\\bfederated\\b"
+   ],
+   "exclude": [],
+   "definition": "training one model across many devices without collecting their data in one place.",
+   "lesson": 10
+  },
+  {
+   "term": "GPU",
+   "match": [
+    "\\bGPUs?\\b",
+    "\\bgpu\\b",
+    "\\bgraphics (processing unit|card)s?\\b"
+   ],
+   "exclude": [],
+   "definition": "graphics processing unit: a chip with thousands of small cores that does the maths of neural networks far faster than a CPU.",
+   "lesson": 1
+  },
+  {
+   "term": "CPU",
+   "match": [
+    "\\bCPUs?\\b",
+    "\\bcpu\\b",
+    "\\bcentral processing unit\\b"
+   ],
+   "exclude": [],
+   "definition": "the computer's main processor.",
+   "lesson": 1
+  },
+  {
+   "term": "core",
+   "match": [
+    "\\bcores?\\b"
+   ],
+   "exclude": [],
+   "definition": "one of the processors inside a CPU (or GPU) that can work at the same time as the others.",
+   "lesson": 1
+  },
+  {
+   "term": "VRAM",
+   "match": [
+    "\\bVRAM\\b",
+    "\\bGPU RAM\\b"
+   ],
+   "exclude": [],
+   "definition": "the memory on the graphics card itself.",
+   "lesson": 5
+  },
+  {
+   "term": "RAM",
+   "match": [
+    "\\bRAM\\b"
+   ],
+   "exclude": [],
+   "definition": "a computer's working memory.",
+   "lesson": 5
+  },
+  {
+   "term": "Nvidia driver",
+   "match": [
+    "\\bdrivers?\\b"
+   ],
+   "exclude": [],
+   "definition": "the software that lets the operating system talk to the graphics card.",
+   "lesson": 10
+  },
+  {
+   "term": "CUDA",
+   "match": [
+    "\\bCUDA\\b"
+   ],
+   "exclude": [],
+   "definition": "Nvidia's software for general-purpose computing on its GPUs.",
+   "lesson": 2
+  },
+  {
+   "term": "cuDNN",
+   "match": [
+    "\\bcuDNN\\b"
+   ],
+   "exclude": [],
+   "definition": "Nvidia's library of fast implementations of neural-network operations such as convolutions.",
+   "lesson": 2
+  },
+  {
+   "term": "nvidia-smi",
+   "match": [
+    "\\bnvidia-smi\\b"
+   ],
+   "exclude": [],
+   "definition": "a command that lists the Nvidia cards, their memory use and the programs using them.",
+   "lesson": 11
+  },
+  {
+   "term": "compute capability",
+   "match": [
+    "\\bcompute capability\\b"
+   ],
+   "exclude": [],
+   "definition": "Nvidia's version number for what a card's hardware can do.",
+   "lesson": 11
+  },
+  {
+   "term": "physical and logical device",
+   "match": [
+    "\\bphysical (device|GPU)s?\\b",
+    "\\blogical (device|GPU)s?\\b",
+    "list_physical_devices",
+    "LogicalDeviceConfiguration"
+   ],
+   "exclude": [],
+   "definition": "a physical device is a real card; a logical device is a slice of one that TensorFlow treats as a whole device.",
+   "lesson": 11
+  },
+  {
+   "term": "memory fragmentation",
+   "match": [
+    "\\bfragmentation\\b"
+   ],
+   "exclude": [],
+   "definition": "free memory broken into pieces too small to use.",
+   "lesson": 12
+  },
+  {
+   "term": "out-of-memory error",
+   "match": [
+    "\\bout-of-memory\\b",
+    "\\bOOM\\b"
+   ],
+   "exclude": [],
+   "definition": "the error a program gets when it asks for more memory than is free.",
+   "lesson": 12
+  },
+  {
+   "term": "CUDA_VISIBLE_DEVICES",
+   "match": [
+    "\\bCUDA_VISIBLE_DEVICES\\b",
+    "\\bCUDA_DEVICE_ORDER\\b",
+    "\\bPCI_BUS_ID\\b"
+   ],
+   "exclude": [],
+   "definition": "environment variables that choose which GPU cards a program may see, and in what order they are numbered.",
+   "lesson": 12
+  },
+  {
+   "term": "memory growth",
+   "match": [
+    "\\bmemory growth\\b",
+    "set_memory_growth",
+    "TF_FORCE_GPU_ALLOW_GROWTH"
+   ],
+   "exclude": [],
+   "definition": "letting TensorFlow take GPU memory as it needs it instead of all at once (it never gives it back).",
+   "lesson": 12
+  },
+  {
+   "term": "device placement",
+   "match": [
+    "\\bplacements?\\b",
+    "tf\\.device"
+   ],
+   "exclude": [],
+   "definition": "which device (CPU or which GPU) a variable or operation runs on; TensorFlow chooses unless you say.",
+   "lesson": 11
+  },
+  {
+   "term": "kernel (device)",
+   "match": [
+    "\\bkernels?\\b"
+   ],
+   "exclude": [],
+   "definition": "the implementation of one operation for one device and data type; no GPU kernel means it runs on the CPU.",
+   "lesson": 5
+  },
+  {
+   "term": "tf.Variable",
+   "match": [
+    "\\btf\\.Variable\\b",
+    "\\b[Vv]ariables?\\b(?![/.])"
+   ],
+   "exclude": [
+    "\\benvironment variables?\\b",
+    "AIP_\\S* variables"
+   ],
+   "definition": "a tensor whose value can be updated, such as a model's weights.",
+   "lesson": 1
+  },
+  {
+   "term": "context manager",
+   "match": [
+    "\\bcontext managers?\\b",
+    "\\bwith\\b block",
+    "`with`"
+   ],
+   "exclude": [],
+   "definition": "a Python with-block that switches something on for the lines inside it and off after.",
+   "lesson": 13
+  },
+  {
+   "term": "soft placement",
+   "match": [
+    "\\bsoft (device )?placement\\b"
+   ],
+   "exclude": [],
+   "definition": "if you ask for a device that is not there, TensorFlow silently uses its default choice instead.",
+   "lesson": 13
+  },
+  {
+   "term": "TF function",
+   "match": [
+    "\\bTF functions?\\b",
+    "@tf\\.function",
+    "\\btf\\.function\\b"
+   ],
+   "exclude": [],
+   "definition": "a Python function TensorFlow has turned into a graph, so it can plan and parallelize the operations.",
+   "lesson": 14
+  },
+  {
+   "term": "dependency counter",
+   "match": [
+    "\\bdependency counters?\\b",
+    "\\bcounts the dependencies\\b"
+   ],
+   "exclude": [],
+   "definition": "for each operation, how many of its inputs are not ready yet; it runs when this reaches 0.",
+   "lesson": 14
+  },
+  {
+   "term": "inter-op and intra-op threads",
+   "match": [
+    "\\binter-op\\b",
+    "\\bintra-op\\b"
+   ],
+   "exclude": [],
+   "definition": "inter-op threads run different operations at the same time; intra-op threads split one operation's work.",
+   "lesson": 14
+  },
+  {
+   "term": "thread",
+   "match": [
+    "\\bthreads?\\b",
+    "\\bmultithreaded\\b"
+   ],
+   "exclude": [],
+   "definition": "one line of work a program runs; several threads can run at once on several cores.",
+   "lesson": 4
+  },
+  {
+   "term": "matrix multiplication",
+   "match": [
+    "\\bmatrix multipl(y|ication|ications)\\b",
+    "\\bmatmul\\b"
+   ],
+   "exclude": [],
+   "definition": "the core arithmetic of neural networks: many multiply-and-add operations over two tables of numbers.",
+   "lesson": 13
+  },
+  {
+   "term": "stateful operation",
+   "match": [
+    "\\bstateful operations?\\b"
+   ],
+   "exclude": [],
+   "definition": "an operation that changes something that stays, such as updating a variable.",
+   "lesson": 14
+  },
+  {
+   "term": "model parallelism",
+   "match": [
+    "\\bmodel parallelism\\b"
+   ],
+   "exclude": [],
+   "definition": "splitting one model into pieces that run on different devices.",
+   "lesson": 15
+  },
+  {
+   "term": "data parallelism",
+   "match": [
+    "\\bdata parallelism\\b",
+    "\\bdata-parallel\\b",
+    "\\bSPMD\\b"
+   ],
+   "exclude": [],
+   "definition": "putting a full copy of the model on every device, each training on a different slice of every batch.",
+   "lesson": 16
+  },
+  {
+   "term": "fully connected",
+   "match": [
+    "\\bfully connected\\b",
+    "\\bdense (layer|model)s?\\b",
+    "\\bDense\\b"
+   ],
+   "exclude": [],
+   "definition": "a layer where every input feeds every neuron; Keras calls it a Dense layer.",
+   "lesson": 1
+  },
+  {
+   "term": "convolutional",
+   "match": [
+    "\\bconvolution(al|s)?\\b",
+    "\\bCNNs?\\b"
+   ],
+   "exclude": [],
+   "definition": "a network whose layers each look only at small neighbouring patches of the input (used for images).",
+   "lesson": 2
+  },
+  {
+   "term": "recurrent",
+   "match": [
+    "\\brecurrent\\b",
+    "\\bRNNs?\\b",
+    "\\bLSTMs?\\b"
+   ],
+   "exclude": [],
+   "definition": "a network that reads a sequence one step at a time, carrying a memory forward (LSTM is a common kind).",
+   "lesson": 15
+  },
+  {
+   "term": "pipeline parallelism",
+   "match": [
+    "\\bpipelin(e|ed|ing) (parallelism|execution)\\b",
+    "\\bPipeDream\\b"
+   ],
+   "exclude": [],
+   "definition": "each device runs one stage, passing its result on, so all stages work at once on different items.",
+   "lesson": 15
+  },
+  {
+   "term": "mini-batch",
+   "match": [
+    "\\bmini-?batch(es)?\\b",
+    "\\bsub-batch(es)?\\b"
+   ],
+   "exclude": [],
+   "definition": "the small group of training examples used for one training step.",
+   "lesson": 16
+  },
+  {
+   "term": "gradient",
+   "match": [
+    "\\bgradients?\\b"
+   ],
+   "exclude": [],
+   "definition": "for each weight, how much and in which direction to change it to reduce the error.",
+   "lesson": 9
+  },
+  {
+   "term": "epoch",
+   "match": [
+    "\\bepochs?\\b"
+   ],
+   "exclude": [],
+   "definition": "one pass of training over the whole training set.",
+   "lesson": 1
+  },
+  {
+   "term": "learning rate",
+   "match": [
+    "\\blearning[_ ]rates?\\b"
+   ],
+   "exclude": [],
+   "definition": "how big a step training takes each time it changes the weights.",
+   "lesson": 1
+  },
+  {
+   "term": "AllReduce",
+   "match": [
+    "\\bAllReduce\\b",
+    "\\ball-reduce\\b",
+    "NcclAllReduce",
+    "\\bNCCL\\b"
+   ],
+   "exclude": [],
+   "definition": "the devices exchange their gradients so that every one ends up with the same average.",
+   "lesson": 16
+  },
+  {
+   "term": "mirrored strategy",
+   "match": [
+    "\\bmirrored strateg(y|ies)\\b",
+    "\\bMirroredStrategy\\b",
+    "\\bMirroredVariable\\b",
+    "\\bmirrored variables?\\b"
+   ],
+   "exclude": [
+    "MultiWorkerMirroredStrategy"
+   ],
+   "definition": "data parallelism where every GPU holds a full copy of the weights and all copies are updated identically.",
+   "lesson": 16
+  },
+  {
+   "term": "parameter server",
+   "match": [
+    "\\bparameter servers?\\b",
+    "\\bParameterServerStrategy\\b",
+    "\\bcentral(i[sz]ed)? parameters\\b",
+    "\\bCentralStorageStrategy\\b"
+   ],
+   "exclude": [],
+   "definition": "a machine (or device) that holds the model's weights centrally while others compute the gradients.",
+   "lesson": 16
+  },
+  {
+   "term": "stale gradients",
+   "match": [
+    "\\bstale\\b"
+   ],
+   "exclude": [],
+   "definition": "gradients computed with weights that other replicas have already changed.",
+   "lesson": 16
+  },
+  {
+   "term": "bandwidth",
+   "match": [
+    "\\bbandwidth\\b"
+   ],
+   "exclude": [],
+   "definition": "how much data a connection can carry per second.",
+   "lesson": 4
+  },
+  {
+   "term": "sparse model",
+   "match": [
+    "\\bsparse\\b"
+   ],
+   "exclude": [],
+   "definition": "a model whose gradients are mostly zeros, so there is little to send between devices.",
+   "lesson": 9
+  },
+  {
+   "term": "distribution strategy",
+   "match": [
+    "\\bdistribution strateg(y|ies)\\b",
+    "\\bDistribution Strategies API\\b",
+    "tf\\.distribute",
+    "\\bstrategy\\.scope\\b",
+    "\\bscope\\b"
+   ],
+   "exclude": [],
+   "definition": "TensorFlow's way to run the same training code on several devices; you build the model inside strategy.scope().",
+   "lesson": 17
+  },
+  {
+   "term": "TensorFlow cluster",
+   "match": [
+    "\\bTensorFlow clusters?\\b",
+    "\\bcluster (layout|specification|map)\\b"
+   ],
+   "exclude": [],
+   "definition": "a group of TensorFlow processes (tasks) on one or more machines, working on one job.",
+   "lesson": 18
+  },
+  {
+   "term": "task",
+   "match": [
+    "\\bTF servers?\\b",
+    "task_id",
+    "task_type",
+    "\\btask types?\\b",
+    "\\beach task\\b",
+    "\\btasks \\("
+   ],
+   "exclude": [],
+   "definition": "one process in a TensorFlow cluster, with a role (worker, chief …) and a number.",
+   "lesson": 18
+  },
+  {
+   "term": "worker",
+   "match": [
+    "\\bworkers?\\b"
+   ],
+   "exclude": [
+    "\\bservice workers?\\b"
+   ],
+   "definition": "a task that does the model's computations.",
+   "lesson": 8
+  },
+  {
+   "term": "chief",
+   "match": [
+    "\\bchief\\b"
+   ],
+   "exclude": [],
+   "definition": "the one worker that also writes the logs and checkpoints.",
+   "lesson": 18
+  },
+  {
+   "term": "evaluator",
+   "match": [
+    "\\bevaluator\\b"
+   ],
+   "exclude": [],
+   "definition": "a task that only evaluates the model; rarely used.",
+   "lesson": 18
+  },
+  {
+   "term": "TF_CONFIG",
+   "match": [
+    "\\bTF_CONFIG\\b",
+    "\\bTFConfigClusterResolver\\b",
+    "\\bresolver\\b"
+   ],
+   "exclude": [],
+   "definition": "an environment variable (read through a resolver) that gives each process the cluster's map and its own role.",
+   "lesson": 18
+  },
+  {
+   "term": "MultiWorkerMirroredStrategy",
+   "match": [
+    "\\bMultiWorkerMirroredStrategy\\b"
+   ],
+   "exclude": [],
+   "definition": "the mirrored strategy across several machines, averaging gradients over the network.",
+   "lesson": 17
+  },
+  {
+   "term": "collective operation",
+   "match": [
+    "\\bcollective\\b"
+   ],
+   "exclude": [],
+   "definition": "an operation every worker must take part in at the same moment, such as AllReduce.",
+   "lesson": 17
+  },
+  {
+   "term": "IP address",
+   "match": [
+    "\\bIP address(es)?\\b"
+   ],
+   "exclude": [],
+   "definition": "the number that identifies a machine on a network.",
+   "lesson": 18
+  },
+  {
+   "term": "TCP",
+   "match": [
+    "\\bTCP\\b"
+   ],
+   "exclude": [],
+   "definition": "the standard way two computers on a network keep a connection open; a TCP port number picks which program on the machine answers.",
+   "lesson": 4
+  },
+  {
+   "term": "shape",
+   "match": [
+    "\\bshapes?\\b"
+   ],
+   "exclude": [],
+   "definition": "the size of each dimension of an array, e.g. (3, 28, 28) = 3 images of 28 × 28 pixels; -1 in a shape means \"any number\".",
+   "lesson": 1
+  },
+  {
+   "term": "ReLU",
+   "match": [
+    "\\brelu\\b"
+   ],
+   "exclude": [],
+   "definition": "an activation that keeps a positive sum as it is and turns a negative one into 0.",
+   "lesson": 1
+  },
+  {
+   "term": "softmax",
+   "match": [
+    "\\bsoftmax\\b"
+   ],
+   "exclude": [],
+   "definition": "an output activation that turns the last layer's numbers into probabilities, one per class, adding up to 1.",
+   "lesson": 1
+  },
+  {
+   "term": "loss",
+   "match": [
+    "\\bloss(es)?\\b"
+   ],
+   "exclude": [
+    "accuracy loss",
+    "loss of accuracy"
+   ],
+   "definition": "the one number saying how wrong the model's answers are; training changes the weights to make it smaller.",
+   "lesson": 1
+  },
+  {
+   "term": "optimizer",
+   "match": [
+    "\\boptimi[sz]ers?\\b"
+   ],
+   "exclude": [],
+   "definition": "the method that changes the weights after each batch to lower the loss, e.g. SGD.",
+   "lesson": 1
+  },
+  {
+   "term": "SGD",
+   "match": [
+    "\\bSGD\\b"
+   ],
+   "exclude": [],
+   "definition": "the basic optimizer: after each small batch, it moves every weight a small step in the direction that lowers the loss.",
+   "lesson": 1
+  },
+  {
+   "term": "accuracy",
+   "match": [
+    "\\baccuracy\\b"
+   ],
+   "exclude": [],
+   "definition": "the share of examples the model gets right.",
+   "lesson": 1
+  },
+  {
+   "term": "argmax",
+   "match": [
+    "\\bargmax\\b"
+   ],
+   "exclude": [],
+   "definition": "the position of the largest value in a list; for our ten probabilities, the predicted digit.",
+   "lesson": 3
+  },
+  {
+   "term": "principal",
+   "match": [
+    "\\bprincipals?\\b"
+   ],
+   "exclude": [],
+   "definition": "an identity that can be given permissions: a person's account or a service account.",
+   "lesson": 6
+  },
+  {
+   "term": "IAM",
+   "match": [
+    "\\bIAM\\b"
+   ],
+   "exclude": [],
+   "definition": "Identity and Access Management: Google Cloud's list of which principal may do what; an IAM binding gives one principal one role.",
+   "lesson": 6
+  },
+  {
+   "term": "blob",
+   "match": [
+    "\\bblobs?\\b"
+   ],
+   "exclude": [],
+   "definition": "Cloud Storage's word for one stored file (its bytes plus its name) inside a bucket.",
+   "lesson": 7
+  },
+  {
+   "term": "pooling",
+   "match": [
+    "\\bpooling\\b"
+   ],
+   "exclude": [],
+   "definition": "a step in image networks that shrinks an image by keeping one value (the largest, or the average) per small block of pixels.",
+   "lesson": 11
+  },
+  {
+   "term": "MiB and GiB",
+   "match": [
+    "\\bMiB\\b",
+    "\\bGiB\\b"
+   ],
+   "exclude": [],
+   "definition": "mebibyte and gibibyte: 1 MiB = 1,024 × 1,024 bytes (about a million), 1 GiB = 1,024 MiB (about a billion bytes). TensorFlow's memory_limit is in MiB.",
+   "lesson": 12
+  },
+  {
+   "term": "horizontal and vertical split",
+   "match": [
+    "\\bhorizontal(ly)?\\b",
+    "\\bvertical(ly)?\\b"
+   ],
+   "exclude": [
+    "horizontal-scaling"
+   ],
+   "definition": "two ways to cut a network across devices: horizontal = whole layers on different devices; vertical = each layer cut in two, one half per device.",
+   "lesson": 15
+  },
+  {
+   "term": "TPUStrategy",
+   "match": [
+    "\\bTPUStrategy\\b",
+    "\\bTPUs\\b"
+   ],
+   "exclude": [],
+   "definition": "the distribution strategy for TPUs (Tensor Processing Units: Google's own chips for neural-network arithmetic, rented on Google Cloud or Colab).",
+   "lesson": 17
+  },
+  {
+   "term": "logits",
+   "match": [
+    "\\blogits?\\b"
+   ],
+   "exclude": [],
+   "definition": "a model's raw output scores, before softmax turns them into probabilities.",
+   "lesson": 18
+  },
+  {
+   "term": "Adam",
+   "match": [
+    "\\bAdam\\b"
+   ],
+   "exclude": [],
+   "definition": "a popular optimizer that gives every weight its own step size, adapted from that weight's recent gradients.",
+   "lesson": 18
+  },
+  {
+   "term": "staging bucket",
+   "match": [
+    "\\bstaging bucket"
+   ],
+   "exclude": [],
+   "definition": "a bucket folder where Vertex AI copies your training script before running it, and where it writes the outputs by default.",
+   "lesson": 19
+  },
+  {
+   "term": "preemptible",
+   "match": [
+    "\\bpreempt\\w*"
+   ],
+   "exclude": [],
+   "definition": "said of cheap rented cloud machines that the cloud may take back at any moment; a job on one is \"preempted\" when that happens.",
+   "lesson": 19
+  },
+  {
+   "term": "dropout",
+   "match": [
+    "\\bdropout\\b"
+   ],
+   "exclude": [],
+   "definition": "a training-only step that switches off random neurons at each training step, so the network cannot rely on any single one; it does nothing at prediction time.",
+   "lesson": 21
+  }
+ ]
+}

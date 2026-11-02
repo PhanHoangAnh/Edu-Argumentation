@@ -1,0 +1,17 @@
+<!doctype html>
+<html lang="en" class="dark">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Lab</title>
+    <link rel="icon" type="image/svg+xml" href="/lab/favicon.svg">
+    <link rel="mask-icon" href="/lab/favicon.svg" color="#ef5b5b">
+    <!-- The study app loads its font the same way (app/frontend/index.html). Tailwind is a
+         BUILD here (ruling R8) — there is no Tailwind CDN tag and there must never be one. -->
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  </head>
+  <body class="min-h-screen flex flex-col">
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>

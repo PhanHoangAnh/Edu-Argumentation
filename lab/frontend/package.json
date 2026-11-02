@@ -1,0 +1,27 @@
+{
+  "name": "edu-lab-frontend",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "description": "Lab — run and edit a lesson's code (ruling R27). Served at /lab/ by the foxai-edu-lab service. Build config copied from app/frontend.",
+  "scripts": {
+    "build": "tsc -b && vite build",
+    "typecheck": "tsc -b --noEmit"
+  },
+  "dependencies": {
+    "@lezer/highlight": "1.2.5",
+    "@lezer/python": "1.1.19",
+    "react": "19.2.7",
+    "react-dom": "19.2.7"
+  },
+  "devDependencies": {
+    "@types/react": "^19.0.0",
+    "@types/react-dom": "^19.0.0",
+    "@vitejs/plugin-react": "^6.0.3",
+    "autoprefixer": "^10.4.21",
+    "postcss": "^8.5.6",
+    "tailwindcss": "^3.4.19",
+    "typescript": "~5.9",
+    "vite": "^8.1.1"
+  }
+}

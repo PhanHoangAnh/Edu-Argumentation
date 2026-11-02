@@ -1,0 +1,64 @@
+{
+ "chrome": {
+  "logo": {
+   "found": true,
+   "display": "block",
+   "w": 32,
+   "h": 32
+  },
+  "upload": {
+   "found": true,
+   "display": "block",
+   "w": 24,
+   "h": 24
+  },
+  "burger": {
+   "found": true,
+   "display": "block",
+   "w": 24,
+   "h": 24
+  }
+ },
+ "outside": {
+  "_README": [
+   "\u26d4 DO NOT 'CORRECT' THE `outside` NUMBERS BACK. READ THIS FIRST.",
+   "",
+   "`outside` was RE-BASELINED on 2026-09-21 (edu-replatform Phase 03 slice C), by explicit user",
+   "ruling, from svg 61.9 / radicand 61.1 to svg 71.2 / radicand 70.3.",
+   "",
+   "WHY THE OLD VALUES WERE WRONG:",
+   "  They were captured while the app loaded Tailwind from https://cdn.tailwindcss.com, which",
+   "  generated CSS AT RUNTIME by watching the DOM. A-G18's probe injects its subtree and measures",
+   "  it immediately, so it measured the element BEFORE the CDN had generated the arbitrary-value",
+   "  class `text-[1.15em]` that the probe (and the real app, js/app.js:1532) puts on it.",
+   "  The old baseline therefore recorded the browser default 16px, not the app's intent.",
+   "",
+   "HOW THAT WAS PROVEN, not argued:",
+   "  Against the post-build app, the SAME probe DOM was rendered twice:",
+   "    WITH    text-[1.15em] -> font-size 18.4px, svg 71.2, radicand 70.3",
+   "    WITHOUT text-[1.15em] -> font-size 16px,   svg 61.9, radicand 61.1  <- the old baseline, exactly",
+   "  Reproducing the old numbers REQUIRED REMOVING a class the app genuinely carries.",
+   "  Corroboration: 71.2/61.9 = 1.1502 and 70.3/61.1 = 1.1506 \u2014 the 1.15em factor, on BOTH numbers.",
+   "",
+   "DERIVED TWICE, IN SEPARATE RUNS (a value captured once is how this happened in the first place):",
+   "  run 1  2026-09-21T10:03:37Z  ->  svg 71.2  radicand 70.3",
+   "  run 2  2026-09-21T10:03:53Z  ->  svg 71.2  radicand 70.3   (identical)",
+   "",
+   "\u26d4 `chrome` WAS NOT TOUCHED, and must not be. logo 32x32 / upload 24x24 / burger 24x24 are",
+   "  A-G18's ACTUAL PURPOSE \u2014 proving the .katex-scoped height fix did not relayout app chrome.",
+   "  All three measured UNCHANGED across the CDN->build swap and across both derivation runs.",
+   "",
+   "\u26a0 REGENERATING THIS FILE WITH `A_G18_WRITE=... node gate-a.mjs` WILL DELETE THIS BLOCK.",
+   "  gate-a.mjs:62 writes only {chrome, outside}. If you regenerate, paste this back."
+  ],
+  "_supersedes": {
+   "svg": 61.9,
+   "radicand": 61.1,
+   "note": "pre-build values, captured under the Tailwind CDN generation race described above"
+  },
+  "found": true,
+  "visible": true,
+  "svg": 71.2,
+  "radicand": 70.3
+ }
+}

@@ -1,0 +1,92 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <!-- ⚑ Phase 04 parity: the legacy's title, favicon and FONT (aws-quiz-app/index.html:6-8, 29).
+         The Plus Jakarta Sans stylesheet was never loaded here, so tailwind.config's
+         fontFamily fell back to the generic sans-serif — visible in every before-shot. -->
+    <title>Platform</title>
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+    <link rel="mask-icon" href="/favicon.svg" color="#ef5b5b">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!--
+      ⛔⛔ THE TAILWIND CDN IS GONE — ITEM A, 22-09-26. DO NOT PUT IT BACK.
+
+      This head used to carry TWO tags that are now deleted:
+        a <script src> to the Tailwind v3 JIT CDN host, with ?plugins=typography
+        a <script> assigning the global `tailwind.config` brand palette
+      (the literal host string is deliberately NOT written here: gate-r-theme.mjs greps the
+       SERVED document for it, and a comment that satisfies a gate is not a gate)
+      The v3 JIT CDN compiled utilities IN THE BROWSER by watching the DOM, reading that
+      global config once at init. It worked, and that is precisely why it survived: the app
+      LOOKED right while the built stylesheet contained ZERO Tailwind utilities and 0 of the
+      10 theme class strings (measured, final EVL, 22-09-26).
+
+      ⛔ IT IS A USER RULING, NOT A PREFERENCE. Ruling R8 (21-09-26) moved :8767 off this
+         exact CDN onto a real build. :8792 REPLACES :8767 at the Phase 06 cutover, so
+         shipping the CDN here would have silently reversed R8 at cutover.
+
+      REPLACED BY, all three required:
+        · tailwind.config.js   — content globs (the purge contract) + the brand palette,
+                                 verbatim from the deleted inline script
+        · postcss.config.js    — what makes Vite expand the @tailwind directives at BUILD
+                                 time; without it the build SUCCEEDS and ships no utilities
+        · src/styles/tailwind.css — the three @tailwind layers, imported by main.tsx BEFORE
+                                 ./styles/app.css so the legacy cascade order is preserved
+
+      ⛔ `?plugins=typography` WAS LOAD-BEARING and is carried across as a real
+         devDependency (@tailwindcss/typography, plugins[] in tailwind.config.js). Dropping
+         it removes every `prose` style, and the damage reads as "the rewrite looks wrong"
+         rather than as a missing dependency.
+      ⛔ KaTeX STAYS ON ITS CDN (the <link> and two <script>s below, plus the @import inside
+         rich-text-viewer.js's shadow style). Offline KaTeX is a Phase 05 item, not this one.
+
+      gates/gate-r-theme.mjs asserts all 10 theme strings live in the BUILT CSS, that the
+      served document neither references nor requests that CDN host, and that a browse of
+      BOTH books yields zero [data-theme-fallback] elements.
+    -->
+
+    <!--
+      A3c — THE TWO GLOBALS <rich-text-viewer> NEEDS. Added by slice A3, not decoration.
+
+      js/rich-text-viewer.js is IMPORTED UNCHANGED from the frozen aws-quiz-app/** tree
+      (sha256 1810c14a7ae16877df7fa93dd0b5770750e6f82d165b761e1f48e36d07331c70) and reads
+      two globals off `window`:
+        · `marked`              (rich-text-viewer.js:64)  — Markdown → HTML
+        · `renderMathInElement`  (rich-text-viewer.js:119) — KaTeX auto-render
+      Both are GUARDED with `typeof x !== 'undefined'`, so a missing tag does NOT throw.
+      It degrades SILENTLY: the shadow root fills with escaped plain text, emits no <p>,
+      and gate A-G6 (which reads the shadow root's <p> line-height) fails on a symptom
+      that looks nothing like "a script tag is missing". That silence is why these are
+      pinned here with a reason attached.
+
+      ⛔ URLS ARE COPIED VERBATIM FROM THE LEGACY app (aws-quiz-app/index.html:45, 48-50),
+         KaTeX version and all. A different KaTeX version is a different renderer.
+      ⛔ KaTeX STAYS ON THE CDN THIS PHASE. Only the TAILWIND CDN drops in Phase 03
+         (Step C, already shipped on :8767); offline KaTeX is a Phase 05 item. The
+         element's own shadow style also @imports katex.min.css (rich-text-viewer.js:72)
+         — that @import styles the SHADOW root, this <link> styles the LIGHT DOM, and
+         both are needed.
+      ⚠ `defer` on the two KaTeX scripts matches the legacy app exactly. auto-render
+         depends on katex, and document order is what orders them.
+    -->
+    <script src="https://cdn.jsdelivr.net/npm/marked/lib/marked.umd.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js"></script>
+  </head>
+  <!--
+    ⛔ `min-h-screen flex flex-col` is VERBATIM from aws-quiz-app/index.html:171 and it is the
+       TOP of B3's height chain, not decoration. #app-container is `flex-grow`, so with no flex
+       parent it has nothing to grow inside. MEASURED before this fix on the deployed :8792:
+       document.body.className was EMPTY.
+  -->
+  <body class="min-h-screen flex flex-col">
+    <!-- The React mount point below is asserted by exit gate G17 against the SERVED
+         document. Do not mention that attribute in a comment: a gate that a comment can
+         satisfy is not a gate. -->
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>

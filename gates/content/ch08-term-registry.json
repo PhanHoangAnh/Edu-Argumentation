@@ -1,0 +1,835 @@
+{
+ "chapter": 8,
+ "flow": [
+  "Get the data",
+  "Set aside a test set",
+  "Explore",
+  "Prepare the data",
+  "Train",
+  "Evaluate",
+  "Fine-tune",
+  "Launch"
+ ],
+ "known": [
+  "ch02-term-registry.json"
+ ],
+ "generated_by": "ml/study/geron-lab/ch08-notes (build_chapter.py)",
+ "terms": [
+  {
+   "term": "dimension",
+   "match": [
+    "\\bdimensions?\\b",
+    "\\b\\d[\\d,]*-(D|dimensional)\\b",
+    "\\b\\d+D\\b",
+    "\\bn-dimensional\\b",
+    "\\bd-dimensional\\b"
+   ],
+   "exclude": [
+    "\\bdimensionality reduction\\b",
+    "\\breduc(e|es|ed|ing) (the )?dimensionality\\b",
+    "\\bcurse of dimensionality\\b"
+   ],
+   "definition": "one input column, seen as one direction in space: a table with 784 columns is a 784-dimensional dataset, and each row is a point in that space.",
+   "lesson": 1
+  },
+  {
+   "term": "dimensionality",
+   "match": [
+    "\\bdimensionality\\b"
+   ],
+   "exclude": [
+    "\\bdimensionality reduction\\b",
+    "\\bcurse of dimensionality\\b",
+    "\\breduc(e|es|ed|ing) (the |a dataset's |its )?dimensionality\\b"
+   ],
+   "definition": "the number of dimensions (columns) a dataset has.",
+   "lesson": 2
+  },
+  {
+   "term": "curse of dimensionality",
+   "match": [
+    "\\bcurse of dimensionality\\b",
+    "\\bthe curse\\b"
+   ],
+   "exclude": [],
+   "definition": "the book's name for everything that goes wrong when a dataset has very many columns: training slows down and good solutions get harder to find.",
+   "lesson": 1
+  },
+  {
+   "term": "dimensionality reduction",
+   "match": [
+    "\\bdimensionality[- ]reduction\\b",
+    "\\breduc(e|es|ed|ing) (the |a dataset's |its )?dimensionality\\b",
+    "\\breduc(e|es|ed|ing) dimensions\\b",
+    "\\bcutting dimensions\\b",
+    "\\bcut dimensions\\b",
+    "\\breducers?\\b"
+   ],
+   "exclude": [],
+   "definition": "turning a table with many columns into one with fewer columns while keeping as much of the useful information as possible.",
+   "lesson": 1
+  },
+  {
+   "term": "MNIST",
+   "match": [
+    "\\bMNIST\\b"
+   ],
+   "exclude": [
+    "\\bFashion MNIST\\b"
+   ],
+   "definition": "a famous dataset of 70,000 small photos of handwritten digits 0 to 9, each 28 × 28 = 784 pixels; the book uses the first 60,000 for training.",
+   "lesson": 1
+  },
+  {
+   "term": "pixel",
+   "match": [
+    "\\bpixels?\\b"
+   ],
+   "exclude": [],
+   "definition": "one dot of an image, stored as one number (for MNIST: 0 = white, 255 = full black).",
+   "lesson": 1
+  },
+  {
+   "term": "visualization",
+   "match": [
+    "\\bvisuali[sz](ation|ations|e|ed|ing)\\b",
+    "\\bvisually\\b"
+   ],
+   "exclude": [],
+   "definition": "drawing the data as a picture (a chart) so a person can see patterns in it.",
+   "lesson": 1
+  },
+  {
+   "term": "unit hypercube",
+   "match": [
+    "\\bhypercubes?\\b",
+    "\\bunit square\\b",
+    "\\bunit cube\\b"
+   ],
+   "exclude": [],
+   "definition": "the box where every coordinate runs from 0 to 1: a unit square in 2 dimensions, a unit cube in 3, a hypercube in more.",
+   "lesson": 1
+  },
+  {
+   "term": "tesseract",
+   "match": [
+    "\\btesseracts?\\b"
+   ],
+   "exclude": [],
+   "definition": "a 4-dimensional cube (Figure 8-1's last drawing).",
+   "lesson": 1
+  },
+  {
+   "term": "sparse",
+   "match": [
+    "\\bsparse\\b(?! ?(matri|random|variant|version|one|projection))",
+    "\\bsparsity\\b"
+   ],
+   "exclude": [
+    "\\bsparse matri(x|ces)\\b",
+    "\\bSparseRandomProjection\\b",
+    "\\balready-sparse data\\b",
+    "\\bsparse data\\b(?= \\(here)"
+   ],
+   "definition": "spread thin: the instances are far apart, with lots of empty space between them.",
+   "lesson": 1
+  },
+  {
+   "term": "extrapolation",
+   "match": [
+    "\\bextrapolat(e|es|ed|ing|ion|ions)\\b"
+   ],
+   "exclude": [],
+   "definition": "predicting for a point far from every training example, instead of between examples you do have (interpolating).",
+   "lesson": 1
+  },
+  {
+   "term": "exponential",
+   "match": [
+    "\\bexponential(ly)?\\b"
+   ],
+   "exclude": [],
+   "definition": "growing by multiplying, not by adding: each extra step multiplies the total (for example doubles it), so it explodes quickly.",
+   "lesson": 1
+  },
+  {
+   "term": "classifier",
+   "match": [
+    "\\bclassifiers?\\b",
+    "\\bClassifier\\b"
+   ],
+   "exclude": [
+    "\\bRandomForestClassifier\\b"
+   ],
+   "definition": "a model that predicts a category (here: which digit an image shows) — the classification version of a regressor.",
+   "lesson": 1
+  },
+  {
+   "term": "projection",
+   "match": [
+    "\\bproject(ion|ions|ed|ing)\\b",
+    "\\bprojects? (onto|every|each|it|the data|down)\\b"
+   ],
+   "exclude": [
+    "\\brandom projections?\\b",
+    "\\bGaussianRandomProjection\\b",
+    "\\bSparseRandomProjection\\b",
+    "\\bprojects? onto a hyperplane that keeps classes\\b"
+   ],
+   "definition": "moving each point straight onto a flat surface (a line or a plane) and reading its position there — like a shadow.",
+   "lesson": 2
+  },
+  {
+   "term": "subspace",
+   "match": [
+    "\\bsubspaces?\\b"
+   ],
+   "exclude": [],
+   "definition": "a flat slice of the full space that passes through its centre: a line inside a plane, or a plane inside 3D space.",
+   "lesson": 2
+  },
+  {
+   "term": "Swiss roll",
+   "match": [
+    "\\bswiss roll\\b",
+    "\\bmake_swiss_roll\\b"
+   ],
+   "exclude": [],
+   "definition": "a toy dataset of points on a flat sheet that has been rolled up in 3D, like a Swiss-roll cake.",
+   "lesson": 2
+  },
+  {
+   "term": "manifold",
+   "match": [
+    "\\bmanifolds?\\b"
+   ],
+   "exclude": [
+    "\\bmanifold learning\\b",
+    "\\bmanifold assumption\\b",
+    "\\bmanifold hypothesis\\b"
+   ],
+   "definition": "a surface that looks flat when you zoom in close, even though it may be bent or rolled up overall (the Swiss roll is a 2D manifold bent into 3D).",
+   "lesson": 2
+  },
+  {
+   "term": "hyperplane",
+   "match": [
+    "\\bhyperplanes?\\b"
+   ],
+   "exclude": [],
+   "definition": "the flat surface one dimension smaller than the space it sits in: a line in 2D, a plane in 3D, and so on.",
+   "lesson": 2
+  },
+  {
+   "term": "manifold learning",
+   "match": [
+    "\\bmanifold learning\\b",
+    "\\bmanifold-learning\\b",
+    "\\bsklearn\\.manifold\\b"
+   ],
+   "exclude": [],
+   "definition": "reducing dimensions by modelling the bent surface the data lies on and unrolling it, instead of flattening it onto a plane.",
+   "lesson": 2
+  },
+  {
+   "term": "manifold assumption",
+   "match": [
+    "\\bmanifold assumption\\b",
+    "\\bmanifold hypothesis\\b"
+   ],
+   "exclude": [],
+   "definition": "the assumption that most real high-dimensional data lies near a much lower-dimensional manifold.",
+   "lesson": 2
+  },
+  {
+   "term": "decision boundary",
+   "match": [
+    "\\bdecision boundar(y|ies)\\b"
+   ],
+   "exclude": [],
+   "definition": "the line or surface a classifier draws between two classes: on one side it predicts one class, on the other side the other.",
+   "lesson": 2
+  },
+  {
+   "term": "feature selection",
+   "match": [
+    "\\bfeature selection\\b"
+   ],
+   "exclude": [],
+   "definition": "reducing columns by keeping some of the original columns and deleting the rest.",
+   "lesson": 2
+  },
+  {
+   "term": "feature extraction",
+   "match": [
+    "\\bfeature extraction\\b"
+   ],
+   "exclude": [],
+   "definition": "reducing columns by computing new columns out of all the old ones (what projection does).",
+   "lesson": 2
+  },
+  {
+   "term": "interpretability",
+   "match": [
+    "\\binterpretab(le|ility)\\b",
+    "\\binterpret\\b"
+   ],
+   "exclude": [],
+   "definition": "how easily a person can say what a column or a model's answer means.",
+   "lesson": 2
+  },
+  {
+   "term": "PCA",
+   "match": [
+    "\\bPCA\\b",
+    "\\bprincipal component analysis\\b"
+   ],
+   "exclude": [
+    "\\bIncrementalPCA\\b"
+   ],
+   "definition": "principal component analysis: the most popular dimensionality-reduction algorithm; it finds the directions along which the data is most spread out and projects onto the first few.",
+   "lesson": 2
+  },
+  {
+   "term": "principal component",
+   "match": [
+    "\\bprincipal components?\\b",
+    "\\bcomponents_\\b"
+   ],
+   "exclude": [],
+   "definition": "one of the directions PCA finds, written as a unit vector. The first keeps the most variance, the second the most of what is left, and so on.",
+   "lesson": 2
+  },
+  {
+   "term": "axis",
+   "match": [
+    "\\bax(is|es)\\b"
+   ],
+   "exclude": [
+    "\\baxis\\s*=",
+    "\\baxis=\\-?\\d\\b",
+    "\\baxis -?\\d\\b"
+   ],
+   "definition": "a direction in space: the original x, y, z axes are the dataset's columns; PCA's new axes are directions it picks through the data.",
+   "lesson": 2
+  },
+  {
+   "term": "orthogonal",
+   "match": [
+    "\\borthogonal(ly)?\\b",
+    "\\bat right angles?\\b",
+    "\\bperpendicular\\b"
+   ],
+   "exclude": [],
+   "definition": "at right angles to each other; two orthogonal directions share nothing, so one says nothing about the other.",
+   "lesson": 2
+  },
+  {
+   "term": "unit vector",
+   "match": [
+    "\\bunit vectors?\\b"
+   ],
+   "exclude": [],
+   "definition": "an arrow of length exactly 1 that only says \"this direction\".",
+   "lesson": 2
+  },
+  {
+   "term": "origin",
+   "match": [
+    "\\borigin\\b"
+   ],
+   "exclude": [
+    "\\borigins?\\b(?= \\()",
+    "\\bPCA's origin\\b"
+   ],
+   "definition": "the point where every coordinate is 0.",
+   "lesson": 3
+  },
+  {
+   "term": "heuristic",
+   "match": [
+    "\\bheuristics?\\b"
+   ],
+   "exclude": [],
+   "definition": "a rule of thumb that usually works but is not guaranteed.",
+   "lesson": 3
+  },
+  {
+   "term": "LDA",
+   "match": [
+    "\\bLDA\\b",
+    "\\blinear discriminant analysis\\b"
+   ],
+   "exclude": [],
+   "definition": "linear discriminant analysis: a classification algorithm whose learned directions keep the classes as far apart as possible; it can also be used to reduce dimensions.",
+   "lesson": 3
+  },
+  {
+   "term": "matrix",
+   "match": [
+    "\\bmatri(x|ces)\\b"
+   ],
+   "exclude": [
+    "\\bsparse matri(x|ces)\\b",
+    "\\bconfusion matrix\\b",
+    "\\bweight matrix\\b"
+   ],
+   "definition": "a grid of numbers, rows by columns — the maths name for a NumPy array with two dimensions.",
+   "lesson": 4
+  },
+  {
+   "term": "SVD",
+   "match": [
+    "\\bSVD\\b",
+    "\\bsingular value decomposition\\b",
+    "\\bsvd\\b"
+   ],
+   "exclude": [],
+   "definition": "singular value decomposition: a standard recipe that splits any matrix X into three matrices U, Σ and V transpose; for PCA, V holds the principal components.",
+   "lesson": 4
+  },
+  {
+   "term": "factorisation",
+   "match": [
+    "\\bfactori[sz](ation|ations|es|ed|e)\\b"
+   ],
+   "exclude": [],
+   "definition": "rewriting one object as a product of simpler ones, the way 12 can be written as 3 × 4.",
+   "lesson": 4
+  },
+  {
+   "term": "transpose",
+   "match": [
+    "\\btranspos(e|ed|es|ing)\\b"
+   ],
+   "exclude": [],
+   "definition": "a matrix flipped over its diagonal, so its rows become columns (written with a raised T).",
+   "lesson": 4
+  },
+  {
+   "term": "linear algebra",
+   "match": [
+    "\\blinear algebra\\b"
+   ],
+   "exclude": [],
+   "definition": "the maths of vectors and matrices (adding them, multiplying them).",
+   "lesson": 4
+  },
+  {
+   "term": "centring",
+   "match": [
+    "\\bcent(ring|ering|red|ered)\\b",
+    "\\bX_centered\\b",
+    "\\bcent(re|er) (the|your) data\\b",
+    "\\bcent(re|er)s? it\\b"
+   ],
+   "exclude": [
+    "\\broughly cent(ered|red)\\b"
+   ],
+   "definition": "subtracting each column's average from every value in it, so each column's new average is 0 and the cloud of points sits around the origin.",
+   "lesson": 3
+  },
+  {
+   "term": "singular values",
+   "match": [
+    "\\bsingular values?\\b",
+    "\\bsigma\\b",
+    "Σ"
+   ],
+   "exclude": [],
+   "definition": "the list s that SVD returns, largest first: how much the data is stretched along each principal component.",
+   "lesson": 4
+  },
+  {
+   "term": "matrix multiplication",
+   "match": [
+    "\\bmatrix multipl(y|ication)\\b",
+    "\\bmultiply\\b(?= (the data|against))",
+    "\\bdot products?\\b"
+   ],
+   "exclude": [],
+   "definition": "the row-by-column arithmetic behind `@` in NumPy: multiply matching entries of a row and a column and add them up, for every row-column pair.",
+   "lesson": 4
+  },
+  {
+   "term": "explained variance ratio",
+   "match": [
+    "\\bexplained[_ ]variance[_ ]ratio_?\\b",
+    "\\bexplained variance\\b"
+   ],
+   "exclude": [],
+   "definition": "for one principal component: the share of the data's total variance that lies along it (0.758 means 75.8%).",
+   "lesson": 5
+  },
+  {
+   "term": "cumulative sum",
+   "match": [
+    "\\bcumulative\\b",
+    "\\bcumsum\\b",
+    "\\brunning total\\b"
+   ],
+   "exclude": [],
+   "definition": "a running total: entry i is the sum of the first i+1 values (np.cumsum).",
+   "lesson": 6
+  },
+  {
+   "term": "elbow",
+   "match": [
+    "\\belbows?\\b"
+   ],
+   "exclude": [],
+   "definition": "the bend in a curve where it stops rising (or falling) steeply and flattens out.",
+   "lesson": 6
+  },
+  {
+   "term": "argmax",
+   "match": [
+    "\\bargmax\\b"
+   ],
+   "exclude": [],
+   "definition": "the POSITION of the largest value in an array (not the value itself); np.argmax.",
+   "lesson": 6
+  },
+  {
+   "term": "accuracy",
+   "match": [
+    "\\baccura(cy|te)\\b"
+   ],
+   "exclude": [],
+   "definition": "for a classifier: the share of instances it labels correctly (0.858 = 85.8%).",
+   "lesson": 1
+  },
+  {
+   "term": "SGDClassifier",
+   "match": [
+    "\\bSGDClassifier\\b"
+   ],
+   "exclude": [],
+   "definition": "Scikit-Learn's linear classifier trained by stochastic gradient descent (a gradient method that learns from one small random sample of rows at a time).",
+   "lesson": 6
+  },
+  {
+   "term": "compression",
+   "match": [
+    "\\bcompress(es|ed|ing|ion|or|ors)?\\b",
+    "\\bdecompress(es|ed|ing|ion)?\\b"
+   ],
+   "exclude": [],
+   "definition": "storing data with fewer numbers; decompression rebuilds (an approximation of) the original.",
+   "lesson": 1
+  },
+  {
+   "term": "reconstruction error",
+   "match": [
+    "\\breconstruction errors?\\b"
+   ],
+   "exclude": [],
+   "definition": "how much a compress-then-decompress round trip loses: the average squared distance between each original point and its rebuilt copy.",
+   "lesson": 5
+  },
+  {
+   "term": "inverse transformation",
+   "match": [
+    "\\binverse[_ ]transform(ation|ations|s)?\\b",
+    "\\binverse\\b(?= step)"
+   ],
+   "exclude": [],
+   "definition": "running a transformation backwards: here, mapping the reduced data back to the original number of columns (inverse_transform).",
+   "lesson": 7
+  },
+  {
+   "term": "lossy",
+   "match": [
+    "\\blossy\\b"
+   ],
+   "exclude": [],
+   "definition": "compression that throws some information away for good (JPEG is lossy; zip is not).",
+   "lesson": 7
+  },
+  {
+   "term": "randomized PCA",
+   "match": [
+    "\\brandomi[sz]ed PCA\\b",
+    "\\bsvd_solver\\b"
+   ],
+   "exclude": [],
+   "definition": "a faster version of PCA that uses random sampling to find only the first d components approximately, instead of computing all of them exactly.",
+   "lesson": 8
+  },
+  {
+   "term": "stochastic",
+   "match": [
+    "\\bstochastic\\b"
+   ],
+   "exclude": [],
+   "definition": "using randomness inside the algorithm, so the result can differ a little from run to run.",
+   "lesson": 6
+  },
+  {
+   "term": "incremental PCA",
+   "match": [
+    "\\bincremental PCA\\b",
+    "\\bIncrementalPCA\\b",
+    "\\bIPCA\\b"
+   ],
+   "exclude": [],
+   "definition": "a version of PCA that learns from the data one chunk (mini-batch) at a time with partial_fit(), so the whole dataset never has to be in memory.",
+   "lesson": 8
+  },
+  {
+   "term": "mini-batch",
+   "match": [
+    "\\bmini-?batch(es)?\\b"
+   ],
+   "exclude": [],
+   "definition": "a small chunk of rows processed in one step, instead of the whole dataset at once.",
+   "lesson": 8
+  },
+  {
+   "term": "partial_fit",
+   "match": [
+    "\\bpartial_fit\\b"
+   ],
+   "exclude": [],
+   "definition": "the Scikit-Learn method that continues learning from one more chunk of data, keeping what was learned from earlier chunks (fit would start over).",
+   "lesson": 8
+  },
+  {
+   "term": "memmap",
+   "match": [
+    "\\bmemmap\\b"
+   ],
+   "exclude": [],
+   "definition": "a NumPy array stored in a file on disk that your code uses like a normal in-memory array; only the pieces you touch are loaded.",
+   "lesson": 8
+  },
+  {
+   "term": "big-O",
+   "match": [
+    "\\bO\\([^)]*\\)"
+   ],
+   "exclude": [],
+   "definition": "shorthand for how cost grows: O(n²) means doubling n makes the work about four times bigger.",
+   "lesson": 8
+  },
+  {
+   "term": "random projection",
+   "match": [
+    "\\brandom projections?\\b",
+    "\\bGaussianRandomProjection\\b",
+    "\\bSparseRandomProjection\\b",
+    "\\brandom_projection\\b"
+   ],
+   "exclude": [],
+   "definition": "reducing dimensions by multiplying the data by a matrix of random numbers — nothing is learned from the data.",
+   "lesson": 5
+  },
+  {
+   "term": "Johnson–Lindenstrauss lemma",
+   "match": [
+    "\\bJohnson[–-]Lindenstrauss\\b",
+    "\\bjohnson_lindenstrauss_min_dim\\b"
+   ],
+   "exclude": [],
+   "definition": "a maths result: a random projection to enough dimensions keeps the distances between points almost unchanged, with high probability; it also gives the minimum number of dimensions.",
+   "lesson": 9
+  },
+  {
+   "term": "lemma",
+   "match": [
+    "\\blemma\\b"
+   ],
+   "exclude": [],
+   "definition": "a proven maths statement (a small theorem).",
+   "lesson": 9
+  },
+  {
+   "term": "epsilon",
+   "match": [
+    "\\bepsilon\\b",
+    "ε",
+    "\\beps\\b"
+   ],
+   "exclude": [],
+   "definition": "the Greek letter ε; here, the tolerance: how much a squared distance may change (0.1 = 10%).",
+   "lesson": 9
+  },
+  {
+   "term": "pairwise distance",
+   "match": [
+    "\\bpairwise distances?\\b"
+   ],
+   "exclude": [],
+   "definition": "the distance between two points, for every pair of points in the data.",
+   "lesson": 9
+  },
+  {
+   "term": "pseudo-inverse",
+   "match": [
+    "\\bpseudo-?inverse\\b"
+   ],
+   "exclude": [],
+   "definition": "the best available stand-in for undoing a matrix multiplication when the matrix is not square and has no true inverse.",
+   "lesson": 9
+  },
+  {
+   "term": "density",
+   "match": [
+    "\\bdensity\\b",
+    "\\bdensity_\\b"
+   ],
+   "exclude": [],
+   "definition": "how full something is: for data, how many points sit in a region of the space; for a table of numbers (b09), the share of its cells that are not zero.",
+   "lesson": 1
+  },
+  {
+   "term": "LLE",
+   "match": [
+    "\\bLLE\\b",
+    "\\blocally linear embedding\\b",
+    "\\bLocallyLinearEmbedding\\b"
+   ],
+   "exclude": [],
+   "definition": "locally linear embedding: a manifold-learning algorithm that describes each point by its nearest neighbours, then finds new low-dimensional positions that keep those same descriptions.",
+   "lesson": 10
+  },
+  {
+   "term": "weight",
+   "match": [
+    "\\bweights?\\b",
+    "\\bweighted\\b"
+   ],
+   "exclude": [
+    "\\bweight matrix\\b"
+   ],
+   "definition": "a number that says how much one input counts when things are multiplied and added up; a bigger weight means that input matters more.",
+   "lesson": 5
+  },
+  {
+   "term": "weight matrix",
+   "match": [
+    "\\bweight matrix\\b"
+   ],
+   "exclude": [],
+   "definition": "all the LLE weights in one table: one row per point, one column per point, zero everywhere except each point's k neighbours.",
+   "lesson": 10
+  },
+  {
+   "term": "embedding",
+   "match": [
+    "\\bembeddings?\\b"
+   ],
+   "exclude": [
+    "\\blocally linear embedding\\b",
+    "\\bLocallyLinearEmbedding\\b"
+   ],
+   "definition": "the new low-dimensional positions an algorithm gives to the points.",
+   "lesson": 10
+  },
+  {
+   "term": "argmin",
+   "match": [
+    "\\bargmin\\b"
+   ],
+   "exclude": [],
+   "definition": "\"the value that makes this smallest\" (np.argmin returns its position).",
+   "lesson": 10
+  },
+  {
+   "term": "constraint",
+   "match": [
+    "\\bconstraints?\\b"
+   ],
+   "exclude": [],
+   "definition": "a limit or rule that must be respected: a memory or time limit, or (b10) a rule the weights must obey.",
+   "lesson": 8
+  },
+  {
+   "term": "quadratic",
+   "match": [
+    "\\bquadratic(ally)?\\b",
+    "\\bsquare of the number of instances\\b",
+    "\\bsquare of the instance count\\b"
+   ],
+   "exclude": [],
+   "definition": "growing with the square: 10 times the rows means 100 times the work.",
+   "lesson": 10
+  },
+  {
+   "term": "MDS",
+   "match": [
+    "\\bMDS\\b",
+    "\\bmultidimensional scaling\\b"
+   ],
+   "exclude": [],
+   "definition": "multidimensional scaling: reduces dimensions while trying to keep the straight-line distance between every pair of points.",
+   "lesson": 11
+  },
+  {
+   "term": "Isomap",
+   "match": [
+    "\\bIsomap\\b"
+   ],
+   "exclude": [],
+   "definition": "reduces dimensions while keeping distances measured ALONG the data's surface (through a graph of neighbours), not straight through space.",
+   "lesson": 11
+  },
+  {
+   "term": "geodesic distance",
+   "match": [
+    "\\bgeodesic\\b"
+   ],
+   "exclude": [],
+   "definition": "distance measured along a surface (or along a graph's links), not in a straight line through the air.",
+   "lesson": 11
+  },
+  {
+   "term": "graph",
+   "match": [
+    "\\bgraphs?\\b"
+   ],
+   "exclude": [],
+   "definition": "points (called nodes) joined by links; here each point is linked to its nearest neighbours.",
+   "lesson": 11
+  },
+  {
+   "term": "t-SNE",
+   "match": [
+    "\\bt-SNE\\b",
+    "\\bTSNE\\b"
+   ],
+   "exclude": [],
+   "definition": "t-distributed stochastic neighbor embedding: reduces dimensions (usually to 2) keeping similar points together and pushing different ones apart; used to look at clusters.",
+   "lesson": 11
+  },
+  {
+   "term": "covariance matrix",
+   "match": [
+    "\\bcovariance matri(x|ces)\\b",
+    "\\bcovariance_eigh\\b"
+   ],
+   "exclude": [],
+   "definition": "a square table with one row and one column per input column, holding how strongly every pair of columns varies together (the diagonal holds each column's variance).",
+   "lesson": 8
+  },
+  {
+   "term": "Matplotlib",
+   "match": [
+    "\\bmatplotlib\\b"
+   ],
+   "exclude": [],
+   "definition": "the Python library for drawing charts (plt.plot, plt.scatter, plt.imshow).",
+   "lesson": 12
+  },
+  {
+   "term": "chaining (reducers)",
+   "match": [
+    "\\bchain(ing|ed)? two\\b",
+    "\\bchain(ing|ed)? (two )?(different )?dimensionality\\b"
+   ],
+   "exclude": [],
+   "definition": "running one reduction after another: a fast one to remove most columns, then a slow one on what is left.",
+   "lesson": 12
+  }
+ ]
+}

@@ -1,1 +1,5 @@
-js/config.js
+# Generated modules are intentionally tracked so the static app works offline.
+edu-argumentation.env
+
+# Python bytecode from edu_server.py
+__pycache__/

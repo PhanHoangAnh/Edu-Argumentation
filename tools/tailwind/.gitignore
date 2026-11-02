@@ -1,0 +1,4 @@
+# The toolchain's own dependencies and build output. ~100 MB — never committed.
+# Reinstall with: cd tools/tailwind && npm install   (pins are in package.json)
+node_modules/
+out/

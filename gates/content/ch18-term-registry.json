@@ -1,0 +1,1201 @@
+{
+ "chapter": 18,
+ "flow": [
+  "Get the data",
+  "Set aside a test set",
+  "Explore",
+  "Prepare the data",
+  "Train",
+  "Evaluate",
+  "Fine-tune",
+  "Launch"
+ ],
+ "known": [
+  "ch02-term-registry.json"
+ ],
+ "generated_by": "ml/study/geron-lab/ch18-notes/build_chapter.py",
+ "terms": [
+  {
+   "term": "reinforcement learning",
+   "match": [
+    "\\breinforcement learning\\b",
+    "\\bRL\\b"
+   ],
+   "exclude": [],
+   "definition": "training a program (an agent) by letting it act and giving it rewards, instead of showing it the right answer.",
+   "lesson": 1
+  },
+  {
+   "term": "agent",
+   "match": [
+    "\\bagents?\\b"
+   ],
+   "exclude": [],
+   "definition": "the program that observes, chooses actions and collects rewards.",
+   "lesson": 1
+  },
+  {
+   "term": "environment",
+   "match": [
+    "\\benvironments?\\b"
+   ],
+   "exclude": [],
+   "definition": "everything the agent acts on: it receives the action and sends back an observation and a reward.",
+   "lesson": 1
+  },
+  {
+   "term": "observation",
+   "match": [
+    "\\bobservations?\\b",
+    "\\bobs\\b"
+   ],
+   "exclude": [],
+   "definition": "what the agent can see of the current situation, e.g. CartPole's 4 numbers.",
+   "lesson": 1
+  },
+  {
+   "term": "action",
+   "match": [
+    "\\bactions?\\b"
+   ],
+   "exclude": [],
+   "definition": "what the agent does at one step, e.g. push the cart left (0) or right (1).",
+   "lesson": 1
+  },
+  {
+   "term": "reward",
+   "match": [
+    "\\brewards?\\b",
+    "\\brewarded\\b"
+   ],
+   "exclude": [],
+   "definition": "the number the environment sends back after each action: positive = good, negative = bad.",
+   "lesson": 1
+  },
+  {
+   "term": "thermostat",
+   "match": [
+    "\\bthermostat\\b"
+   ],
+   "exclude": [],
+   "definition": "the device that switches heating or cooling on and off to keep a room at a set temperature.",
+   "lesson": 1
+  },
+  {
+   "term": "DeepMind",
+   "match": [
+    "\\bDeepMind\\b"
+   ],
+   "exclude": [],
+   "definition": "Google's AI research lab.",
+   "lesson": 1
+  },
+  {
+   "term": "Atari",
+   "match": [
+    "\\bAtari\\b"
+   ],
+   "exclude": [],
+   "definition": "1970s–80s video games, used as a standard test for game-playing agents.",
+   "lesson": 1
+  },
+  {
+   "term": "deep learning",
+   "match": [
+    "\\bdeep learning\\b",
+    "\\bdeep reinforcement\\b"
+   ],
+   "exclude": [],
+   "definition": "machine learning with neural networks of many layers.",
+   "lesson": 1
+  },
+  {
+   "term": "neural network",
+   "match": [
+    "\\bneural net(work)?s?\\b",
+    "\\bnetworks?\\b"
+   ],
+   "exclude": [],
+   "definition": "a model built from many small parts (neurons) arranged in layers; each part does a little arithmetic and passes its result on.",
+   "lesson": 1
+  },
+  {
+   "term": "neuron",
+   "match": [
+    "\\bneurons?\\b"
+   ],
+   "exclude": [],
+   "definition": "one small part of a neural network: a weighted sum of its inputs passed through a fixed curve.",
+   "lesson": 1
+  },
+  {
+   "term": "layer",
+   "match": [
+    "\\blayers?\\b"
+   ],
+   "exclude": [
+    "storage layer"
+   ],
+   "definition": "a group of neurons working side by side; a network is several layers, each feeding the next.",
+   "lesson": 1
+  },
+  {
+   "term": "weight",
+   "match": [
+    "\\bweights?\\b",
+    "\\bweighted\\b"
+   ],
+   "exclude": [],
+   "definition": "a number the network learns; each input is multiplied by its weight.",
+   "lesson": 1
+  },
+  {
+   "term": "credit assignment problem",
+   "match": [
+    "\\bcredit assignment\\b"
+   ],
+   "exclude": [],
+   "definition": "working out which of many earlier actions deserves the credit or blame for a reward that came later.",
+   "lesson": 1
+  },
+  {
+   "term": "episode",
+   "match": [
+    "\\bepisodes?\\b"
+   ],
+   "exclude": [],
+   "definition": "one complete run, from reset until the task ends (the pole falls) or a step limit is hit.",
+   "lesson": 1
+  },
+  {
+   "term": "policy",
+   "match": [
+    "\\bpolic(y|ies)\\b"
+   ],
+   "exclude": [],
+   "definition": "the rule the agent uses to choose an action from an observation.",
+   "lesson": 1
+  },
+  {
+   "term": "policy search",
+   "match": [
+    "\\bpolicy search\\b"
+   ],
+   "exclude": [],
+   "definition": "any method that tries many policies and keeps the ones that collect more reward.",
+   "lesson": 2
+  },
+  {
+   "term": "policy parameters",
+   "match": [
+    "\\bpolicy parameters\\b",
+    "\\bpolicy space\\b"
+   ],
+   "exclude": [],
+   "definition": "the few numbers that define a policy; the policy space is every possible combination of them.",
+   "lesson": 2
+  },
+  {
+   "term": "stochastic",
+   "match": [
+    "\\bstochastic\\b"
+   ],
+   "exclude": [],
+   "definition": "involving chance: the same situation can lead to different actions or outcomes.",
+   "lesson": 2
+  },
+  {
+   "term": "brute force",
+   "match": [
+    "\\bbrute[- ]force\\b"
+   ],
+   "exclude": [],
+   "definition": "trying every combination (or a great many) and keeping the best.",
+   "lesson": 2
+  },
+  {
+   "term": "genetic algorithm",
+   "match": [
+    "\\bgenetic\\b",
+    "\\bevolution(ary)?\\b",
+    "\\bNEAT\\b"
+   ],
+   "exclude": [],
+   "definition": "keep a population of policies, drop the worst, and make copies of the best with small random changes, generation after generation.",
+   "lesson": 2
+  },
+  {
+   "term": "policy gradient",
+   "match": [
+    "\\bpolicy gradients?\\b"
+   ],
+   "exclude": [],
+   "definition": "adjusting the policy's parameters in the direction that increases the reward (using gradients).",
+   "lesson": 2
+  },
+  {
+   "term": "gradient",
+   "match": [
+    "\\bgradients?\\b"
+   ],
+   "exclude": [],
+   "definition": "for one parameter: how much and in which direction a result changes when the parameter is nudged.",
+   "lesson": 2
+  },
+  {
+   "term": "OpenAI Gym",
+   "match": [
+    "\\bGym\\b",
+    "\\bgymnasium\\b",
+    "\\bOpenAI\\b"
+   ],
+   "exclude": [],
+   "definition": "a Python library of simulated environments with one standard interface (reset and step); gymnasium is its maintained successor.",
+   "lesson": 3
+  },
+  {
+   "term": "simulator",
+   "match": [
+    "\\bsimulat(e|ed|es|ion|or|ors|ing)\\b"
+   ],
+   "exclude": [],
+   "definition": "software that imitates a real system, so an agent can practise without real hardware.",
+   "lesson": 1
+  },
+  {
+   "term": "CartPole",
+   "match": [
+    "\\bCartPole\\b"
+   ],
+   "exclude": [],
+   "definition": "the simulated task of keeping a pole balanced on a cart by pushing the cart left or right.",
+   "lesson": 1
+  },
+  {
+   "term": "reset and step",
+   "match": [
+    "\\breset\\(",
+    "\\bstep\\("
+   ],
+   "exclude": [],
+   "definition": "reset() starts an episode and returns the first observation; step(action) does the action and returns what happened.",
+   "lesson": 3
+  },
+  {
+   "term": "action space",
+   "match": [
+    "\\baction space\\b"
+   ],
+   "exclude": [],
+   "definition": "the list of actions an environment accepts, e.g. Discrete(2) = the integers 0 and 1.",
+   "lesson": 3
+  },
+  {
+   "term": "done and truncated",
+   "match": [
+    "\\btruncat(ed|ion)\\b"
+   ],
+   "exclude": [],
+   "definition": "the two ways an episode stops: done = it really ended (the pole fell), truncated = it was cut off by a step limit.",
+   "lesson": 3
+  },
+  {
+   "term": "baseline (RL)",
+   "match": [
+    "\\bbaseline\\b"
+   ],
+   "exclude": [],
+   "definition": "the score of a simple method that any learned one must beat; here the hand-written policy's 41.7 steps.",
+   "lesson": 3
+  },
+  {
+   "term": "sigmoid",
+   "match": [
+    "\\bsigmoid\\b"
+   ],
+   "exclude": [],
+   "definition": "the S-shaped curve that turns any number into one between 0 and 1.",
+   "lesson": 4
+  },
+  {
+   "term": "activation function",
+   "match": [
+    "\\bactivations?\\b",
+    "\\bactivation functions?\\b"
+   ],
+   "exclude": [],
+   "definition": "the fixed curve applied to a neuron's sum.",
+   "lesson": 4
+  },
+  {
+   "term": "softmax",
+   "match": [
+    "\\bsoftmax\\b"
+   ],
+   "exclude": [],
+   "definition": "turns a row of scores into probabilities that add up to 1.",
+   "lesson": 4
+  },
+  {
+   "term": "exploration/exploitation",
+   "match": [
+    "\\bexplor(e|es|ed|ing|ation)\\b",
+    "\\bexploit(s|ed|ing|ation)?\\b"
+   ],
+   "exclude": [],
+   "definition": "the trade-off between trying actions to learn more (exploring) and using the best one known so far (exploiting).",
+   "lesson": 1
+  },
+  {
+   "term": "hidden layer",
+   "match": [
+    "\\bhidden layers?\\b"
+   ],
+   "exclude": [],
+   "definition": "a layer between the input and the output.",
+   "lesson": 4
+  },
+  {
+   "term": "ReLU",
+   "match": [
+    "\\bReLU\\b",
+    "\\brelu\\b"
+   ],
+   "exclude": [],
+   "definition": "the activation max(0, x).",
+   "lesson": 4
+  },
+  {
+   "term": "Keras",
+   "match": [
+    "\\bKeras\\b",
+    "\\btf\\.keras\\b"
+   ],
+   "exclude": [],
+   "definition": "the part of Google's TensorFlow library used to build and train neural networks.",
+   "lesson": 4
+  },
+  {
+   "term": "TensorFlow",
+   "match": [
+    "\\bTensorFlow\\b",
+    "\\btf\\.(?!keras)"
+   ],
+   "exclude": [],
+   "definition": "Google's library for neural networks; code calls it tf.",
+   "lesson": 3
+  },
+  {
+   "term": "Dense layer",
+   "match": [
+    "\\bDense\\b"
+   ],
+   "exclude": [],
+   "definition": "an ordinary layer where every input feeds every neuron.",
+   "lesson": 4
+  },
+  {
+   "term": "compile",
+   "match": [
+    "\\bcompil(e|es|ed|ing)\\b"
+   ],
+   "exclude": [],
+   "definition": "in Keras, fix a model's loss and optimizer before training.",
+   "lesson": 4
+  },
+  {
+   "term": "loss",
+   "match": [
+    "\\bloss(es)?\\b"
+   ],
+   "exclude": [],
+   "definition": "the one number that says how wrong the outputs are; training changes the weights to make it smaller.",
+   "lesson": 4
+  },
+  {
+   "term": "continuous action",
+   "match": [
+    "\\bcontinuous\\b"
+   ],
+   "exclude": [],
+   "definition": "an action that is a dial setting, like a steering angle, not one of a short list.",
+   "lesson": 4
+  },
+  {
+   "term": "sparse and delayed rewards",
+   "match": [
+    "\\bsparse\\b",
+    "\\bdelayed\\b"
+   ],
+   "exclude": [],
+   "definition": "sparse = most steps pay nothing; delayed = the reward comes long after the action that earned it.",
+   "lesson": 5
+  },
+  {
+   "term": "return",
+   "match": [
+    "\\breturns?\\b"
+   ],
+   "exclude": [
+    "\\breturns? (the|a|an|two|one|five|obs|nothing|its|to|value|updated|exactly)",
+    "\\bstep\\(\\) return",
+    "\\breturn [a-z_]+\\b"
+   ],
+   "definition": "an action's discounted sum of all the rewards that came after it.",
+   "lesson": 1
+  },
+  {
+   "term": "discount factor",
+   "match": [
+    "\\bdiscount(ed|ing)?\\b",
+    "\\bgamma\\b",
+    "γ"
+   ],
+   "exclude": [],
+   "definition": "γ (gamma), between 0 and 1: how much a reward one step later counts, compared with one now.",
+   "lesson": 1
+  },
+  {
+   "term": "advantage",
+   "match": [
+    "\\badvantages?\\b"
+   ],
+   "exclude": [],
+   "definition": "how much better (positive) or worse (negative) an action's return was than the average return.",
+   "lesson": 1
+  },
+  {
+   "term": "REINFORCE",
+   "match": [
+    "\\bREINFORCE\\b"
+   ],
+   "exclude": [],
+   "definition": "the basic policy-gradient algorithm: play episodes, then make each action more (or less) likely according to its advantage.",
+   "lesson": 5
+  },
+  {
+   "term": "GradientTape",
+   "match": [
+    "\\bGradientTape\\b",
+    "\\btape\\b"
+   ],
+   "exclude": [],
+   "definition": "TensorFlow's recorder: it remembers the calculations done inside it so their gradients can be computed.",
+   "lesson": 10
+  },
+  {
+   "term": "optimizer",
+   "match": [
+    "\\boptimi[sz]ers?\\b"
+   ],
+   "exclude": [],
+   "definition": "the algorithm that changes the weights using gradients, e.g. Nadam.",
+   "lesson": 4
+  },
+  {
+   "term": "Nadam",
+   "match": [
+    "\\bNadam\\b",
+    "\\bAdam\\b"
+   ],
+   "exclude": [],
+   "definition": "Adam is a popular optimizer that adapts each weight's step size; Nadam is a small improvement of it.",
+   "lesson": 4
+  },
+  {
+   "term": "binary cross-entropy",
+   "match": [
+    "binary_crossentropy",
+    "\\bbinary cross-?entropy\\b"
+   ],
+   "exclude": [],
+   "definition": "the usual loss for a yes/no prediction; used here to compute the gradient that makes the chosen action more likely.",
+   "lesson": 6
+  },
+  {
+   "term": "sample inefficient",
+   "match": [
+    "\\bsample[- ]inefficien(t|cy)\\b"
+   ],
+   "exclude": [],
+   "definition": "needing a very large number of episodes of practice before it improves.",
+   "lesson": 6
+  },
+  {
+   "term": "trainable variables",
+   "match": [
+    "trainable_variables",
+    "\\btrainable\\b"
+   ],
+   "exclude": [],
+   "definition": "the learnable numbers of a model: its weights and biases.",
+   "lesson": 6
+  },
+  {
+   "term": "SGD",
+   "match": [
+    "\\bSGD\\b",
+    "stochastic gradient descent"
+   ],
+   "exclude": [],
+   "definition": "stochastic gradient descent: nudging the weights after every small batch (here, after every sample).",
+   "lesson": 8
+  },
+  {
+   "term": "gradient descent",
+   "match": [
+    "\\bgradient descent\\b"
+   ],
+   "exclude": [],
+   "definition": "the training method: again and again, nudge every weight a little in the direction that lowers the loss.",
+   "lesson": 6
+  },
+  {
+   "term": "Markov chain",
+   "match": [
+    "\\bMarkov chains?\\b"
+   ],
+   "exclude": [],
+   "definition": "states that change at random from step to step, where the next state depends only on the current one.",
+   "lesson": 7
+  },
+  {
+   "term": "Markov decision process",
+   "match": [
+    "\\bMarkov decision process(es)?\\b",
+    "\\bMDPs?\\b"
+   ],
+   "exclude": [],
+   "definition": "a Markov chain where an agent chooses an action at each state, and actions give rewards.",
+   "lesson": 7
+  },
+  {
+   "term": "state",
+   "match": [
+    "\\bstates?\\b"
+   ],
+   "exclude": [
+    "\\bstatement"
+   ],
+   "definition": "the situation the agent is in, e.g. s0, s1 or s2 in Figure 18-8.",
+   "lesson": 1
+  },
+  {
+   "term": "transition probability",
+   "match": [
+    "\\btransition probabilit(y|ies)\\b",
+    "transition_probabilities"
+   ],
+   "exclude": [],
+   "definition": "T(s, a, s′): the chance that action a in state s lands in state s′.",
+   "lesson": 7
+  },
+  {
+   "term": "Bellman equation",
+   "match": [
+    "\\bBellman\\b"
+   ],
+   "exclude": [],
+   "definition": "the value of a state = the reward of the best action plus the discounted value of where it leads, on average.",
+   "lesson": 7
+  },
+  {
+   "term": "optimal state value",
+   "match": [
+    "\\bstate values?\\b",
+    "V\\*"
+   ],
+   "exclude": [],
+   "definition": "V*(s): the discounted rewards the agent can expect from state s if it acts as well as possible.",
+   "lesson": 7
+  },
+  {
+   "term": "Q-value",
+   "match": [
+    "\\bQ-values?\\b",
+    "\\bQ_values\\b",
+    "Q\\*"
+   ],
+   "exclude": [],
+   "definition": "Q(s, a): the discounted rewards the agent can expect after doing action a in state s, then acting as well as possible.",
+   "lesson": 1
+  },
+  {
+   "term": "value iteration",
+   "match": [
+    "\\bvalue iteration\\b"
+   ],
+   "exclude": [],
+   "definition": "computing state values by starting at 0 and applying the Bellman equation over and over.",
+   "lesson": 7
+  },
+  {
+   "term": "dynamic programming",
+   "match": [
+    "\\bdynamic programming\\b"
+   ],
+   "exclude": [],
+   "definition": "solving a problem by reusing the answers to smaller versions of it, round after round.",
+   "lesson": 7
+  },
+  {
+   "term": "argmax",
+   "match": [
+    "\\bargmax\\b"
+   ],
+   "exclude": [],
+   "definition": "the position of the largest value: here, which action has the highest Q-value.",
+   "lesson": 7
+  },
+  {
+   "term": "expected value",
+   "match": [
+    "\\bexpected value\\b"
+   ],
+   "exclude": [],
+   "definition": "the average result, each outcome weighted by its probability.",
+   "lesson": 7
+  },
+  {
+   "term": "temporal difference learning",
+   "match": [
+    "\\btemporal difference\\b",
+    "\\bTD\\b"
+   ],
+   "exclude": [],
+   "definition": "updating a value estimate after every single step, towards (reward + discounted value of the next state).",
+   "lesson": 7
+  },
+  {
+   "term": "learning rate",
+   "match": [
+    "\\blearning[_ ]rates?\\b",
+    "\\balpha\\b",
+    "α"
+   ],
+   "exclude": [],
+   "definition": "α (alpha): what fraction of the way an estimate moves towards the new evidence.",
+   "lesson": 8
+  },
+  {
+   "term": "exploration policy",
+   "match": [
+    "\\bexploration polic(y|ies)\\b"
+   ],
+   "exclude": [],
+   "definition": "the rule used to move around while learning, often completely random.",
+   "lesson": 8
+  },
+  {
+   "term": "bootstrapping",
+   "match": [
+    "\\bbootstrap(ping|s)?\\b"
+   ],
+   "exclude": [],
+   "definition": "updating one estimate using another estimate.",
+   "lesson": 8
+  },
+  {
+   "term": "Q-learning",
+   "match": [
+    "\\bQ-learning\\b"
+   ],
+   "exclude": [],
+   "definition": "learning Q-values from experience alone, by TD updates, without knowing the transition probabilities.",
+   "lesson": 7
+  },
+  {
+   "term": "off-policy",
+   "match": [
+    "\\boff-policy\\b",
+    "\\bon-policy\\b"
+   ],
+   "exclude": [
+    "Soft Actor-Critic: Off-Policy Maximum Entropy[^”]*"
+   ],
+   "definition": "off-policy = learns about one policy (the best) while acting with another (e.g. random); on-policy = learns about the policy it is acting with.",
+   "lesson": 9
+  },
+  {
+   "term": "ε-greedy policy",
+   "match": [
+    "ε-greedy",
+    "\\bepsilon\\b",
+    "\\bε\\b"
+   ],
+   "exclude": [],
+   "definition": "act randomly with probability ε (epsilon), otherwise take the action with the highest Q-value.",
+   "lesson": 9
+  },
+  {
+   "term": "greedy policy",
+   "match": [
+    "\\bgreedy\\b"
+   ],
+   "exclude": [],
+   "definition": "always take the action with the highest current estimate.",
+   "lesson": 4
+  },
+  {
+   "term": "exploration function",
+   "match": [
+    "\\bexploration function\\b",
+    "\\bcuriosity\\b"
+   ],
+   "exclude": [],
+   "definition": "a bonus added to actions that have rarely been tried, so the agent is drawn to them.",
+   "lesson": 9
+  },
+  {
+   "term": "approximate Q-learning",
+   "match": [
+    "\\bapproximate Q-learning\\b"
+   ],
+   "exclude": [],
+   "definition": "Q-learning with a function (e.g. a neural network) estimating the Q-values instead of a table.",
+   "lesson": 9
+  },
+  {
+   "term": "DQN",
+   "match": [
+    "\\bDQNs?\\b",
+    "deep Q-network"
+   ],
+   "exclude": [],
+   "definition": "deep Q-network: a neural network that takes a state and outputs one Q-value per action.",
+   "lesson": 9
+  },
+  {
+   "term": "target Q-value",
+   "match": [
+    "\\btarget Q-values?\\b",
+    "target_Q_values"
+   ],
+   "exclude": [],
+   "definition": "y = the reward observed + γ × the best Q-value predicted for the next state; what the network is trained towards.",
+   "lesson": 9
+  },
+  {
+   "term": "replay buffer",
+   "match": [
+    "\\breplay buffers?\\b",
+    "\\bexperience replay\\b",
+    "replay_buffer"
+   ],
+   "exclude": [],
+   "definition": "a store of past (state, action, reward, next state, done, truncated) steps that training samples from at random.",
+   "lesson": 8
+  },
+  {
+   "term": "one-hot mask",
+   "match": [
+    "\\bmask\\b",
+    "one_hot"
+   ],
+   "exclude": [],
+   "definition": "a row of 0s with a 1 at the position of the action taken, used to keep only that action's Q-value.",
+   "lesson": 10
+  },
+  {
+   "term": "catastrophic forgetting",
+   "match": [
+    "\\bcatastrophic forgetting\\b"
+   ],
+   "exclude": [],
+   "definition": "the network suddenly losing what it had learned in one situation while learning another.",
+   "lesson": 10
+  },
+  {
+   "term": "ELU",
+   "match": [
+    "\\belu\\b"
+   ],
+   "exclude": [],
+   "definition": "an activation like ReLU but with a smooth curve for negative inputs.",
+   "lesson": 10
+  },
+  {
+   "term": "target model",
+   "match": [
+    "\\btarget (model|network|net)s?\\b",
+    "\\bfixed Q-value targets\\b"
+   ],
+   "exclude": [],
+   "definition": "a copy of the network, updated only every so often, used to compute the targets so they hold still.",
+   "lesson": 9
+  },
+  {
+   "term": "online model",
+   "match": [
+    "\\bonline (model|network)\\b"
+   ],
+   "exclude": [],
+   "definition": "the network that learns at every step and chooses the agent's actions.",
+   "lesson": 9
+  },
+  {
+   "term": "Double DQN",
+   "match": [
+    "\\bdouble DQN\\b",
+    "\\bdouble deep Q\\b"
+   ],
+   "exclude": [],
+   "definition": "a DQN where the online model picks the next action and the target model says what it is worth.",
+   "lesson": 9
+  },
+  {
+   "term": "maximization bias",
+   "match": [
+    "\\bmaximi[sz]ation bias\\b",
+    "\\boverestimat(e|es|ed|ing|ion)\\b"
+   ],
+   "exclude": [],
+   "definition": "taking the maximum of noisy estimates gives a number that is too high on average.",
+   "lesson": 11
+  },
+  {
+   "term": "dueling DQN",
+   "match": [
+    "\\bdueling\\b"
+   ],
+   "exclude": [],
+   "definition": "a DQN variant (a separate idea) that estimates a state's value and each action's advantage separately.",
+   "lesson": 11
+  },
+  {
+   "term": "actor-critic",
+   "match": [
+    "\\bactor-critic\\b",
+    "\\bactor\\b",
+    "\\bcritic\\b"
+   ],
+   "exclude": [
+    "Soft Actor-Critic: Off-Policy Maximum Entropy[^”]*"
+   ],
+   "definition": "two networks: the actor (a policy) chooses actions, the critic estimates how good they are, so the actor improves after every step.",
+   "lesson": 5
+  },
+  {
+   "term": "A2C, A3C, PPO, SAC",
+   "match": [
+    "\\bA2C\\b",
+    "\\bA3C\\b",
+    "\\bPPO\\b",
+    "\\bSAC\\b"
+   ],
+   "exclude": [],
+   "definition": "well-known actor-critic algorithms: A2C/A3C (advantage actor-critic), PPO (proximal policy optimization), SAC (soft actor-critic).",
+   "lesson": 12
+  },
+  {
+   "term": "Ms. Pac-Man",
+   "match": [
+    "\\bPac-Man\\b"
+   ],
+   "exclude": [],
+   "definition": "a classic arcade game used as a test for game-playing agents.",
+   "lesson": 1
+  },
+  {
+   "term": "Go",
+   "match": [
+    "\\bGo\\b(?! to| up| back)"
+   ],
+   "exclude": [
+    "\\bGo player\\b"
+   ],
+   "definition": "an ancient board game; DeepMind's AlphaGo beat the world champion at it in 2016.",
+   "lesson": 1
+  },
+  {
+   "term": "preprint",
+   "match": [
+    "\\barXiv\\b"
+   ],
+   "exclude": [],
+   "definition": "arXiv is a free website where research papers are posted.",
+   "lesson": 1
+  },
+  {
+   "term": "LunarLander and Breakout",
+   "match": [
+    "\\bLunarLander\\b",
+    "\\bBreakout\\b"
+   ],
+   "exclude": [],
+   "definition": "two harder gymnasium environments: land a craft on the moon; bounce a ball to break bricks (Atari).",
+   "lesson": 13
+  },
+  {
+   "term": "Raspberry Pi",
+   "match": [
+    "\\bRaspberry Pi\\b"
+   ],
+   "exclude": [],
+   "definition": "a cheap credit-card-sized computer.",
+   "lesson": 13
+  },
+  {
+   "term": "TD(λ)",
+   "match": [
+    "TD\\(lambda\\)",
+    "TD\\(λ\\)",
+    "\\beligibility traces\\b"
+   ],
+   "exclude": [],
+   "definition": "a version of TD learning that looks several steps ahead before updating.",
+   "lesson": 8
+  },
+  {
+   "term": "prioritized experience replay",
+   "match": [
+    "\\bprioriti[sz]ed\\b"
+   ],
+   "exclude": [],
+   "definition": "replaying the stored experiences with the largest TD error more often.",
+   "lesson": 8
+  },
+  {
+   "term": "trajectory",
+   "match": [
+    "\\btrajector(y|ies)\\b"
+   ],
+   "exclude": [],
+   "definition": "the path the robot (or agent) actually follows, step by step.",
+   "lesson": 2
+  },
+  {
+   "term": "deterministic",
+   "match": [
+    "\\bdeterministic(ally)?\\b",
+    "\\bnon-deterministic\\b"
+   ],
+   "exclude": [],
+   "definition": "with no chance involved: the same input always gives the same output (the opposite of stochastic).",
+   "lesson": 2
+  },
+  {
+   "term": "dictionary",
+   "match": [
+    "\\bdictionar(y|ies)\\b"
+   ],
+   "exclude": [],
+   "definition": "a Python lookup table of name → value pairs; step()'s info is one.",
+   "lesson": 3
+  },
+  {
+   "term": "boolean",
+   "match": [
+    "\\bbooleans?\\b"
+   ],
+   "exclude": [],
+   "definition": "a value that is either True or False.",
+   "lesson": 3
+  },
+  {
+   "term": "integer and float",
+   "match": [
+    "\\bintegers?\\b",
+    "\\bfloat(ing-point)?s?\\b"
+   ],
+   "exclude": [
+    "float32"
+   ],
+   "definition": "an integer is a whole number (0, 1, 2); a float is a number with a decimal point (0.0274).",
+   "lesson": 3
+  },
+  {
+   "term": "frame",
+   "match": [
+    "\\bframes?\\b"
+   ],
+   "exclude": [],
+   "definition": "one still picture of the screen; a video or a game is a sequence of frames.",
+   "lesson": 3
+  },
+  {
+   "term": "pixel",
+   "match": [
+    "\\bpixels?\\b"
+   ],
+   "exclude": [],
+   "definition": "one dot of an image; its colour is stored as a number (or three: red, green, blue).",
+   "lesson": 1
+  },
+  {
+   "term": "tensor",
+   "match": [
+    "\\btensors?\\b"
+   ],
+   "exclude": [],
+   "definition": "TensorFlow's name for an array of numbers with any number of dimensions (a list, a table, a table of tables…).",
+   "lesson": 6
+  },
+  {
+   "term": "bias",
+   "match": [
+    "\\bbias(es|ed)?\\b"
+   ],
+   "exclude": [
+    "\\bmaximi[sz]ation bias\\b",
+    "\\bsampling bias\\b"
+   ],
+   "definition": "two meanings here. (1) A number each neuron adds to its weighted sum, learned like a weight. (2) In b11–b12: a systematic error, an estimate that is too high (or too low) on average.",
+   "lesson": 4
+  },
+  {
+   "term": "converge",
+   "match": [
+    "\\bconverg(e|es|ed|ing|ence)\\b"
+   ],
+   "exclude": [],
+   "definition": "settle on a final value and stop changing (much) as the steps go on.",
+   "lesson": 4
+  },
+  {
+   "term": "diverge",
+   "match": [
+    "\\bdiverg(e|es|ed|ing|ence)\\b"
+   ],
+   "exclude": [],
+   "definition": "the opposite of converge: the numbers grow without limit instead of settling.",
+   "lesson": 10
+  },
+  {
+   "term": "dimension",
+   "match": [
+    "\\bdimension(s|al)?\\b",
+    "\\b\\w+-dimensional\\b"
+   ],
+   "exclude": [],
+   "definition": "how many numbers describe one thing (a four-dimensional observation is 4 numbers); in array code, one axis of the array (rows, columns).",
+   "lesson": 2
+  },
+  {
+   "term": "scalar",
+   "match": [
+    "\\bscalars?\\b"
+   ],
+   "exclude": [],
+   "definition": "a single number, not a list of numbers.",
+   "lesson": 4
+  },
+  {
+   "term": "mini-batch",
+   "match": [
+    "\\bmini-?batch(es)?\\b",
+    "\\bbatch(es)?\\b"
+   ],
+   "exclude": [
+    "\\bbatch learning\\b",
+    "batch_size"
+   ],
+   "definition": "a group of examples used together for one update: in b06, the steps of 10 episodes; in b10, 32 stored steps picked at random.",
+   "lesson": 4
+  },
+  {
+   "term": "synchronous",
+   "match": [
+    "\\b(a)?synchron(ous|ously|y)\\b"
+   ],
+   "exclude": [],
+   "definition": "synchronous = in step, everyone waits for everyone; asynchronous = each part goes ahead as soon as it is ready.",
+   "lesson": 5
+  },
+  {
+   "term": "GPU",
+   "match": [
+    "\\bGPUs?\\b"
+   ],
+   "exclude": [],
+   "definition": "the graphics-card chip; it does thousands of small calculations at once, which makes neural networks much faster.",
+   "lesson": 12
+  },
+  {
+   "term": "clip",
+   "match": [
+    "\\bclip(s|ped|ping)?\\b"
+   ],
+   "exclude": [],
+   "definition": "cut a value off at a limit, so it cannot go further than that limit.",
+   "lesson": 12
+  },
+  {
+   "term": "unbiased",
+   "match": [
+    "\\bunbiased\\b"
+   ],
+   "exclude": [],
+   "definition": "right on average: not systematically too high or too low.",
+   "lesson": 12
+  },
+  {
+   "term": "log-gradient",
+   "match": [
+    "\\blog-gradients?\\b"
+   ],
+   "exclude": [],
+   "definition": "the gradient of the logarithm of the chosen action's probability: the direction that makes that action more likely.",
+   "lesson": 6
+  },
+  {
+   "term": "mean squared error",
+   "match": [
+    "\\bmean squared error\\b",
+    "\\bMSE\\b",
+    "mean_squared_error"
+   ],
+   "exclude": [],
+   "definition": "square each error and average them; the loss b10 trains with.",
+   "lesson": 10
+  },
+  {
+   "term": "unsupervised learning",
+   "match": [
+    "\\bunsupervised\\b"
+   ],
+   "exclude": [],
+   "definition": "learning from data that has no answer column, e.g. finding groups of similar rows.",
+   "lesson": 13
+  },
+  {
+   "term": "convolutional layer",
+   "match": [
+    "\\bconvolutional\\b"
+   ],
+   "exclude": [],
+   "definition": "a layer that slides small learned filters across an image to detect patterns such as edges; the standard layer for pictures.",
+   "lesson": 13
+  },
+  {
+   "term": "image preprocessing",
+   "match": [
+    "\\bgrayscale\\b",
+    "\\bdownsampled\\b"
+   ],
+   "exclude": [],
+   "definition": "preparing game frames before the network sees them: grayscale = black-and-white, cropped = edges cut off, downsampled = fewer pixels, stacked = several frames in a row given together so motion is visible.",
+   "lesson": 13
+  },
+  {
+   "term": "research venues",
+   "match": [
+    "\\bICML\\b",
+    "\\bAAAI\\b",
+    "\\bNature\\b"
+   ],
+   "exclude": [],
+   "definition": "ICML and AAAI are major AI research conferences and Nature is a leading science journal; papers they publish have been checked by other researchers.",
+   "lesson": 4
+  },
+  {
+   "term": "radian",
+   "match": [
+    "\\bradians?\\b"
+   ],
+   "exclude": [],
+   "definition": "a unit for angles: 1 radian ≈ 57.3°, so 0.036 radians ≈ 2°.",
+   "lesson": 3
+  }
+ ]
+}

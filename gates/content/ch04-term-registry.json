@@ -1,0 +1,1049 @@
+{
+ "chapter": 4,
+ "flow": [
+  "Get the data",
+  "Set aside a test set",
+  "Explore",
+  "Prepare the data",
+  "Train",
+  "Evaluate",
+  "Fine-tune",
+  "Launch"
+ ],
+ "known": [
+  "ch02-term-registry.json"
+ ],
+ "generated_by": "ml/study/geron-lab/chapter-build/build_chapter.py --chapter 4",
+ "terms": [
+  {
+   "term": "weighted sum",
+   "match": [
+    "\\bweighted sums?\\b"
+   ],
+   "exclude": [],
+   "definition": "multiply each input by its own number (its weight), then add the results up.",
+   "lesson": 1
+  },
+  {
+   "term": "weight",
+   "match": [
+    "\\bweights?\\b"
+   ],
+   "exclude": [
+    "\\bweighted sums?\\b",
+    "\\bweighted by\\b",
+    "\\bweights? each label\\b",
+    "\\bweighting\\b"
+   ],
+   "definition": "the number a model multiplies one feature by. In this chapter the weights are θ₁, θ₂, … θₙ.",
+   "lesson": 1
+  },
+  {
+   "term": "bias term",
+   "match": [
+    "\\bbias term\\b",
+    "\\bbias\\b"
+   ],
+   "exclude": [
+    "\\bhigh[- ]bias\\b",
+    "\\bbias/variance\\b",
+    "\\bbias[- ]variance\\b",
+    "\\bbias and variance\\b",
+    "\\bbias,? variance\\b",
+    "\\*\\*Bias\\*\\* is error",
+    "\\bBias is error\\b",
+    "\\bmore bias\\b",
+    "\\badds? bias\\b",
+    "\\bincreases? (its )?bias\\b",
+    "\\breduces? (its )?bias\\b",
+    "\\bbias for (a large drop in )?variance\\b",
+    "\\bsystematic error\\b"
+   ],
+   "definition": "θ₀, the constant added to every prediction whatever the inputs are; also called the intercept. (Lesson b08 uses \"bias\" for something else: an error from wrong assumptions.)",
+   "lesson": 1
+  },
+  {
+   "term": "intercept",
+   "match": [
+    "\\bintercepts?\\b"
+   ],
+   "exclude": [],
+   "definition": "another name for the bias term θ₀: the prediction when every feature is 0.",
+   "lesson": 1
+  },
+  {
+   "term": "theta",
+   "match": [
+    "θ",
+    "\\btheta\\b"
+   ],
+   "exclude": [],
+   "definition": "θ (\"theta\") is the Greek letter the book uses for the model's numbers: θ₀ is the bias term, θ₁ to θₙ are the weights. Bold θ, or θ written alone, means all of them as one list.",
+   "lesson": 1
+  },
+  {
+   "term": "model parameter",
+   "match": [
+    "\\bparameters?\\b"
+   ],
+   "exclude": [
+    "\\bhyperparameters?\\b"
+   ],
+   "definition": "a number inside the model that training chooses: here the θ values.",
+   "lesson": 1
+  },
+  {
+   "term": "prediction",
+   "match": [
+    "\\bpredict(s|ed|ing|ion|ions)?\\b"
+   ],
+   "exclude": [],
+   "definition": "the model's output for one row, written ŷ (\"y hat\").",
+   "lesson": 1
+  },
+  {
+   "term": "y hat",
+   "match": [
+    "ŷ",
+    "\\by hat\\b"
+   ],
+   "exclude": [],
+   "definition": "ŷ, the model's prediction; plain y is the true value.",
+   "lesson": 1
+  },
+  {
+   "term": "dot product",
+   "match": [
+    "\\bdot products?\\b"
+   ],
+   "exclude": [],
+   "definition": "multiply two equal-length lists position by position, then add up the results: [2, 3]·[1, 4] = 2×1 + 3×4 = 14.",
+   "lesson": 1
+  },
+  {
+   "term": "transpose",
+   "match": [
+    "\\btranspos(e|ed|ing)\\b"
+   ],
+   "exclude": [],
+   "definition": "turn a grid on its side: rows become columns. Written with a small raised T, e.g. Xᵀ.",
+   "lesson": 1
+  },
+  {
+   "term": "matrix",
+   "match": [
+    "\\bmatri(x|ces)\\b"
+   ],
+   "exclude": [],
+   "definition": "a grid of numbers with rows and columns. X, the training data with one row per instance, is a matrix.",
+   "lesson": 2
+  },
+  {
+   "term": "MSE",
+   "match": [
+    "\\bMSE\\b",
+    "\\bmean squared error\\b"
+   ],
+   "exclude": [
+    "\\broot mean squared error\\b",
+    "\\bneg_root_mean_squared_error\\b",
+    "\\broot_mean_squared_error\\b"
+   ],
+   "definition": "mean squared error: square every error (prediction minus truth), then average them. RMSE is its square root.",
+   "lesson": 1
+  },
+  {
+   "term": "cost function",
+   "match": [
+    "\\bcost functions?\\b"
+   ],
+   "exclude": [],
+   "definition": "the single number that says how badly a model's current θ fits the training data; training pushes it down. For linear regression it is the MSE.",
+   "lesson": 1
+  },
+  {
+   "term": "hypothesis",
+   "match": [
+    "\\bhypothesis\\b"
+   ],
+   "exclude": [],
+   "definition": "the book's old name for the model; that is why it is written h.",
+   "lesson": 1
+  },
+  {
+   "term": "column vector",
+   "match": [
+    "\\bcolumn vectors?\\b"
+   ],
+   "exclude": [],
+   "definition": "a list of numbers written as one column (rows × 1), the shape NumPy code often needs.",
+   "lesson": 2
+  },
+  {
+   "term": "closed-form",
+   "match": [
+    "\\bclosed[- ]form\\b"
+   ],
+   "exclude": [],
+   "definition": "an answer computed by one fixed formula in one pass, with no loop and no search.",
+   "lesson": 2
+  },
+  {
+   "term": "Normal equation",
+   "match": [
+    "\\bnormal equation\\b"
+   ],
+   "exclude": [],
+   "definition": "the closed-form formula θ = (XᵀX)⁻¹ Xᵀy that gives linear regression's best θ in one step (Equation 4-4).",
+   "lesson": 2
+  },
+  {
+   "term": "inverse",
+   "match": [
+    "\\binvers(e|es|ion)\\b",
+    "\\binvert(s|ed|ing|ible)?\\b"
+   ],
+   "exclude": [
+    "\\binverse of strength\\b"
+   ],
+   "definition": "the matrix version of dividing: a matrix times its inverse changes nothing. Not every matrix has one; a matrix that does is invertible.",
+   "lesson": 2
+  },
+  {
+   "term": "singular",
+   "match": [
+    "\\bsingular\\b"
+   ],
+   "exclude": [
+    "\\bsingular value decomposition\\b"
+   ],
+   "definition": "a matrix with no inverse.",
+   "lesson": 2
+  },
+  {
+   "term": "SVD",
+   "match": [
+    "\\bSVD\\b",
+    "\\bsingular value decomposition\\b"
+   ],
+   "exclude": [],
+   "definition": "singular value decomposition: splitting a matrix into three simpler ones. Scikit-Learn uses it to solve linear regression safely.",
+   "lesson": 2
+  },
+  {
+   "term": "pseudoinverse",
+   "match": [
+    "\\bpseudo-?inverses?\\b"
+   ],
+   "exclude": [],
+   "definition": "a stand-in for the inverse that exists even when the true inverse does not.",
+   "lesson": 2
+  },
+  {
+   "term": "least squares",
+   "match": [
+    "\\bleast squares\\b",
+    "\\blstsq\\b"
+   ],
+   "exclude": [],
+   "definition": "fitting by making the sum of squared errors as small as possible; linear regression's usual method.",
+   "lesson": 2
+  },
+  {
+   "term": "synthetic",
+   "match": [
+    "\\bsynthetic\\b"
+   ],
+   "exclude": [],
+   "definition": "made up by a program on purpose, not collected from the real world.",
+   "lesson": 2
+  },
+  {
+   "term": "noise",
+   "match": [
+    "\\bnoise\\b",
+    "\\bnoisy\\b"
+   ],
+   "exclude": [],
+   "definition": "the random wobble added to each point, the part of y that no rule could predict.",
+   "lesson": 1
+  },
+  {
+   "term": "O(n²)",
+   "match": [
+    "O\\(n",
+    "O\\(m\\)"
+   ],
+   "exclude": [],
+   "definition": "\"big O\" notation: how the running time grows with the number of features n (or rows m). O(n²) means twice the features, about four times the time.",
+   "lesson": 2
+  },
+  {
+   "term": "add_dummy_feature",
+   "match": [
+    "\\badd_dummy_feature\\b"
+   ],
+   "exclude": [],
+   "definition": "Scikit-Learn helper that puts a column of 1s in front of every row, so the bias term can be multiplied like any weight.",
+   "lesson": 1
+  },
+  {
+   "term": "gradient descent",
+   "match": [
+    "\\bgradient descent\\b"
+   ],
+   "exclude": [
+    "\\bstochastic gradient descent\\b",
+    "\\bmini-?batch gradient descent\\b",
+    "\\bbatch gradient descent\\b"
+   ],
+   "definition": "training by repeated small steps: measure which way the cost goes down fastest, move θ a little that way, repeat.",
+   "lesson": 2
+  },
+  {
+   "term": "learning rate",
+   "match": [
+    "\\blearning[- ]rates?\\b",
+    "η",
+    "\\beta\\b"
+   ],
+   "exclude": [
+    "\\beta0\\b"
+   ],
+   "definition": "η (\"eta\"): how big each gradient-descent step is. Too small is slow; too large overshoots and diverges.",
+   "lesson": 3
+  },
+  {
+   "term": "hyperparameter",
+   "match": [
+    "\\bhyperparameters?\\b"
+   ],
+   "exclude": [],
+   "definition": "a setting YOU choose before training, such as the learning rate; training never changes it.",
+   "lesson": 3
+  },
+  {
+   "term": "converge",
+   "match": [
+    "\\bconverg(e|es|ed|ing|ence)\\b"
+   ],
+   "exclude": [],
+   "definition": "settle on (reach) the answer as the steps go on.",
+   "lesson": 3
+  },
+  {
+   "term": "diverge",
+   "match": [
+    "\\bdiverg(e|es|ed|ing|ence)\\b"
+   ],
+   "exclude": [],
+   "definition": "get further from the answer with every step, until the numbers blow up.",
+   "lesson": 3
+  },
+  {
+   "term": "convex",
+   "match": [
+    "\\bconvex\\b"
+   ],
+   "exclude": [
+    "\\bnon-convex\\b"
+   ],
+   "definition": "shaped like one bowl: a single lowest point and no other dips, so walking downhill always reaches it.",
+   "lesson": 3
+  },
+  {
+   "term": "local minimum",
+   "match": [
+    "\\blocal minim(um|a)\\b"
+   ],
+   "exclude": [],
+   "definition": "a dip that is lower than everything near it but higher than the true lowest point (the global minimum).",
+   "lesson": 3
+  },
+  {
+   "term": "global minimum",
+   "match": [
+    "\\bglobal minim(um|a)\\b"
+   ],
+   "exclude": [],
+   "definition": "the lowest point of the whole cost surface: the best θ.",
+   "lesson": 3
+  },
+  {
+   "term": "plateau",
+   "match": [
+    "\\bplateau(s|x)?\\b"
+   ],
+   "exclude": [],
+   "definition": "a nearly flat stretch: steps there are tiny, so progress almost stops. A curve that levels off is also said to plateau.",
+   "lesson": 3
+  },
+  {
+   "term": "contour",
+   "match": [
+    "\\bcontours?\\b"
+   ],
+   "exclude": [],
+   "definition": "a line joining points of equal height, as on a map; here, all the θ values that give the same cost.",
+   "lesson": 10
+  },
+  {
+   "term": "partial derivative",
+   "match": [
+    "\\bpartial derivatives?\\b"
+   ],
+   "exclude": [],
+   "definition": "the slope of the cost in one weight's direction: how fast it changes if you nudge only that weight.",
+   "lesson": 3
+  },
+  {
+   "term": "gradient",
+   "match": [
+    "\\bgradients?\\b"
+   ],
+   "exclude": [
+    "\\bgradient descent\\b",
+    "\\bgradient-based\\b"
+   ],
+   "definition": "all the partial derivatives stacked into one list; it points uphill, toward a higher cost.",
+   "lesson": 3
+  },
+  {
+   "term": "nabla",
+   "match": [
+    "\\bnabla\\b",
+    "∇"
+   ],
+   "exclude": [],
+   "definition": "∇, the upside-down triangle: \"the gradient of\".",
+   "lesson": 4
+  },
+  {
+   "term": "epoch",
+   "match": [
+    "\\bepochs?\\b"
+   ],
+   "exclude": [],
+   "definition": "one full pass over the training data.",
+   "lesson": 4
+  },
+  {
+   "term": "batch gradient descent",
+   "match": [
+    "\\bbatch gradient descent\\b",
+    "\\bbatch GD\\b"
+   ],
+   "exclude": [],
+   "definition": "gradient descent that uses the whole training set for every step. (\"Batch\" here means all the rows, not a chunk of them.)",
+   "lesson": 4
+  },
+  {
+   "term": "stochastic gradient descent",
+   "match": [
+    "\\bstochastic gradient descent\\b",
+    "\\bSGD\\b"
+   ],
+   "exclude": [],
+   "definition": "gradient descent that uses one random row for each step: cheap and fast, but noisy.",
+   "lesson": 3
+  },
+  {
+   "term": "stochastic",
+   "match": [
+    "\\bstochastic\\b"
+   ],
+   "exclude": [
+    "\\bstochastic gradient descent\\b"
+   ],
+   "definition": "random.",
+   "lesson": 4
+  },
+  {
+   "term": "learning schedule",
+   "match": [
+    "\\blearning schedules?\\b"
+   ],
+   "exclude": [],
+   "definition": "a rule that shrinks the learning rate as training goes on.",
+   "lesson": 5
+  },
+  {
+   "term": "IID",
+   "match": [
+    "\\bIID\\b",
+    "\\bindependent and identically distributed\\b"
+   ],
+   "exclude": [],
+   "definition": "independent and identically distributed: each row drawn looks like a fair sample of the whole dataset, unrelated to the rows before it.",
+   "lesson": 5
+  },
+  {
+   "term": "mini-batch",
+   "match": [
+    "\\bmini-?batch(es)?\\b"
+   ],
+   "exclude": [],
+   "definition": "a small random group of rows (e.g. 20) used for one gradient-descent step.",
+   "lesson": 4
+  },
+  {
+   "term": "GPU",
+   "match": [
+    "\\bGPUs?\\b"
+   ],
+   "exclude": [],
+   "definition": "a graphics chip; it does many multiplications at once, which makes matrix arithmetic fast.",
+   "lesson": 6
+  },
+  {
+   "term": "out-of-core",
+   "match": [
+    "\\bout-of-core\\b"
+   ],
+   "exclude": [],
+   "definition": "training on data too big for memory by loading one part at a time.",
+   "lesson": 5
+  },
+  {
+   "term": "parameter space",
+   "match": [
+    "\\bparameter space\\b"
+   ],
+   "exclude": [],
+   "definition": "a plot with one axis per model parameter; each point is one candidate θ.",
+   "lesson": 6
+  },
+  {
+   "term": "seed",
+   "match": [
+    "\\brandom_state\\b",
+    "\\bnp\\.random\\.seed\\b",
+    "\\bseed\\b"
+   ],
+   "exclude": [],
+   "definition": "the starting number of the random generator (`np.random.seed(42)`, or `random_state=42` in Scikit-Learn): the same seed gives the same \"random\" numbers every run.",
+   "lesson": 2
+  },
+  {
+   "term": "polynomial regression",
+   "match": [
+    "\\bpolynomial\\b"
+   ],
+   "exclude": [],
+   "definition": "linear regression fed powers of the inputs (x², x³, …) as extra columns, so it can fit curves.",
+   "lesson": 7
+  },
+  {
+   "term": "PolynomialFeatures",
+   "match": [
+    "\\bPolynomialFeatures\\b"
+   ],
+   "exclude": [],
+   "definition": "Scikit-Learn's tool that adds the power and product columns to the data.",
+   "lesson": 7
+  },
+  {
+   "term": "degree",
+   "match": [
+    "\\bdegrees?\\b"
+   ],
+   "exclude": [
+    "\\bdegrees? of freedom\\b"
+   ],
+   "definition": "the highest power used: degree 2 adds x², degree 10 goes up to x¹⁰.",
+   "lesson": 7
+  },
+  {
+   "term": "quadratic",
+   "match": [
+    "\\bquadratic\\b"
+   ],
+   "exclude": [],
+   "definition": "a formula of the form ax² + bx + c; its graph is a U-shaped curve with one bend.",
+   "lesson": 7
+  },
+  {
+   "term": "linear in its parameters",
+   "match": [
+    "\\blinear in its parameters\\b",
+    "\\blinear in its \\*\\*parameters\\*\\*"
+   ],
+   "exclude": [],
+   "definition": "the prediction is still a plain weighted sum of the columns it is given, even if some columns are x² or x³.",
+   "lesson": 7
+  },
+  {
+   "term": "interaction",
+   "match": [
+    "\\binteractions?\\b"
+   ],
+   "exclude": [],
+   "definition": "an effect that depends on two inputs together: the effect of a changes with the value of b.",
+   "lesson": 7
+  },
+  {
+   "term": "combinatorial",
+   "match": [
+    "\\bcombinatori(al|ally)\\b"
+   ],
+   "exclude": [],
+   "definition": "growing by counting every possible combination, which gets big very fast.",
+   "lesson": 7
+  },
+  {
+   "term": "learning curve",
+   "match": [
+    "\\blearning curves?\\b"
+   ],
+   "exclude": [],
+   "definition": "a plot of training error and validation error against the number of training rows (or against training time).",
+   "lesson": 7
+  },
+  {
+   "term": "training error",
+   "match": [
+    "\\btraining errors?\\b"
+   ],
+   "exclude": [],
+   "definition": "how wrong the model is on the rows it learned from.",
+   "lesson": 7
+  },
+  {
+   "term": "validation error",
+   "match": [
+    "\\bvalidation errors?\\b"
+   ],
+   "exclude": [],
+   "definition": "how wrong the model is on held-out rows it did not learn from.",
+   "lesson": 7
+  },
+  {
+   "term": "bias (error)",
+   "match": [
+    "\\bhigh[- ]bias\\b",
+    "\\bBias is error\\b",
+    "\\*\\*Bias\\*\\* is error",
+    "\\bbias/variance\\b",
+    "\\bbias-variance\\b"
+   ],
+   "exclude": [],
+   "definition": "error from wrong assumptions, such as fitting a straight line to curved data; too much of it is underfitting. Not the same word as the bias term θ₀.",
+   "lesson": 8
+  },
+  {
+   "term": "variance (error)",
+   "match": [
+    "\\bhigh[- ]variance\\b",
+    "\\bVariance is error\\b",
+    "\\*\\*Variance\\*\\* is error",
+    "\\bincreases? (its )?variance\\b",
+    "\\breduces? (its )?variance\\b"
+   ],
+   "exclude": [],
+   "definition": "error from a model reacting too much to the exact training rows it saw; too much of it is overfitting.",
+   "lesson": 8
+  },
+  {
+   "term": "irreducible error",
+   "match": [
+    "\\birreducible error\\b"
+   ],
+   "exclude": [],
+   "definition": "the part of the error that comes from noise in the data itself; no model can remove it.",
+   "lesson": 8
+  },
+  {
+   "term": "degrees of freedom",
+   "match": [
+    "\\bdegrees? of freedom\\b"
+   ],
+   "exclude": [],
+   "definition": "how many independent numbers the model can adjust, roughly its number of parameters.",
+   "lesson": 8
+  },
+  {
+   "term": "np.linspace",
+   "match": [
+    "\\blinspace\\b"
+   ],
+   "exclude": [],
+   "definition": "NumPy function: np.linspace(a, b, n) gives n evenly spaced numbers from a to b.",
+   "lesson": 8
+  },
+  {
+   "term": "ridge regression",
+   "match": [
+    "\\bridge\\b"
+   ],
+   "exclude": [],
+   "definition": "linear regression plus a penalty on the sum of the squared weights, so the weights stay small.",
+   "lesson": 9
+  },
+  {
+   "term": "alpha",
+   "match": [
+    "α",
+    "\\balpha\\b"
+   ],
+   "exclude": [],
+   "definition": "α, the regularization strength: 0 means no penalty; larger means a stronger pull on the weights toward 0.",
+   "lesson": 9
+  },
+  {
+   "term": "penalty",
+   "match": [
+    "\\bpenalt(y|ies)\\b",
+    "\\bpenalis(e|es|ed|ing)\\b",
+    "\\bpenaliz(e|es|ed|ing)\\b"
+   ],
+   "exclude": [],
+   "definition": "an extra amount added to the cost to discourage something, here large weights.",
+   "lesson": 5
+  },
+  {
+   "term": "identity matrix",
+   "match": [
+    "\\bidentity matri(x|ces)\\b"
+   ],
+   "exclude": [],
+   "definition": "a square matrix with 1s on the diagonal and 0s elsewhere; multiplying by it changes nothing.",
+   "lesson": 9
+  },
+  {
+   "term": "Cholesky",
+   "match": [
+    "\\bCholesky\\b"
+   ],
+   "exclude": [],
+   "definition": "a matrix factorisation, like SVD, that Ridge can use to compute the closed-form answer quickly.",
+   "lesson": 9
+  },
+  {
+   "term": "l1 and l2",
+   "match": [
+    "ℓ[12]",
+    "\\b[lL][12]\\b"
+   ],
+   "exclude": [],
+   "definition": "two ways to measure the size of a list of weights: ℓ1 adds their sizes (signs dropped), ℓ2 adds their squares. Ridge uses ℓ2, lasso ℓ1.",
+   "lesson": 9
+  },
+  {
+   "term": "lasso",
+   "match": [
+    "\\blasso\\b"
+   ],
+   "exclude": [],
+   "definition": "linear regression plus a penalty on the sum of the weights' sizes (signs dropped); it pushes useless weights to exactly 0.",
+   "lesson": 9
+  },
+  {
+   "term": "absolute value",
+   "match": [
+    "\\babsolute values?\\b"
+   ],
+   "exclude": [],
+   "definition": "a number's size without its minus sign: the absolute value of −3 is 3.",
+   "lesson": 1
+  },
+  {
+   "term": "sparse",
+   "match": [
+    "\\bsparse\\b"
+   ],
+   "exclude": [],
+   "definition": "mostly zeros: a sparse model has most of its weights exactly 0.",
+   "lesson": 10
+  },
+  {
+   "term": "feature selection",
+   "match": [
+    "\\bfeature selection\\b"
+   ],
+   "exclude": [],
+   "definition": "keeping only the useful input columns and dropping the rest.",
+   "lesson": 10
+  },
+  {
+   "term": "subgradient",
+   "match": [
+    "\\bsubgradients?\\b"
+   ],
+   "exclude": [],
+   "definition": "a stand-in for the gradient at a sharp corner, where the true slope does not exist.",
+   "lesson": 10
+  },
+  {
+   "term": "sign",
+   "match": [
+    "\\bsign\\(",
+    "\\bsign of\\b",
+    "\\bits sign\\b"
+   ],
+   "exclude": [],
+   "definition": "sign(x) is −1 for a negative number, +1 for a positive one, 0 for zero.",
+   "lesson": 10
+  },
+  {
+   "term": "correlated",
+   "match": [
+    "\\bcorrelat(ed|ion|ions)\\b"
+   ],
+   "exclude": [],
+   "definition": "two columns are correlated when they tend to move together, so they carry much the same information.",
+   "lesson": 10
+  },
+  {
+   "term": "elastic net",
+   "match": [
+    "\\belastic[- ]?net\\b",
+    "\\bElasticNet\\b"
+   ],
+   "exclude": [],
+   "definition": "linear regression with both the ridge and the lasso penalty at once, mixed by a ratio r.",
+   "lesson": 9
+  },
+  {
+   "term": "mix ratio",
+   "match": [
+    "\\bmix ratio\\b",
+    "\\bl1_ratio\\b"
+   ],
+   "exclude": [],
+   "definition": "r in elastic net (l1_ratio in Scikit-Learn): the share of the penalty that is lasso's; the rest is ridge's.",
+   "lesson": 11
+  },
+  {
+   "term": "interpretable",
+   "match": [
+    "\\binterpretable\\b"
+   ],
+   "exclude": [],
+   "definition": "easy to read: you can see which features the model actually uses.",
+   "lesson": 1
+  },
+  {
+   "term": "early stopping",
+   "match": [
+    "\\bearly stopping\\b"
+   ],
+   "exclude": [],
+   "definition": "regularizing by stopping training at the epoch where the validation error was lowest.",
+   "lesson": 12
+  },
+  {
+   "term": "deep copy",
+   "match": [
+    "\\bdeep ?cop(y|ies)\\b",
+    "\\bdeepcopy\\b"
+   ],
+   "exclude": [],
+   "definition": "a full, independent copy of an object and everything inside it; later changes to the original do not reach it.",
+   "lesson": 12
+  },
+  {
+   "term": "partial_fit",
+   "match": [
+    "\\bpartial_fit\\b"
+   ],
+   "exclude": [],
+   "definition": "Scikit-Learn call that trains one more epoch, continuing from where the model already is (plain fit would start from scratch).",
+   "lesson": 6
+  },
+  {
+   "term": "patience",
+   "match": [
+    "\\bpatience\\b"
+   ],
+   "exclude": [],
+   "definition": "in early stopping: how many epochs without improvement to wait before stopping.",
+   "lesson": 12
+  },
+  {
+   "term": "logistic regression",
+   "match": [
+    "\\blogistic regression\\b",
+    "\\bLogisticRegression\\b"
+   ],
+   "exclude": [],
+   "definition": "a model that answers a yes/no question instead of predicting a number (lesson b13 explains how).",
+   "lesson": 3
+  },
+  {
+   "term": "neural network",
+   "match": [
+    "\\bneural networks?\\b"
+   ],
+   "exclude": [],
+   "definition": "a model built from many small connected units, the subject of Chapter 10 onward.",
+   "lesson": 3
+  },
+  {
+   "term": "probability",
+   "match": [
+    "\\bprobabilit(y|ies)\\b"
+   ],
+   "exclude": [],
+   "definition": "how likely something is, from 0 (never) to 1 (certain).",
+   "lesson": 13
+  },
+  {
+   "term": "sigmoid",
+   "match": [
+    "\\bsigmoid\\b",
+    "\\blogistic function\\b",
+    "σ"
+   ],
+   "exclude": [],
+   "definition": "σ(t) = 1 / (1 + e⁻ᵗ), also called the logistic function: it squeezes any number into the range 0 to 1, and σ(0) = 0.5.",
+   "lesson": 13
+  },
+  {
+   "term": "exponential",
+   "match": [
+    "\\bexp\\(",
+    "\\bexponential\\b",
+    "\\bexponentiat(e|es|ed|ing)\\b",
+    "\\be ≈ 2\\.718\\b",
+    "\\be is\\b"
+   ],
+   "exclude": [],
+   "definition": "e raised to a power, eˣ, where e ≈ 2.718; always positive, and it grows very fast.",
+   "lesson": 13
+  },
+  {
+   "term": "positive class",
+   "match": [
+    "\\bpositive class\\b",
+    "\\bnegative class\\b"
+   ],
+   "exclude": [],
+   "definition": "the class labelled 1 (the yes answer); the negative class is labelled 0. Neither word means good or bad.",
+   "lesson": 13
+  },
+  {
+   "term": "threshold",
+   "match": [
+    "\\bthresholds?\\b"
+   ],
+   "exclude": [],
+   "definition": "the cut-off that turns a probability into a yes/no answer; 0.5 by default.",
+   "lesson": 13
+  },
+  {
+   "term": "loss",
+   "match": [
+    "\\bloss(es)?\\b"
+   ],
+   "exclude": [],
+   "definition": "another word for the cost: the error score that training makes as small as it can; the book tends to say \"loss\" for that number while training is running.",
+   "lesson": 5
+  },
+  {
+   "term": "log loss",
+   "match": [
+    "\\blog loss\\b"
+   ],
+   "exclude": [],
+   "definition": "logistic regression's cost function: the average of −log(the probability the model gave the correct answer).",
+   "lesson": 13
+  },
+  {
+   "term": "decision boundary",
+   "match": [
+    "\\bdecision boundar(y|ies)\\b"
+   ],
+   "exclude": [],
+   "definition": "the inputs where the model's probability is exactly 50%: on one side it answers yes, on the other no.",
+   "lesson": 14
+  },
+  {
+   "term": "iris",
+   "match": [
+    "\\biris\\b",
+    "\\bvirginica\\b",
+    "\\bversicolor\\b",
+    "\\bsetosa\\b"
+   ],
+   "exclude": [],
+   "definition": "a flower. The iris dataset: 150 flowers of three species (setosa, versicolor, virginica), each with 4 measurements in cm.",
+   "lesson": 13
+  },
+  {
+   "term": "petal",
+   "match": [
+    "\\bpetals?\\b",
+    "\\bsepals?\\b"
+   ],
+   "exclude": [],
+   "definition": "petals are the inner, upright parts of a flower; sepals are the outer parts underneath.",
+   "lesson": 13
+  },
+  {
+   "term": "feature space",
+   "match": [
+    "\\bfeature space\\b"
+   ],
+   "exclude": [],
+   "definition": "a plot with one axis per feature, where each flower is one dot.",
+   "lesson": 14
+  },
+  {
+   "term": "train_test_split",
+   "match": [
+    "\\btrain_test_split\\b"
+   ],
+   "exclude": [],
+   "definition": "Scikit-Learn function that splits rows at random into a training set and a test set (25% test unless told otherwise).",
+   "lesson": 14
+  },
+  {
+   "term": "softmax regression",
+   "match": [
+    "\\bsoftmax\\b",
+    "\\bmultinomial\\b"
+   ],
+   "exclude": [],
+   "definition": "logistic regression for several classes at once: one score per class, turned into probabilities that add up to 1.",
+   "lesson": 13
+  },
+  {
+   "term": "argmax",
+   "match": [
+    "\\bargmax\\b"
+   ],
+   "exclude": [],
+   "definition": "the position of the largest value, not the value itself: argmax of [0.1, 0.7, 0.2] is 1.",
+   "lesson": 15
+  },
+  {
+   "term": "cross entropy",
+   "match": [
+    "\\bcross[- ]entropy\\b"
+   ],
+   "exclude": [],
+   "definition": "softmax regression's cost function: the average of −log(the probability given to the correct class). With two classes it is the log loss.",
+   "lesson": 15
+  },
+  {
+   "term": "C",
+   "match": [
+    "\\bC=",
+    "`C`",
+    "\\bC\\b(?= is| runs|\\s+(comes|raises)| \\()"
+   ],
+   "exclude": [],
+   "definition": "LogisticRegression's regularization setting, the other way round from α: a larger C means weaker regularization.",
+   "lesson": 15
+  },
+  {
+   "term": "mutually exclusive",
+   "match": [
+    "\\bmutually exclusive\\b"
+   ],
+   "exclude": [],
+   "definition": "only one can be true at a time, like a flower's species.",
+   "lesson": 15
+  }
+ ]
+}

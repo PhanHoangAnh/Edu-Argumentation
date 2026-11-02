@@ -1,0 +1,9 @@
+# Lab backend (nn:8798, foxai-edu-lab). Python 3.10 venv at /home/ubuntu/edu-lab-venv.
+# fastapi / uvicorn / starlette / pydantic are pinned to the versions already running in
+# /home/ubuntu/edu-study-venv (pip freeze, 24-09-26). httpx is NOT in that venv, so it is
+# pinned here on its own (plan L6 deviation, recorded in the report).
+fastapi==0.141.1
+starlette==1.6.0
+pydantic==2.13.5
+uvicorn==0.52.0
+httpx==0.28.1

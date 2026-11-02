@@ -1,0 +1,3 @@
+# Bytecode from running the app locally (uvicorn). Never committed, never deployed.
+__pycache__/
+*.pyc

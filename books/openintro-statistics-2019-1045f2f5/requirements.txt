@@ -1,0 +1,3 @@
+# Libraries this book's Lab lessons import (written by the importer's code scan).
+# Names only: the runner pins versions. Unknown imports are in lab.json 'unmapped', not here.
+numpy

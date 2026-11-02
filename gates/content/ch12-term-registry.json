@@ -1,0 +1,1202 @@
+{
+ "chapter": 12,
+ "flow": [
+  "Get the data",
+  "Set aside a test set",
+  "Explore",
+  "Prepare the data",
+  "Train",
+  "Evaluate",
+  "Fine-tune",
+  "Launch"
+ ],
+ "known": [
+  "ch02-term-registry.json"
+ ],
+ "generated_by": "ml/study/geron-lab/ch12-notes (chapter_build.py)",
+ "terms": [
+  {
+   "term": "TensorFlow",
+   "match": [
+    "\\btensorflow\\b(?!\\.js| Lite| Hub| Extended| Serving)",
+    "\\btf\\.",
+    "\\bTF\\b(?! Serving| Lite)"
+   ],
+   "exclude": [],
+   "definition": "Google's library for deep learning: fast arithmetic on big grids of numbers (tensors), on CPUs, GPUs and TPUs, with automatic gradients.",
+   "lesson": 1
+  },
+  {
+   "term": "Keras",
+   "match": [
+    "\\bkeras\\b"
+   ],
+   "exclude": [],
+   "definition": "the part of TensorFlow for building and training networks with ready-made layers, losses and a training loop (imports start with tf.keras).",
+   "lesson": 1
+  },
+  {
+   "term": "tensor",
+   "match": [
+    "\\btensors?\\b"
+   ],
+   "exclude": [],
+   "definition": "TensorFlow's array: a single number, a list, a table or a stack of tables, all of one data type.",
+   "lesson": 1
+  },
+  {
+   "term": "API",
+   "match": [
+    "\\bAPIs?\\b"
+   ],
+   "exclude": [],
+   "definition": "the set of functions and classes a library offers you to call (\"application programming interface\").",
+   "lesson": 1
+  },
+  {
+   "term": "tf.data",
+   "match": [
+    "\\btf\\.data\\b",
+    "\\bData API\\b"
+   ],
+   "exclude": [],
+   "definition": "TensorFlow's library for loading data and feeding it to a model in batches (Chapter 13).",
+   "lesson": 1
+  },
+  {
+   "term": "neural network",
+   "match": [
+    "\\bneural net(work)?s?\\b",
+    "\\bnetworks?\\b",
+    "\\bsubnetworks?\\b"
+   ],
+   "exclude": [],
+   "definition": "a model made of layers of small calculating units (neurons); each layer's outputs are the next layer's inputs.",
+   "lesson": 1
+  },
+  {
+   "term": "layer",
+   "match": [
+    "\\blayers?\\b"
+   ],
+   "exclude": [],
+   "definition": "one step of a network: a group of neurons that read the same inputs; in Keras an object such as Dense(30).",
+   "lesson": 1
+  },
+  {
+   "term": "neuron",
+   "match": [
+    "\\bneurons?\\b",
+    "\\bunits\\b"
+   ],
+   "exclude": [
+    "\\bunits of 100,000\\b",
+    "\\bunits of your target\\b"
+   ],
+   "definition": "one calculating unit of a layer: it multiplies each input by a weight, adds them up with a bias, and applies an activation function.",
+   "lesson": 1
+  },
+  {
+   "term": "weight",
+   "match": [
+    "\\bweights?\\b"
+   ],
+   "exclude": [
+    "\\bweighted\\b",
+    "\\bsample weights?\\b",
+    "\\bclass weights?\\b",
+    "\\bsave_weights\\b",
+    "\\bload_weights\\b",
+    "\\badd_weight\\b",
+    "\\bget_weights\\b",
+    "\\bset_weights\\b"
+   ],
+   "definition": "a number the network learns, one per connection between two neurons; training changes the weights.",
+   "lesson": 1
+  },
+  {
+   "term": "bias",
+   "match": [
+    "\\bbias(es)?\\b"
+   ],
+   "exclude": [],
+   "definition": "one extra learned number per neuron, added to its weighted sum.",
+   "lesson": 1
+  },
+  {
+   "term": "activation function",
+   "match": [
+    "\\bactivations?\\b"
+   ],
+   "exclude": [],
+   "definition": "the small function a neuron applies to its weighted sum before passing it on, such as ReLU (\"negative becomes 0\"); in this chapter also: what a layer outputs is called its activation.",
+   "lesson": 1
+  },
+  {
+   "term": "ReLU",
+   "match": [
+    "\\bReLU\\b",
+    "\\\"relu\\\""
+   ],
+   "exclude": [],
+   "definition": "the activation max(0, z): positive values pass unchanged, negative values become 0.",
+   "lesson": 1
+  },
+  {
+   "term": "loss",
+   "match": [
+    "\\bloss(es)?\\b"
+   ],
+   "exclude": [],
+   "definition": "the number training tries to make small: how wrong the model's predictions are (for example the mean squared error).",
+   "lesson": 1
+  },
+  {
+   "term": "gradient",
+   "match": [
+    "\\bgradients?\\b"
+   ],
+   "exclude": [],
+   "definition": "for every parameter, how much the loss would change if that parameter moved a little, and in which direction; the optimizer steps against it.",
+   "lesson": 1
+  },
+  {
+   "term": "optimizer",
+   "match": [
+    "\\boptimi[sz]ers?\\b",
+    "\\bRMSProp\\b",
+    "\\bNadam\\b",
+    "\\bSGD\\b"
+   ],
+   "exclude": [],
+   "definition": "the object that turns gradients into parameter updates. SGD, RMSProp and Nadam are different update rules (Chapter 11 compares them); \"nadam\" in compile() picks one.",
+   "lesson": 1
+  },
+  {
+   "term": "training loop",
+   "match": [
+    "\\btraining loops?\\b"
+   ],
+   "exclude": [],
+   "definition": "the repeated cycle: take a batch, predict, compute the loss, compute gradients, update the weights. Keras's fit() runs it for you.",
+   "lesson": 1
+  },
+  {
+   "term": "parameter (network)",
+   "match": [
+    "\\bparameters?\\b"
+   ],
+   "exclude": [
+    "\\bhyperparameters?\\b"
+   ],
+   "definition": "a number the model learns in training: its weights and biases. (Chapter 2 used the word the same way for Scikit-Learn models.)",
+   "lesson": 1
+  },
+  {
+   "term": "forward pass",
+   "match": [
+    "\\bforward pass(es)?\\b"
+   ],
+   "exclude": [],
+   "definition": "sending inputs through the layers to get predictions (no learning yet).",
+   "lesson": 1
+  },
+  {
+   "term": "autodiff",
+   "match": [
+    "\\bautodiff\\b",
+    "\\bautomatic differentiation\\b",
+    "\\bauto-?differentiation\\b"
+   ],
+   "exclude": [],
+   "definition": "automatic differentiation: TensorFlow records the operations of the forward pass and works out every gradient exactly from that record.",
+   "lesson": 1
+  },
+  {
+   "term": "GradientTape",
+   "match": [
+    "\\bGradientTape\\b",
+    "\\bgradient tapes?\\b",
+    "\\btapes?\\b"
+   ],
+   "exclude": [],
+   "definition": "TensorFlow's recorder (tf.GradientTape): operations run inside its with-block are written down, so tape.gradient() can compute gradients afterwards.",
+   "lesson": 1
+  },
+  {
+   "term": "op",
+   "match": [
+    "\\bops?\\b",
+    "\\boperations?\\b"
+   ],
+   "exclude": [],
+   "definition": "one TensorFlow operation, such as add or matrix multiply.",
+   "lesson": 1
+  },
+  {
+   "term": "kernel (TensorFlow)",
+   "match": [
+    "\\bkernels?\\b"
+   ],
+   "exclude": [
+    "\\bkernel_\\w+",
+    "\\bself\\.kernel\\b",
+    "\\bkernel weight\\b",
+    "\\bthe kernel\\b(?= weight)"
+   ],
+   "definition": "the code that runs one op on one kind of device (a CPU kernel, a GPU kernel). Careful: Keras also calls a layer's weight matrix its kernel, and Chapter 2's kernel was a similarity function — three uses of one word.",
+   "lesson": 1
+  },
+  {
+   "term": "CPU",
+   "match": [
+    "\\bCPUs?\\b"
+   ],
+   "exclude": [],
+   "definition": "the computer's ordinary processor.",
+   "lesson": 1
+  },
+  {
+   "term": "GPU",
+   "match": [
+    "\\bGPUs?\\b"
+   ],
+   "exclude": [],
+   "definition": "graphics processor: a chip with thousands of small cores, very fast at the arithmetic networks need.",
+   "lesson": 1
+  },
+  {
+   "term": "TPU",
+   "match": [
+    "\\bTPUs?\\b"
+   ],
+   "exclude": [],
+   "definition": "tensor processing unit: Google's chip built only for deep-learning arithmetic.",
+   "lesson": 1
+  },
+  {
+   "term": "computation graph",
+   "match": [
+    "\\bgraphs?\\b"
+   ],
+   "exclude": [],
+   "definition": "a description of a calculation as a network of ops (nodes) connected by the tensors flowing between them (edges), which TensorFlow can optimize before running.",
+   "lesson": 1
+  },
+  {
+   "term": "just-in-time compiler",
+   "match": [
+    "\\bjust-in-time\\b",
+    "\\bJIT\\b",
+    "\\bjit_compile\\b",
+    "\\bXLA\\b"
+   ],
+   "exclude": [],
+   "definition": "a compiler that turns code into a faster form while the program is running, not ahead of time; XLA is TensorFlow's.",
+   "lesson": 1
+  },
+  {
+   "term": "TensorBoard",
+   "match": [
+    "\\bTensorBoard\\b"
+   ],
+   "exclude": [],
+   "definition": "TensorFlow's web page for watching training runs (loss curves and more).",
+   "lesson": 1
+  },
+  {
+   "term": "TensorFlow Hub",
+   "match": [
+    "\\bTensorFlow Hub\\b",
+    "\\bTF Hub\\b"
+   ],
+   "exclude": [],
+   "definition": "a site of pretrained models you can download and reuse.",
+   "lesson": 1
+  },
+  {
+   "term": "pretrained",
+   "match": [
+    "\\bpre-?trained\\b"
+   ],
+   "exclude": [],
+   "definition": "already trained by someone else, ready to reuse.",
+   "lesson": 1
+  },
+  {
+   "term": "TFX",
+   "match": [
+    "\\bTFX\\b",
+    "\\bTensorFlow Extended\\b",
+    "\\bTF Serving\\b",
+    "\\bproductioniz\\w+"
+   ],
+   "exclude": [],
+   "definition": "TensorFlow Extended: Google's libraries for running models in production (data checks, serving predictions with TF Serving).",
+   "lesson": 1
+  },
+  {
+   "term": "TensorFlow Lite",
+   "match": [
+    "\\bTensorFlow Lite\\b",
+    "\\bTF Lite\\b",
+    "\\bTensorFlow\\.js\\b"
+   ],
+   "exclude": [],
+   "definition": "the version of TensorFlow that runs models on phones and small devices; TensorFlow.js runs them in a web browser.",
+   "lesson": 1
+  },
+  {
+   "term": "model garden",
+   "match": [
+    "\\bmodel garden\\b"
+   ],
+   "exclude": [],
+   "definition": "TensorFlow's collection of ready-made network designs, some already trained.",
+   "lesson": 1
+  },
+  {
+   "term": "constraint",
+   "match": [
+    "\\bconstraints?\\b"
+   ],
+   "exclude": [],
+   "definition": "a rule applied to a layer's weights after each training step, e.g. \"no weight may be negative\".",
+   "lesson": 1
+  },
+  {
+   "term": "node",
+   "match": [
+    "\\bnodes?\\b"
+   ],
+   "exclude": [],
+   "definition": "one op inside a computation graph.",
+   "lesson": 1
+  },
+  {
+   "term": "pruning (graph)",
+   "match": [
+    "\\bprun(e|es|ed|ing)\\b"
+   ],
+   "exclude": [],
+   "definition": "removing parts of a graph whose results nothing uses.",
+   "lesson": 1
+  },
+  {
+   "term": "immutable",
+   "match": [
+    "\\bimmutab(le|ility)\\b",
+    "\\bmutable\\b",
+    "\\bmutat(e|es|ed|ing|ion)\\b"
+   ],
+   "exclude": [],
+   "definition": "cannot be changed after it is created; an operation gives you a new one instead (mutable: can be changed in place).",
+   "lesson": 2
+  },
+  {
+   "term": "tf.Variable",
+   "match": [
+    "\\bVariables?\\b"
+   ],
+   "exclude": [],
+   "definition": "TensorFlow's changeable tensor: its values are updated in place with assign(); a model's weights are Variables.",
+   "lesson": 2
+  },
+  {
+   "term": "float32",
+   "match": [
+    "\\bfloat32\\b",
+    "\\bfloat64\\b",
+    "\\b(32|64)-bit\\b",
+    "\\bdouble-precision\\b"
+   ],
+   "exclude": [],
+   "definition": "a number stored in 32 bits (float64: 64 bits, more exact, twice the memory). TensorFlow's default is float32, NumPy's is float64.",
+   "lesson": 2
+  },
+  {
+   "term": "cast",
+   "match": [
+    "\\bcast(s|ing)?\\b",
+    "\\btf\\.cast\\b"
+   ],
+   "exclude": [],
+   "definition": "convert values from one data type to another, e.g. float64 to float32.",
+   "lesson": 2
+  },
+  {
+   "term": "matrix",
+   "match": [
+    "\\bmatri(x|ces)\\b"
+   ],
+   "exclude": [
+    "\\bsparse matri(x|ces)\\b"
+   ],
+   "definition": "a table of numbers in rows and columns; @ multiplies two matrices.",
+   "lesson": 1
+  },
+  {
+   "term": "transpose",
+   "match": [
+    "\\btranspos(e|ed)\\b"
+   ],
+   "exclude": [],
+   "definition": "swap rows and columns of a matrix.",
+   "lesson": 2
+  },
+  {
+   "term": "ndarray",
+   "match": [
+    "\\bndarrays?\\b"
+   ],
+   "exclude": [],
+   "definition": "NumPy's array type.",
+   "lesson": 2
+  },
+  {
+   "term": "sparse tensor",
+   "match": [
+    "\\bsparse tensors?\\b",
+    "\\bragged tensors?\\b",
+    "\\bstring tensors?\\b"
+   ],
+   "exclude": [],
+   "definition": "special tensors: sparse = only the non-zero values are stored; ragged = rows of different lengths; string = text. (Appendix C.)",
+   "lesson": 2
+  },
+  {
+   "term": "metric",
+   "match": [
+    "\\bmetrics?\\b"
+   ],
+   "exclude": [],
+   "definition": "a number that measures how well the model does, for you to read (accuracy, mean absolute error ...); unlike the loss, training does not follow it.",
+   "lesson": 2
+  },
+  {
+   "term": "batch",
+   "match": [
+    "\\bbatch(es)?\\b",
+    "\\bmini-?batch(es)?\\b"
+   ],
+   "exclude": [
+    "\\bbatch normali[sz]ation\\b",
+    "\\bBatchNormalization\\b"
+   ],
+   "definition": "a small group of rows processed together in one training step (Keras default: 32).",
+   "lesson": 1
+  },
+  {
+   "term": "precision (numbers)",
+   "match": [
+    "\\bprecision\\b(?! is| cannot)"
+   ],
+   "exclude": [
+    "\\bprecision\\b(?= (of|for) (the )?(positive|classifier))",
+    "\\bbatch precision\\b",
+    "\\boverall precision\\b",
+    "\\btrue overall precision\\b",
+    "\\bmetrics like precision\\b",
+    "\\bPrecision is the number\\b"
+   ],
+   "definition": "how many digits a number keeps: 32-bit precision keeps about 7 digits, 64-bit about 16.",
+   "lesson": 2
+  },
+  {
+   "term": "MSE",
+   "match": [
+    "\\bMSE\\b",
+    "\\bmean squared error\\b",
+    "\\bmean_squared_error\\b"
+   ],
+   "exclude": [],
+   "definition": "mean squared error: square each error and average them. A big error counts a lot (10 wrong costs 100).",
+   "lesson": 1
+  },
+  {
+   "term": "Huber loss",
+   "match": [
+    "\\bHuber\\b"
+   ],
+   "exclude": [],
+   "definition": "a loss that squares small errors (like MSE) and grows only in a straight line for large ones (like MAE), so outliers pull less.",
+   "lesson": 3
+  },
+  {
+   "term": "converge",
+   "match": [
+    "\\bconverg(e|es|ed|ing|ence)\\b"
+   ],
+   "exclude": [],
+   "definition": "training converges when the loss stops going down because the parameters have settled.",
+   "lesson": 3
+  },
+  {
+   "term": "residual",
+   "match": [
+    "\\bresiduals?\\b"
+   ],
+   "exclude": [
+    "\\bresidual block\\b",
+    "\\bResidualBlock\\b",
+    "\\bResidualRegressor\\b",
+    "\\bresidual layer\\b",
+    "\\bresidual networks?\\b"
+   ],
+   "definition": "one sample's error: true value minus prediction.",
+   "lesson": 3
+  },
+  {
+   "term": "ground truth",
+   "match": [
+    "\\bground truth\\b"
+   ],
+   "exclude": [],
+   "definition": "the real answer from the data (y_true).",
+   "lesson": 3
+  },
+  {
+   "term": "differentiable",
+   "match": [
+    "\\bdifferentiab(le|ility)\\b"
+   ],
+   "exclude": [],
+   "definition": "has a slope everywhere, so gradients can be computed through it.",
+   "lesson": 3
+  },
+  {
+   "term": "sample weight",
+   "match": [
+    "\\bsample[ _]weights?\\b",
+    "\\bclass weights?\\b"
+   ],
+   "exclude": [],
+   "definition": "a number per training row saying how much that row counts in the loss (class weights: one per class).",
+   "lesson": 3
+  },
+  {
+   "term": "serialize",
+   "match": [
+    "\\b(de)?seriali[sz](e|es|ed|ation|ing|able)\\b"
+   ],
+   "exclude": [],
+   "definition": "turn a live object into a storable description (deserialize: rebuild the object from that description).",
+   "lesson": 4
+  },
+  {
+   "term": "closure",
+   "match": [
+    "\\bclosures?\\b"
+   ],
+   "exclude": [],
+   "definition": "a function built inside another function that remembers the outer function's values (here the threshold).",
+   "lesson": 4
+  },
+  {
+   "term": "factory function",
+   "match": [
+    "\\bfactor(y|ies)\\b"
+   ],
+   "exclude": [
+    "\\bfactor\\b"
+   ],
+   "definition": "a function whose job is to build and return another function, like create_huber(2.0).",
+   "lesson": 4
+  },
+  {
+   "term": "custom_objects",
+   "match": [
+    "\\bcustom_objects\\b"
+   ],
+   "exclude": [],
+   "definition": "the load_model() argument that maps each saved name to the real Python function or class.",
+   "lesson": 4
+  },
+  {
+   "term": "subclass",
+   "match": [
+    "\\bsub-?class(es|ed|ing)?\\b",
+    "\\binherit(s|ed|ing|ance)?\\b"
+   ],
+   "exclude": [],
+   "definition": "a new class built on an existing one: it gets all the parent's behaviour and changes only what it redefines.",
+   "lesson": 4
+  },
+  {
+   "term": "get_config",
+   "match": [
+    "\\bget_config\\b"
+   ],
+   "exclude": [],
+   "definition": "the method that returns a dictionary of an object's settings, so Keras can save it and rebuild it later.",
+   "lesson": 4
+  },
+  {
+   "term": "super()",
+   "match": [
+    "\\bsuper\\(\\)",
+    "\\bparent class\\b",
+    "\\bparent constructor\\b",
+    "\\bbase class\\b"
+   ],
+   "exclude": [],
+   "definition": "calls the parent class's version of a method, e.g. super().__init__(**kwargs) runs the parent's setup first.",
+   "lesson": 4
+  },
+  {
+   "term": "kwargs",
+   "match": [
+    "\\bkwargs\\b"
+   ],
+   "exclude": [],
+   "definition": "**kwargs collects any extra named arguments (name=..., reduction=...) so they can be passed on to the parent class.",
+   "lesson": 4
+  },
+  {
+   "term": "reduction",
+   "match": [
+    "\\breductions?\\b",
+    "\\breduce_\\w+",
+    "\\bSUM_OVER_BATCH_SIZE\\b",
+    "\\bAUTO\\b"
+   ],
+   "exclude": [],
+   "definition": "how many per-sample values are combined into one number: sum them, average them, or keep them all.",
+   "lesson": 4
+  },
+  {
+   "term": "dictionary",
+   "match": [
+    "\\bdictionar(y|ies)\\b",
+    "\\bdict\\b"
+   ],
+   "exclude": [],
+   "definition": "a Python table of key: value pairs, like {\"threshold\": 2.0}.",
+   "lesson": 4
+  },
+  {
+   "term": "decorator",
+   "match": [
+    "\\bdecorat(or|ors|ed|ing|e)\\b",
+    "@tf\\.function\\b",
+    "@tf\\.custom_gradient\\b",
+    "@keras\\.utils"
+   ],
+   "exclude": [],
+   "definition": "a line starting with @ above a function; it wraps the function to change how it behaves (e.g. @tf.function).",
+   "lesson": 4
+  },
+  {
+   "term": "initializer",
+   "match": [
+    "\\binitiali[sz](er|ers|ation|e|ed)\\b"
+   ],
+   "exclude": [],
+   "definition": "the function that picks a layer's random starting weights.",
+   "lesson": 4
+  },
+  {
+   "term": "Glorot initialization",
+   "match": [
+    "\\bglorot\\b"
+   ],
+   "exclude": [],
+   "definition": "a rule for how spread out the random starting weights are: variance 2 / (number of inputs + number of outputs).",
+   "lesson": 5
+  },
+  {
+   "term": "regularizer",
+   "match": [
+    "\\bregulari[sz]ers?\\b",
+    "\\bkernel_regularizer\\b"
+   ],
+   "exclude": [],
+   "definition": "a function that computes a penalty from a layer's weights; the penalty is added to the loss to keep the weights small.",
+   "lesson": 3
+  },
+  {
+   "term": "Dense layer",
+   "match": [
+    "\\bDense\\b"
+   ],
+   "exclude": [
+    "\\bdense layers?\\b(?= —)"
+   ],
+   "definition": "a layer in which every neuron reads every input (tf.keras.layers.Dense). Dense(30) = 30 neurons.",
+   "lesson": 1
+  },
+  {
+   "term": "L1 penalty",
+   "match": [
+    "\\bL1\\b",
+    "\\bℓ1\\b",
+    "\\bL2\\b",
+    "\\bl2\\("
+   ],
+   "exclude": [],
+   "definition": "L1: the sum of the absolute values of the weights (times a factor), added to the loss; L2 uses their squares instead.",
+   "lesson": 5
+  },
+  {
+   "term": "penalty",
+   "match": [
+    "\\bpenalt(y|ies)\\b"
+   ],
+   "exclude": [],
+   "definition": "an extra amount added to the loss, growing with the weights, so large weights cost something.",
+   "lesson": 1
+  },
+  {
+   "term": "scalar",
+   "match": [
+    "\\bscalars?\\b"
+   ],
+   "exclude": [],
+   "definition": "a single number (a tensor with no dimensions).",
+   "lesson": 5
+  },
+  {
+   "term": "precision (metric)",
+   "match": [
+    "\\bPrecision is the number\\b",
+    "\\bbatch precision\\b",
+    "\\boverall precision\\b",
+    "\\bPrecision\\(\\)",
+    "\\bprecision\\b(?= (of|for) )"
+   ],
+   "exclude": [],
+   "definition": "of all the rows the model called positive, the share that really were positive: 4 right out of 5 = 80%.",
+   "lesson": 2
+  },
+  {
+   "term": "streaming metric",
+   "match": [
+    "\\bstreaming\\b"
+   ],
+   "exclude": [],
+   "definition": "a metric that keeps running totals (counts, sums) across batches and divides only at the end, so the result is exact for the whole epoch.",
+   "lesson": 6
+  },
+  {
+   "term": "epoch",
+   "match": [
+    "\\bepochs?\\b"
+   ],
+   "exclude": [],
+   "definition": "one full pass over the training data.",
+   "lesson": 3
+  },
+  {
+   "term": "true positive",
+   "match": [
+    "\\btrue positives?\\b",
+    "\\bfalse positives?\\b"
+   ],
+   "exclude": [],
+   "definition": "a positive prediction that was right (false positive: a positive prediction that was wrong).",
+   "lesson": 6
+  },
+  {
+   "term": "binary classification",
+   "match": [
+    "\\bbinary\\b"
+   ],
+   "exclude": [],
+   "definition": "sorting rows into two classes (positive or negative).",
+   "lesson": 6
+  },
+  {
+   "term": "reset_state",
+   "match": [
+    "\\breset_states?\\b"
+   ],
+   "exclude": [],
+   "definition": "sets a metric's running totals back to 0 (Keras 3 name; the book writes reset_states).",
+   "lesson": 6
+  },
+  {
+   "term": "add_weight",
+   "match": [
+    "\\badd_weight\\b"
+   ],
+   "exclude": [],
+   "definition": "creates a tracked variable inside a layer or metric, so Keras saves it, resets it and (for layers) trains it.",
+   "lesson": 6
+  },
+  {
+   "term": "Lambda layer",
+   "match": [
+    "\\bLambda\\b"
+   ],
+   "exclude": [
+    "\\blambda w\\b"
+   ],
+   "definition": "a layer made from a plain function (tf.keras.layers.Lambda), for layers with no weights.",
+   "lesson": 7
+  },
+  {
+   "term": "build()",
+   "match": [
+    "\\bbuild\\(\\)",
+    "\\bbuild method\\b",
+    "\\bbuild step\\b",
+    "\\bbuild phase\\b"
+   ],
+   "exclude": [],
+   "definition": "the layer method Keras calls once, the first time data arrives, so the layer can create weights of the right shape.",
+   "lesson": 7
+  },
+  {
+   "term": "call()",
+   "match": [
+    "\\bcall\\(\\)",
+    "\\bcall method\\b"
+   ],
+   "exclude": [],
+   "definition": "the method holding a layer's or model's forward pass: the calculation done on every input.",
+   "lesson": 5
+  },
+  {
+   "term": "shape",
+   "match": [
+    "\\bshapes?\\b(?= \\[| \\(|:| is\\b| of\\b)",
+    "\\bbatch_input_shape\\b",
+    "\\binput_shape\\b",
+    "\\bTensorShape\\b"
+   ],
+   "exclude": [
+    "\\bthree-step shape\\b",
+    "\\bsame shape\\b(?= for)",
+    "\\bAPI shape\\b"
+   ],
+   "definition": "the size of a tensor along each direction: [None, 5] = any number of rows (None) of 5 columns.",
+   "lesson": 2
+  },
+  {
+   "term": "trainable",
+   "match": [
+    "\\btrainable\\b",
+    "\\btrainable_variables\\b"
+   ],
+   "exclude": [],
+   "definition": "a variable gradient descent is allowed to change; non-trainable variables (e.g. running statistics) are kept but not trained.",
+   "lesson": 7
+  },
+  {
+   "term": "broadcast",
+   "match": [
+    "\\bbroadcast(s|ing)?\\b"
+   ],
+   "exclude": [],
+   "definition": "stretching a smaller tensor to match a bigger one in arithmetic, e.g. adding one bias vector to every row of a matrix.",
+   "lesson": 7
+  },
+  {
+   "term": "dynamic layer",
+   "match": [
+    "\\bdynamic=True\\b",
+    "\\bdynamic (layer|model)s?\\b"
+   ],
+   "exclude": [],
+   "definition": "a layer or model Keras must run line by line in Python instead of turning it into a graph.",
+   "lesson": 7
+  },
+  {
+   "term": "residual block",
+   "match": [
+    "\\bresidual blocks?\\b",
+    "\\bResidualBlock\\b",
+    "\\bresidual layer\\b"
+   ],
+   "exclude": [],
+   "definition": "a small stack of layers whose output is added back to its own input (input + layers(input)).",
+   "lesson": 8
+  },
+  {
+   "term": "skip connection",
+   "match": [
+    "\\bskip connections?\\b",
+    "\\bskip path\\b"
+   ],
+   "exclude": [],
+   "definition": "the path that carries a block's input past its layers so it can be added back at the end.",
+   "lesson": 8
+  },
+  {
+   "term": "control flow",
+   "match": [
+    "\\bcontrol flow\\b"
+   ],
+   "exclude": [],
+   "definition": "the if and for statements of a program: branching and repeating.",
+   "lesson": 8
+  },
+  {
+   "term": "functional API",
+   "match": [
+    "\\bfunctional API\\b"
+   ],
+   "exclude": [],
+   "definition": "Keras's way of wiring layers by calling them on each other's outputs; it builds a fixed graph, so it cannot loop.",
+   "lesson": 8
+  },
+  {
+   "term": "save_weights",
+   "match": [
+    "\\bsave_weights\\b",
+    "\\bload_weights\\b"
+   ],
+   "exclude": [],
+   "definition": "saving (or loading) only the numbers of a model's weights, not its design.",
+   "lesson": 8
+  },
+  {
+   "term": "Sequential",
+   "match": [
+    "\\bSequential\\b"
+   ],
+   "exclude": [],
+   "definition": "Keras's simplest model: a plain list of layers, each feeding the next.",
+   "lesson": 8
+  },
+  {
+   "term": "add_loss",
+   "match": [
+    "\\badd_loss\\b"
+   ],
+   "exclude": [],
+   "definition": "called inside a layer or model's call(): adds an extra value to the loss that training minimises.",
+   "lesson": 9
+  },
+  {
+   "term": "add_metric",
+   "match": [
+    "\\badd_metric\\b"
+   ],
+   "exclude": [],
+   "definition": "the book's call for showing an extra value during training without training on it; removed in Keras 3 (a metric object kept on the model does the same job).",
+   "lesson": 9
+  },
+  {
+   "term": "autoencoder",
+   "match": [
+    "\\bautoencoders?\\b"
+   ],
+   "exclude": [],
+   "definition": "a network trained to rebuild its own input from a smaller inner representation (Chapter 17).",
+   "lesson": 9
+  },
+  {
+   "term": "representation",
+   "match": [
+    "\\brepresentations?\\b"
+   ],
+   "exclude": [],
+   "definition": "what a layer's outputs capture about the input: the numbers it hands on.",
+   "lesson": 9
+  },
+  {
+   "term": "reconstruction",
+   "match": [
+    "\\breconstruct(ion|ions|ed|s|ing)?\\b"
+   ],
+   "exclude": [
+    "\\bstores a loss it cannot reconstruct\\b",
+    "\\breconstruct the object\\b"
+   ],
+   "definition": "the network's attempt to rebuild its own input from an inner layer.",
+   "lesson": 7
+  },
+  {
+   "term": "finite differences",
+   "match": [
+    "\\bfinite differences?\\b"
+   ],
+   "exclude": [],
+   "definition": "estimating a slope by nudging one input by a tiny amount and seeing how much the output moved.",
+   "lesson": 10
+  },
+  {
+   "term": "partial derivative",
+   "match": [
+    "\\bpartial derivatives?\\b",
+    "∂"
+   ],
+   "exclude": [],
+   "definition": "how much the output changes when ONE input changes a little, the others held still; the gradient is the list of them.",
+   "lesson": 10
+  },
+  {
+   "term": "reverse-mode autodiff",
+   "match": [
+    "\\breverse[- ]mode\\b",
+    "\\bforward[- ]mode\\b"
+   ],
+   "exclude": [],
+   "definition": "the autodiff method TensorFlow uses: one forward pass, then one backward pass gives the gradient for every parameter at once.",
+   "lesson": 10
+  },
+  {
+   "term": "stop_gradient",
+   "match": [
+    "\\bstop_gradient\\b"
+   ],
+   "exclude": [],
+   "definition": "tf.stop_gradient(x): passes x forward unchanged but blocks gradients from flowing back through it.",
+   "lesson": 10
+  },
+  {
+   "term": "custom_gradient",
+   "match": [
+    "\\bcustom_gradient\\b"
+   ],
+   "exclude": [],
+   "definition": "the @tf.custom_gradient decorator: you write the derivative yourself, e.g. to avoid an overflow.",
+   "lesson": 10
+  },
+  {
+   "term": "overflow",
+   "match": [
+    "\\boverflow\\b",
+    "\\binfinity\\b",
+    "\\binf\\b"
+   ],
+   "exclude": [],
+   "definition": "a number too big for its storage becomes inf (infinity); inf / inf gives NaN.",
+   "lesson": 10
+  },
+  {
+   "term": "NaN",
+   "match": [
+    "\\bNaN\\b"
+   ],
+   "exclude": [],
+   "definition": "\"not a number\": the result of an impossible calculation such as inf / inf. Once it appears, it spreads.",
+   "lesson": 10
+  },
+  {
+   "term": "persistent tape",
+   "match": [
+    "\\bpersistent\\b"
+   ],
+   "exclude": [
+    "\\bpersistent variable\\b"
+   ],
+   "definition": "tf.GradientTape(persistent=True): a tape that is not erased after its first gradient() call.",
+   "lesson": 10
+  },
+  {
+   "term": "dropout",
+   "match": [
+    "\\bdropout\\b"
+   ],
+   "exclude": [],
+   "definition": "a layer that switches off random neurons at each training step (only while training), to fight overfitting.",
+   "lesson": 11
+  },
+  {
+   "term": "batch normalization",
+   "match": [
+    "\\bbatch normali[sz]ation\\b",
+    "\\bBatchNormalization\\b"
+   ],
+   "exclude": [],
+   "definition": "a layer that standardizes its inputs using the current batch while training, and stored averages when predicting.",
+   "lesson": 11
+  },
+  {
+   "term": "apply_gradients",
+   "match": [
+    "\\bapply_gradients\\b"
+   ],
+   "exclude": [],
+   "definition": "the optimizer method that updates the variables: it takes (gradient, variable) pairs.",
+   "lesson": 11
+  },
+  {
+   "term": "tf.add_n",
+   "match": [
+    "\\badd_n\\b"
+   ],
+   "exclude": [],
+   "definition": "adds up a list of tensors of the same shape.",
+   "lesson": 5
+  },
+  {
+   "term": "tf.function",
+   "match": [
+    "\\btf\\.function\\b",
+    "\\bTF functions?\\b"
+   ],
+   "exclude": [],
+   "definition": "turns a Python function into a TensorFlow graph that runs faster and can be exported.",
+   "lesson": 4
+  },
+  {
+   "term": "AutoGraph",
+   "match": [
+    "\\bAutoGraph\\b"
+   ],
+   "exclude": [],
+   "definition": "the part of tf.function that reads your function's source and rewrites Python for-loops and ifs into TensorFlow ops.",
+   "lesson": 12
+  },
+  {
+   "term": "tracing",
+   "match": [
+    "\\btrac(e|es|ed|ing)\\b"
+   ],
+   "exclude": [],
+   "definition": "the one-time run of your function with placeholder tensors, during which TensorFlow records the graph.",
+   "lesson": 1
+  },
+  {
+   "term": "symbolic tensor",
+   "match": [
+    "\\bsymbolic\\b",
+    "\\bplaceholders?\\b"
+   ],
+   "exclude": [],
+   "definition": "a tensor with a data type and a shape but no values, used while tracing.",
+   "lesson": 1
+  },
+  {
+   "term": "eager execution",
+   "match": [
+    "\\beager(ly)?\\b",
+    "\\brun_eagerly\\b"
+   ],
+   "exclude": [],
+   "definition": "TensorFlow's normal mode: each line runs immediately, like ordinary Python (the opposite of graph mode).",
+   "lesson": 12
+  },
+  {
+   "term": "softplus",
+   "match": [
+    "\\bsoftplus\\b"
+   ],
+   "exclude": [],
+   "definition": "the activation log(1 + e^z): a smooth version of ReLU — always above 0, close to 0 for very negative z and close to z for large z.",
+   "lesson": 5
+  },
+  {
+   "term": "layer normalization",
+   "match": [
+    "\\blayer normali[sz]ation\\b",
+    "\\bLayerNormalization\\b"
+   ],
+   "exclude": [],
+   "definition": "rescaling each example's own features to average 0 and spread 1 (then a learned scale and offset), row by row, so it works the same on one example as on many.",
+   "lesson": 13
+  },
+  {
+   "term": "Fashion MNIST",
+   "match": [
+    "\\bfashion[ -]mnist\\b"
+   ],
+   "exclude": [],
+   "definition": "an image set of 70,000 small grey photos of clothes, 28 x 28 pixels, in 10 classes such as T-shirt, trouser and ankle boot (60,000 for training, 10,000 for testing).",
+   "lesson": 13
+  }
+ ]
+}

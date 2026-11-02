@@ -1,0 +1,22 @@
+[Unit]
+Description=Edu-Argumentation learning interface
+After=network.target
+
+[Service]
+Type=simple
+User=ubuntu
+WorkingDirectory=/srv/foxai/edu-argumentation
+# The provider credentials and the general settings live in foxai-data, NOT in
+# /srv/foxai/edu-argumentation. That tree is deployed with `rsync --delete`, so a
+# store kept inside it is wiped on every deploy and the service returns healthy
+# and empty. The file is owned by this unit's user because the in-app Settings
+# page writes it; mode 600.
+EnvironmentFile=-/home/ubuntu/foxai-data/edu-argumentation/provider.env
+Environment=EDU_ENV_PATH=/home/ubuntu/foxai-data/edu-argumentation/provider.env
+Environment=EDU_SETTINGS_PATH=/home/ubuntu/foxai-data/edu-argumentation/settings.json
+ExecStart=/usr/bin/python3 /srv/foxai/edu-argumentation/edu_server.py --bind 0.0.0.0 --port 8767 --directory /srv/foxai/edu-argumentation
+Restart=always
+RestartSec=3
+
+[Install]
+WantedBy=multi-user.target

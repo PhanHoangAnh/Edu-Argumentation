@@ -1,0 +1,830 @@
+{
+ "chapter": 9,
+ "flow": [
+  "Get the data",
+  "Set aside a test set",
+  "Explore",
+  "Prepare the data",
+  "Train",
+  "Evaluate",
+  "Fine-tune",
+  "Launch"
+ ],
+ "known": [
+  "ch02-term-registry.json"
+ ],
+ "generated_by": "ml/study/geron-lab/ch09-notes (build_chapter.py)",
+ "terms": [
+  {
+   "term": "unsupervised learning",
+   "match": [
+    "\\bunsupervised\\b"
+   ],
+   "exclude": [],
+   "definition": "learning from data that has NO answer column: the algorithm looks for structure (groups, oddities) on its own.",
+   "lesson": 1
+  },
+  {
+   "term": "reinforcement learning",
+   "match": [
+    "\\breinforcement learning\\b"
+   ],
+   "exclude": [],
+   "definition": "a third kind of learning, where a program learns by trying actions and getting rewards (Chapter 18); not used here.",
+   "lesson": 1
+  },
+  {
+   "term": "anomaly detection",
+   "match": [
+    "\\banomaly detection\\b",
+    "\\boutlier detection\\b",
+    "\\banomaly detectors?\\b"
+   ],
+   "exclude": [],
+   "definition": "learning what normal data looks like, then flagging the instances that do not fit it.",
+   "lesson": 1
+  },
+  {
+   "term": "anomaly",
+   "match": [
+    "\\banomal(y|ies|ous)\\b"
+   ],
+   "exclude": [
+    "\\banomaly detection\\b",
+    "\\banomaly detectors?\\b"
+   ],
+   "definition": "an instance that does not look like the rest of the data (also called an outlier).",
+   "lesson": 1
+  },
+  {
+   "term": "inlier",
+   "match": [
+    "\\binliers?\\b"
+   ],
+   "exclude": [],
+   "definition": "a normal instance — the opposite of an outlier.",
+   "lesson": 1
+  },
+  {
+   "term": "density estimation",
+   "match": [
+    "\\bdensity estimation\\b",
+    "\\bestimat(e|es|ed|ing) (the )?density\\b"
+   ],
+   "exclude": [],
+   "definition": "estimating how the data is spread over the space: which regions are crowded and which are nearly empty.",
+   "lesson": 1
+  },
+  {
+   "term": "density",
+   "match": [
+    "\\bdens(ity|ities|e)\\b"
+   ],
+   "exclude": [
+    "\\bdensity estimation\\b",
+    "\\bdense layers?\\b"
+   ],
+   "definition": "how crowded a region of the data is: many instances packed close together = high density; a lonely instance = low density.",
+   "lesson": 1
+  },
+  {
+   "term": "probability distribution",
+   "match": [
+    "\\bprobability distributions?\\b"
+   ],
+   "exclude": [],
+   "definition": "a description of which values are likely and which are rare; the chances of all possible values add up to 1.",
+   "lesson": 1
+  },
+  {
+   "term": "customer segmentation",
+   "match": [
+    "\\bcustomer segmentation\\b",
+    "\\bsegment (customers|the customers)\\b"
+   ],
+   "exclude": [],
+   "definition": "grouping customers by behaviour so each group can be treated differently.",
+   "lesson": 1
+  },
+  {
+   "term": "semi-supervised learning",
+   "match": [
+    "\\bsemi-?supervised\\b"
+   ],
+   "exclude": [],
+   "definition": "learning when only a few instances have labels and most have none.",
+   "lesson": 2
+  },
+  {
+   "term": "image segmentation",
+   "match": [
+    "\\bimage segmentation\\b",
+    "\\bsegmentation\\b",
+    "\\bsegment(s|ed)?\\b"
+   ],
+   "exclude": [
+    "\\bcustomer segmentation\\b",
+    "\\bsegment (customers|the customers)\\b"
+   ],
+   "definition": "splitting an image into regions (segments) whose pixels belong together.",
+   "lesson": 1
+  },
+  {
+   "term": "dimensionality reduction",
+   "match": [
+    "\\bdimensionality[- ]reduc(tion|er)\\b",
+    "\\breduc(e|es|ed|ing) (the )?dimensionality\\b"
+   ],
+   "exclude": [],
+   "definition": "turning a table with many columns into one with fewer columns while keeping the useful information (Chapter 8's subject).",
+   "lesson": 2
+  },
+  {
+   "term": "centroid",
+   "match": [
+    "\\bcentroids?\\b",
+    "\\bcluster_centers_\\b",
+    "\\bcluster cent(er|re)s?\\b"
+   ],
+   "exclude": [],
+   "definition": "the centre of a cluster: the average position of its instances (average of each column).",
+   "lesson": 2
+  },
+  {
+   "term": "iris dataset",
+   "match": [
+    "\\biris\\b"
+   ],
+   "exclude": [],
+   "definition": "a classic table of 150 flowers of 3 species, with 4 measurements each (sepal and petal length and width, in cm).",
+   "lesson": 2
+  },
+  {
+   "term": "hierarchy",
+   "match": [
+    "\\bhierarch(y|ies|ical)\\b"
+   ],
+   "exclude": [],
+   "definition": "groups nested inside bigger groups.",
+   "lesson": 2
+  },
+  {
+   "term": "make_blobs",
+   "match": [
+    "\\bmake_blobs\\b",
+    "\\bblobs?\\b"
+   ],
+   "exclude": [],
+   "definition": "a Scikit-Learn function that generates points gathered in round clumps (blobs) around chosen centres; handy test data.",
+   "lesson": 1
+  },
+  {
+   "term": "fit_predict",
+   "match": [
+    "\\bfit_predict\\b"
+   ],
+   "exclude": [],
+   "definition": "fit the model, then return its prediction for each training row, in one call.",
+   "lesson": 3
+  },
+  {
+   "term": "labels_ (cluster index)",
+   "match": [
+    "\\blabels_\\b"
+   ],
+   "exclude": [],
+   "definition": "after k-means is fitted: one cluster NUMBER per training instance (0, 1, 2 ...). An arbitrary bucket number, not a real-world label.",
+   "lesson": 3
+  },
+  {
+   "term": "Voronoi tessellation",
+   "match": [
+    "\\bvoronoi\\b",
+    "\\btessellation\\b"
+   ],
+   "exclude": [],
+   "definition": "cutting the plane into regions, one per centroid, where every point belongs to the region of its nearest centroid.",
+   "lesson": 3
+  },
+  {
+   "term": "hard clustering",
+   "match": [
+    "\\bhard (clustering|assignment)\\b"
+   ],
+   "exclude": [],
+   "definition": "giving each instance exactly one cluster.",
+   "lesson": 3
+  },
+  {
+   "term": "soft clustering",
+   "match": [
+    "\\bsoft (clustering|assignments?)\\b"
+   ],
+   "exclude": [],
+   "definition": "giving each instance a score (a distance or a probability) for EVERY cluster, instead of one cluster.",
+   "lesson": 3
+  },
+  {
+   "term": "local optimum",
+   "match": [
+    "\\blocal optim(um|a)\\b",
+    "\\blocal minim(um|a)\\b"
+   ],
+   "exclude": [],
+   "definition": "a solution that no small change can improve, even though a completely different solution would be better.",
+   "lesson": 4
+  },
+  {
+   "term": "converge",
+   "match": [
+    "\\bconverg(e|es|ed|ing|ence)\\b"
+   ],
+   "exclude": [],
+   "definition": "to settle: repeating the steps stops changing anything.",
+   "lesson": 3
+  },
+  {
+   "term": "initialization",
+   "match": [
+    "\\binitiali[sz](ation|e|es|ed|ing)\\b",
+    "\\binit\\b",
+    "\\binit=",
+    "\\bgood_init\\b"
+   ],
+   "exclude": [],
+   "definition": "the starting values an algorithm begins from (for k-means: where the k centroids start).",
+   "lesson": 4
+  },
+  {
+   "term": "inertia",
+   "match": [
+    "\\binertia_?\\b"
+   ],
+   "exclude": [],
+   "definition": "k-means' score: add up, over all instances, the squared distance from each one to its own centroid. Lower = tighter clusters.",
+   "lesson": 3
+  },
+  {
+   "term": "n_init",
+   "match": [
+    "\\bn_init\\b",
+    "\\brestarts?\\b"
+   ],
+   "exclude": [],
+   "definition": "how many times k-means is run from different random starts; the run with the lowest inertia is kept.",
+   "lesson": 3
+  },
+  {
+   "term": "k-means++",
+   "match": [
+    "\\bk-means\\+\\+",
+    "\\bkmeans\\+\\+"
+   ],
+   "exclude": [],
+   "definition": "a smarter way to place the starting centroids: one at a time, each new one more likely to land far from the ones already placed.",
+   "lesson": 5
+  },
+  {
+   "term": "triangle inequality",
+   "match": [
+    "\\btriangle inequality\\b"
+   ],
+   "exclude": [],
+   "definition": "going straight from A to C is never longer than going from A to B and then to C.",
+   "lesson": 6
+  },
+  {
+   "term": "mini-batch",
+   "match": [
+    "\\bmini-?batch(es)?\\b(?! k-?means)",
+    "\\bMiniBatchKMeans\\b"
+   ],
+   "exclude": [],
+   "definition": "a small random chunk of rows processed in one step, instead of the whole dataset at once.",
+   "lesson": 6
+  },
+  {
+   "term": "elbow",
+   "match": [
+    "\\belbows?\\b"
+   ],
+   "exclude": [],
+   "definition": "the bend in a curve where the steep part meets the flat part.",
+   "lesson": 7
+  },
+  {
+   "term": "silhouette score",
+   "match": [
+    "\\bsilhouette\\b",
+    "\\bsilhouette_score\\b",
+    "\\bsilhouette_samples\\b"
+   ],
+   "exclude": [],
+   "definition": "a score from -1 to +1 for each instance: how much closer it is to its own cluster than to the next-nearest cluster; averaged over all instances it scores a whole clustering.",
+   "lesson": 7
+  },
+  {
+   "term": "dimensionless",
+   "match": [
+    "\\bdimensionless\\b"
+   ],
+   "exclude": [],
+   "definition": "a number with no units (not metres, not pixels), so it can be compared across datasets.",
+   "lesson": 8
+  },
+  {
+   "term": "spherical",
+   "match": [
+    "\\bspherical\\b",
+    "\\bround (clusters|blobs)\\b"
+   ],
+   "exclude": [],
+   "definition": "round: spread the same amount in every direction (in 2D, a circle).",
+   "lesson": 2
+  },
+  {
+   "term": "ellipse",
+   "match": [
+    "\\bellip(se|ses|tical|soidal|soid)\\b"
+   ],
+   "exclude": [],
+   "definition": "a stretched circle; elliptical clusters are longer in one direction than in another and may be tilted.",
+   "lesson": 9
+  },
+  {
+   "term": "pixel",
+   "match": [
+    "\\bpixels?\\b"
+   ],
+   "exclude": [],
+   "definition": "one dot of an image. A colour pixel is 3 numbers: red, green and blue intensity, each 0 to 255.",
+   "lesson": 1
+  },
+  {
+   "term": "RGB",
+   "match": [
+    "\\bRGB\\b",
+    "\\bcolou?r channels?\\b",
+    "\\bchannels?\\b"
+   ],
+   "exclude": [],
+   "definition": "red, green, blue: the 3 numbers (channels) that describe one pixel's colour.",
+   "lesson": 10
+  },
+  {
+   "term": "reshape",
+   "match": [
+    "\\breshap(e|ed|es|ing)\\b"
+   ],
+   "exclude": [],
+   "definition": "change an array's shape (rows × columns) without changing its numbers; -1 means \"work this size out for me\".",
+   "lesson": 10
+  },
+  {
+   "term": "convolutional network",
+   "match": [
+    "\\bconvolutional\\b"
+   ],
+   "exclude": [],
+   "definition": "a kind of neural network built for images (Chapter 14).",
+   "lesson": 10
+  },
+  {
+   "term": "colour quantization",
+   "match": [
+    "\\bquanti[sz](ation|ed|e)\\b",
+    "\\bcodebook\\b"
+   ],
+   "exclude": [],
+   "definition": "representing many values by a small set of representative values (a codebook); for an image, redrawing it with a small palette of colours.",
+   "lesson": 2
+  },
+  {
+   "term": "digits dataset",
+   "match": [
+    "\\bdigits dataset\\b",
+    "\\bload_digits\\b",
+    "\\bX_digits\\b"
+   ],
+   "exclude": [],
+   "definition": "1,797 small 8 × 8 grey images of handwritten digits 0 to 9 that ship with Scikit-Learn (64 pixel columns each).",
+   "lesson": 11
+  },
+  {
+   "term": "logistic regression",
+   "match": [
+    "\\blogistic regression\\b",
+    "\\bLogisticRegression\\b",
+    "\\blog_reg\\b"
+   ],
+   "exclude": [],
+   "definition": "despite its name, a simple CLASSIFICATION model (Chapter 4): it outputs a probability per class.",
+   "lesson": 11
+  },
+  {
+   "term": "accuracy",
+   "match": [
+    "\\baccura(cy|te)\\b"
+   ],
+   "exclude": [
+    "\\baccurately\\b"
+   ],
+   "definition": "how correct results are; for a classifier, the share of test instances it gets right (0.84 = 84%).",
+   "lesson": 6
+  },
+  {
+   "term": "representative instance",
+   "match": [
+    "\\brepresentatives?\\b"
+   ],
+   "exclude": [],
+   "definition": "the training instance closest to a cluster's centroid: the most typical member of that cluster.",
+   "lesson": 2
+  },
+  {
+   "term": "label propagation",
+   "match": [
+    "\\blabel propagation\\b",
+    "\\bpropagat(e|es|ed|ing|ion)\\b",
+    "\\bLabelPropagation\\b",
+    "\\bLabelSpreading\\b"
+   ],
+   "exclude": [],
+   "definition": "copying a known label onto other, unlabeled instances — here, onto every member of the same cluster.",
+   "lesson": 11
+  },
+  {
+   "term": "active learning",
+   "match": [
+    "\\bactive learning\\b"
+   ],
+   "exclude": [],
+   "definition": "a loop where the model asks a human to label the instances that would help it most, then retrains.",
+   "lesson": 11
+  },
+  {
+   "term": "uncertainty sampling",
+   "match": [
+    "\\buncertainty sampling\\b"
+   ],
+   "exclude": [],
+   "definition": "the active-learning rule: ask the human about the instances the current model is least sure about.",
+   "lesson": 12
+  },
+  {
+   "term": "DBSCAN",
+   "match": [
+    "\\bDBSCAN\\b",
+    "\\bHDBSCAN\\b"
+   ],
+   "exclude": [],
+   "definition": "a clustering algorithm that defines a cluster as a connected region where instances are packed densely; it finds any shape and marks leftovers as anomalies.",
+   "lesson": 13
+  },
+  {
+   "term": "epsilon (eps)",
+   "match": [
+    "\\beps\\b",
+    "ε",
+    "\\bepsilon\\b"
+   ],
+   "exclude": [
+    "ε-neighbou?rhoods?"
+   ],
+   "definition": "the Greek letter ε; in DBSCAN, the radius: how close two instances must be to count as neighbours.",
+   "lesson": 13
+  },
+  {
+   "term": "ε-neighborhood",
+   "match": [
+    "ε-neighbou?rhoods?"
+   ],
+   "exclude": [],
+   "definition": "all the instances within distance ε of a given instance.",
+   "lesson": 13
+  },
+  {
+   "term": "core instance",
+   "match": [
+    "\\bcore (instances?|points?|samples?)\\b",
+    "\\bcore_sample_indices_\\b"
+   ],
+   "exclude": [],
+   "definition": "in DBSCAN, an instance with at least min_samples instances (itself included) within distance ε: it sits in a dense region.",
+   "lesson": 13
+  },
+  {
+   "term": "min_samples",
+   "match": [
+    "\\bmin_samples\\b"
+   ],
+   "exclude": [],
+   "definition": "DBSCAN's other setting: how many instances an ε-neighborhood must hold for its centre to be a core instance.",
+   "lesson": 13
+  },
+  {
+   "term": "moons dataset",
+   "match": [
+    "\\bmoons?\\b",
+    "\\bmake_moons\\b",
+    "\\bcrescents?\\b"
+   ],
+   "exclude": [],
+   "definition": "a toy dataset of two interlocking crescent (half-moon) shapes.",
+   "lesson": 13
+  },
+  {
+   "term": "KNeighborsClassifier",
+   "match": [
+    "\\bKNeighborsClassifier\\b"
+   ],
+   "exclude": [],
+   "definition": "a classifier that labels a new instance by majority vote of its k nearest training instances.",
+   "lesson": 13
+  },
+  {
+   "term": "Gaussian mixture model",
+   "match": [
+    "\\bGaussian mixtures?\\b",
+    "\\bmixture models?\\b",
+    "\\bGaussianMixture\\b",
+    "\\bGMMs?\\b"
+   ],
+   "exclude": [],
+   "definition": "a model that assumes the data was generated by a few bell-shaped (Gaussian) clouds, each with its own centre, shape and share of the data.",
+   "lesson": 1
+  },
+  {
+   "term": "covariance",
+   "match": [
+    "\\bcovariances?(_)?\\b",
+    "\\bcovariance_type\\b"
+   ],
+   "exclude": [],
+   "definition": "for one Gaussian cloud: the numbers that set how wide it is in each direction and how it is tilted (the shape of its ellipse).",
+   "lesson": 9
+  },
+  {
+   "term": "mixture weight",
+   "match": [
+    "\\bweights?_?\\b",
+    "\\bweighted\\b"
+   ],
+   "exclude": [
+    "\\bweight matrix\\b"
+   ],
+   "definition": "a number saying how much something counts; for a Gaussian mixture, the share of the data each cloud produced (the weights add up to 1).",
+   "lesson": 5
+  },
+  {
+   "term": "probability",
+   "match": [
+    "\\bprobabilit(y|ies)\\b",
+    "\\bpredict_proba\\b",
+    "\\bprobable\\b"
+   ],
+   "exclude": [
+    "\\bprobability distributions?\\b"
+   ],
+   "definition": "a number from 0 to 1 saying how likely something is (0.98 = 98% likely).",
+   "lesson": 3
+  },
+  {
+   "term": "expectation-maximization",
+   "match": [
+    "\\bexpectation[–-]maximi[sz]ation\\b",
+    "\\bEM\\b"
+   ],
+   "exclude": [],
+   "definition": "the algorithm that fits a Gaussian mixture: guess the clouds, then repeat two steps — work out each instance's probabilities, then re-fit every cloud — until nothing changes.",
+   "lesson": 4
+  },
+  {
+   "term": "expectation step",
+   "match": [
+    "\\bexpectation step\\b"
+   ],
+   "exclude": [],
+   "definition": "EM's first step: with the current clouds, work out the probability that each instance came from each cloud.",
+   "lesson": 14
+  },
+  {
+   "term": "maximization step",
+   "match": [
+    "\\bmaximi[sz]ation step\\b",
+    "\\bmaximi[sz]ation\\b(?! algorithm)"
+   ],
+   "exclude": [
+    "\\bexpectation[–-]maximi[sz]ation\\b"
+   ],
+   "definition": "EM's second step: re-fit every cloud's centre, shape and weight from ALL instances, each counted by its probability.",
+   "lesson": 14
+  },
+  {
+   "term": "responsibility",
+   "match": [
+    "\\bresponsibilit(y|ies)\\b",
+    "\\bresponsible\\b"
+   ],
+   "exclude": [],
+   "definition": "in EM, the probability that one instance belongs to one cluster, given the current clouds.",
+   "lesson": 14
+  },
+  {
+   "term": "generative model",
+   "match": [
+    "\\bgenerative\\b"
+   ],
+   "exclude": [],
+   "definition": "a model of how the data was produced, so it can also make up new instances (gm.sample).",
+   "lesson": 14
+  },
+  {
+   "term": "score_samples",
+   "match": [
+    "\\bscore_samples\\b"
+   ],
+   "exclude": [],
+   "definition": "returns, for each instance, the LOG of the density the fitted model puts at that point: high = normal, very low = unusual.",
+   "lesson": 15
+  },
+  {
+   "term": "false positive",
+   "match": [
+    "\\bfalse positives?\\b"
+   ],
+   "exclude": [],
+   "definition": "a normal item wrongly flagged (a good product called defective).",
+   "lesson": 15
+  },
+  {
+   "term": "false negative",
+   "match": [
+    "\\bfalse negatives?\\b"
+   ],
+   "exclude": [],
+   "definition": "a real problem the detector misses (a defect that slips through).",
+   "lesson": 15
+  },
+  {
+   "term": "precision/recall trade-off",
+   "match": [
+    "\\bprecision\\b",
+    "\\brecall\\b"
+   ],
+   "exclude": [],
+   "definition": "flag more and you catch more real anomalies (recall) but also raise more false alarms (worse precision); flag less, the reverse (Chapter 3).",
+   "lesson": 15
+  },
+  {
+   "term": "novelty detection",
+   "match": [
+    "\\bnovelty\\b",
+    "\\bnovel\\b"
+   ],
+   "exclude": [],
+   "definition": "like anomaly detection, but the training data is assumed clean; the question is whether a NEW instance is unlike everything seen.",
+   "lesson": 15
+  },
+  {
+   "term": "information criterion",
+   "match": [
+    "\\binformation criteri(on|a)\\b"
+   ],
+   "exclude": [],
+   "definition": "a score that rewards fitting the data well but charges for every parameter the model learned; lower is better.",
+   "lesson": 15
+  },
+  {
+   "term": "BIC",
+   "match": [
+    "\\bBIC\\b",
+    "\\bbic\\(\\)",
+    "\\bBayesian information criterion\\b"
+   ],
+   "exclude": [],
+   "definition": "Bayesian information criterion: fit penalty plus log(m) per parameter; lowest wins.",
+   "lesson": 15
+  },
+  {
+   "term": "AIC",
+   "match": [
+    "\\bAIC\\b",
+    "\\baic\\(\\)",
+    "\\bAkaike information criterion\\b"
+   ],
+   "exclude": [],
+   "definition": "Akaike information criterion: fit penalty plus 2 per parameter; lowest wins.",
+   "lesson": 15
+  },
+  {
+   "term": "likelihood",
+   "match": [
+    "\\blikelihoods?\\b"
+   ],
+   "exclude": [],
+   "definition": "how plausible the model's fitted numbers make the data you actually observed; fitting tries to make it as large as possible.",
+   "lesson": 14
+  },
+  {
+   "term": "BayesianGaussianMixture",
+   "match": [
+    "\\bBayesianGaussianMixture\\b"
+   ],
+   "exclude": [],
+   "definition": "a Gaussian mixture that is given too many clusters on purpose and pushes the weights of unneeded ones to about 0.",
+   "lesson": 15
+  },
+  {
+   "term": "Fast-MCD",
+   "match": [
+    "\\bFast-MCD\\b",
+    "\\bEllipticEnvelope\\b",
+    "\\bMCD\\b"
+   ],
+   "exclude": [],
+   "definition": "a detector that fits ONE Gaussian ellipse to the normal data while ignoring likely outliers (Scikit-Learn: EllipticEnvelope).",
+   "lesson": 16
+  },
+  {
+   "term": "isolation forest",
+   "match": [
+    "\\bisolation forests?\\b",
+    "\\bIsolationForest\\b"
+   ],
+   "exclude": [],
+   "definition": "a detector that cuts the data with random splits; instances cut off from the rest after very few splits are flagged.",
+   "lesson": 16
+  },
+  {
+   "term": "local outlier factor",
+   "match": [
+    "\\blocal outlier factor\\b",
+    "\\bLOF\\b",
+    "\\bLocalOutlierFactor\\b"
+   ],
+   "exclude": [],
+   "definition": "a detector that compares how crowded an instance's neighbourhood is with how crowded its neighbours' neighbourhoods are.",
+   "lesson": 16
+  },
+  {
+   "term": "one-class SVM",
+   "match": [
+    "\\bone-class SVMs?\\b",
+    "\\bSVM\\b"
+   ],
+   "exclude": [],
+   "definition": "a novelty detector that draws a boundary around the (clean) training data; anything outside is new.",
+   "lesson": 16
+  },
+  {
+   "term": "agglomerative clustering",
+   "match": [
+    "\\bagglomerative\\b",
+    "\\bBIRCH\\b",
+    "\\bmean-shift\\b",
+    "\\bspectral clustering\\b"
+   ],
+   "exclude": [],
+   "definition": "the chapter's other clustering algorithms, named in the exercises: agglomerative clustering, BIRCH, mean-shift, spectral clustering (the book covers them briefly).",
+   "lesson": 17
+  },
+  {
+   "term": "PCA",
+   "match": [
+    "\\bPCA\\b"
+   ],
+   "exclude": [],
+   "definition": "principal component analysis (Chapter 8): shrinks a table to fewer columns while keeping most of its spread.",
+   "lesson": 17
+  },
+  {
+   "term": "inverse_transform",
+   "match": [
+    "\\binverse_transform\\b",
+    "\\binverse transform(ation)?\\b"
+   ],
+   "exclude": [],
+   "definition": "undo a transformation: e.g. turn PCA's few columns back into the original number of columns (approximately).",
+   "lesson": 17
+  },
+  {
+   "term": "reconstruction error",
+   "match": [
+    "\\breconstruction errors?\\b"
+   ],
+   "exclude": [],
+   "definition": "how far the rebuilt (inverse-transformed) data is from the original: the average squared gap.",
+   "lesson": 10
+  },
+  {
+   "term": "Olivetti faces",
+   "match": [
+    "\\bOlivetti\\b"
+   ],
+   "exclude": [],
+   "definition": "a dataset of 400 grey 64 × 64 photos of 40 people's faces (10 each), used in the exercises.",
+   "lesson": 17
+  }
+ ]
+}

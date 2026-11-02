@@ -1,0 +1,1300 @@
+{
+ "chapter": 2,
+ "flow": [
+  "Get the data",
+  "Set aside a test set",
+  "Explore",
+  "Prepare the data",
+  "Train",
+  "Evaluate",
+  "Fine-tune",
+  "Launch"
+ ],
+ "generated_by": "ml/study/geron-lab/ch02-notes/build_ch02.py",
+ "terms": [
+  {
+   "term": "machine learning",
+   "match": [
+    "\\bmachine learning\\b",
+    "\\bML\\b"
+   ],
+   "exclude": [],
+   "definition": "writing programs that learn how to do a task from examples in data, instead of a person writing every rule.",
+   "lesson": 1
+  },
+  {
+   "term": "model",
+   "match": [
+    "\\bmodel(s|led|ling|ed|ing)?\\b"
+   ],
+   "exclude": [],
+   "definition": "the thing that gets learned: a formula (a function) that takes a district's input columns and outputs a guess of its price.",
+   "lesson": 1
+  },
+  {
+   "term": "algorithm",
+   "match": [
+    "\\balgorithms?\\b"
+   ],
+   "exclude": [],
+   "definition": "the recipe a computer follows; in ML, the learning method that builds a model from data. The chapter meets several, from b12 on.",
+   "lesson": 1
+  },
+  {
+   "term": "train",
+   "match": [
+    "\\btrain(s|ed|ing)?\\b"
+   ],
+   "exclude": [],
+   "definition": "to let the algorithm look at examples whose answers are known and adjust the model until its guesses get close to those answers. The finished model is trained before it is used; while comparing options (b18–b19) you train many times.",
+   "lesson": 1
+  },
+  {
+   "term": "prediction",
+   "match": [
+    "\\bpredict(s|ed|ing|ion|ions)?\\b"
+   ],
+   "exclude": [],
+   "definition": "the model's guess of the answer for one row, e.g. \"this district's median house value is about 250,000\".",
+   "lesson": 1
+  },
+  {
+   "term": "test set",
+   "match": [
+    "\\btest (set|sets|data|rows|score|scores|RMSE|error)\\b"
+   ],
+   "exclude": [],
+   "definition": "a slice of rows (here 20%) locked away at the start and used only once, at the very end, to check the finished model on data it never saw.",
+   "lesson": 1
+  },
+  {
+   "term": "explore",
+   "match": [
+    "\\bexplor(e|es|ed|ing|ation|atory)\\b"
+   ],
+   "exclude": [],
+   "definition": "look at the data (tables, charts) to understand it before changing anything.",
+   "lesson": 1
+  },
+  {
+   "term": "evaluate",
+   "match": [
+    "\\bevaluat(e|es|ed|ing|ion)\\b"
+   ],
+   "exclude": [],
+   "definition": "measure how wrong the model's predictions are, as one number (b03 chooses which number).",
+   "lesson": 1
+  },
+  {
+   "term": "fine-tune",
+   "match": [
+    "\\bfine-?tun(e|es|ed|ing)\\b",
+    "(?<!-)\\btun(e|es|ed|ing)\\b"
+   ],
+   "exclude": [],
+   "definition": "try different settings for the model and keep the ones that give the best score. Short form: tune.",
+   "lesson": 1
+  },
+  {
+   "term": "launch",
+   "match": [
+    "\\blaunch(es|ed|ing)?\\b"
+   ],
+   "exclude": [],
+   "definition": "put the finished model into real use, so other systems send it inputs and get predictions back.",
+   "lesson": 1
+  },
+  {
+   "term": "production",
+   "match": [
+    "\\bproduction\\b"
+   ],
+   "exclude": [],
+   "definition": "the live system that real users and other programs depend on, as opposed to your experiments.",
+   "lesson": 1
+  },
+  {
+   "term": "attribute",
+   "match": [
+    "\\battributes?\\b"
+   ],
+   "exclude": [],
+   "definition": "a column of the data, e.g. median_income. The book uses attribute and feature for the same thing.",
+   "lesson": 1
+  },
+  {
+   "term": "median",
+   "match": [
+    "\\bmedian\\b"
+   ],
+   "exclude": [],
+   "definition": "the middle value once a list is sorted. \"median house value\" = the middle house price in that district.",
+   "lesson": 1
+  },
+  {
+   "term": "skewed",
+   "match": [
+    "\\bskew(s|ed|ness)?\\b"
+   ],
+   "exclude": [],
+   "definition": "values pile up at one end instead of sitting evenly around the middle.",
+   "lesson": 1
+  },
+  {
+   "term": "capped",
+   "match": [
+    "\\bcap(s|ped)?\\b"
+   ],
+   "exclude": [],
+   "definition": "every value above a ceiling was cut down to that ceiling, e.g. every price above 500,000 was recorded as 500,001.",
+   "lesson": 1
+  },
+  {
+   "term": "missing value",
+   "match": [
+    "\\bmissing values?\\b",
+    "\\bgaps?\\b"
+   ],
+   "exclude": [
+    "\\bgap between\\b"
+   ],
+   "definition": "an empty cell: the row exists but that column has no value in it.",
+   "lesson": 1
+  },
+  {
+   "term": "feature",
+   "match": [
+    "\\bfeatures?\\b"
+   ],
+   "exclude": [],
+   "definition": "an input column the model uses to make its guess, e.g. median_income. Same thing as attribute; the output column is NOT a feature.",
+   "lesson": 1
+  },
+  {
+   "term": "label",
+   "match": [
+    "\\blabel(s|led)?\\b"
+   ],
+   "exclude": [
+    "\\blabels?\\s*=",
+    "\\blabel=\\\"population\\\""
+   ],
+   "definition": "the known correct answer for a row, the column the model learns to predict. Here: median_house_value.",
+   "lesson": 1
+  },
+  {
+   "term": "supervised learning",
+   "match": [
+    "\\bsupervised\\b"
+   ],
+   "exclude": [],
+   "definition": "learning from examples that come with the correct answer (the label) attached.",
+   "lesson": 2
+  },
+  {
+   "term": "regression",
+   "match": [
+    "\\bregression\\b"
+   ],
+   "exclude": [],
+   "definition": "predicting a number (a price), as opposed to a category.",
+   "lesson": 2
+  },
+  {
+   "term": "classification",
+   "match": [
+    "\\bclassification\\b"
+   ],
+   "exclude": [],
+   "definition": "predicting a category (e.g. cheap / medium / expensive) instead of a number.",
+   "lesson": 2
+  },
+  {
+   "term": "univariate",
+   "match": [
+    "\\bunivariate\\b"
+   ],
+   "exclude": [],
+   "definition": "the model predicts ONE value per row (here one price).",
+   "lesson": 2
+  },
+  {
+   "term": "multivariate",
+   "match": [
+    "\\bmultivariate\\b"
+   ],
+   "exclude": [],
+   "definition": "the model predicts SEVERAL values per row.",
+   "lesson": 2
+  },
+  {
+   "term": "batch learning",
+   "match": [
+    "\\bbatch learning\\b"
+   ],
+   "exclude": [],
+   "definition": "train once on all the data at the same time.",
+   "lesson": 2
+  },
+  {
+   "term": "online learning",
+   "match": [
+    "\\bonline learning\\b"
+   ],
+   "exclude": [],
+   "definition": "keep learning in small steps as new data arrives.",
+   "lesson": 2
+  },
+  {
+   "term": "baseline",
+   "match": [
+    "\\bbaselines?\\b"
+   ],
+   "exclude": [],
+   "definition": "the score you must beat for the project to be worth anything (here: human estimates off by 30%).",
+   "lesson": 2
+  },
+  {
+   "term": "pipeline",
+   "match": [
+    "\\bpipelines?\\b"
+   ],
+   "exclude": [],
+   "definition": "a chain of steps where each step's output is the next step's input.",
+   "lesson": 2
+  },
+  {
+   "term": "performance measure",
+   "match": [
+    "\\bperformance measures?\\b"
+   ],
+   "exclude": [],
+   "definition": "the single number that says how good (or how wrong) a model is.",
+   "lesson": 1
+  },
+  {
+   "term": "error",
+   "match": [
+    "\\berrors?\\b"
+   ],
+   "exclude": [],
+   "definition": "for one row: prediction minus true value. A model that guessed 242,762 for a district worth 458,300 has an error of -215,538.",
+   "lesson": 1
+  },
+  {
+   "term": "RMSE",
+   "match": [
+    "\\bRMSE\\b",
+    "root mean square"
+   ],
+   "exclude": [],
+   "definition": "root mean square error: square every error, average them, take the square root. One number, in dollars, that punishes big misses hard.",
+   "lesson": 3
+  },
+  {
+   "term": "MAE",
+   "match": [
+    "\\bMAE\\b",
+    "mean absolute error"
+   ],
+   "exclude": [],
+   "definition": "mean absolute error: drop the minus sign of every error and average them.",
+   "lesson": 3
+  },
+  {
+   "term": "outlier",
+   "match": [
+    "\\boutliers?\\b"
+   ],
+   "exclude": [],
+   "definition": "a value far away from all the others.",
+   "lesson": 3
+  },
+  {
+   "term": "instance",
+   "match": [
+    "\\binstances?\\b"
+   ],
+   "exclude": [],
+   "definition": "one row being learned from or predicted, here one district.",
+   "lesson": 3
+  },
+  {
+   "term": "vector",
+   "match": [
+    "\\bvectors?\\b"
+   ],
+   "exclude": [],
+   "definition": "an ordered list of numbers, e.g. all the predictions in row order.",
+   "lesson": 3
+  },
+  {
+   "term": "norm",
+   "match": [
+    "\\bnorms?\\b"
+   ],
+   "exclude": [],
+   "definition": "a rule for measuring the length of a vector; RMSE and MAE are two such rules.",
+   "lesson": 3
+  },
+  {
+   "term": "distribution",
+   "match": [
+    "\\bdistribution(s|al)?\\b"
+   ],
+   "exclude": [],
+   "definition": "how a column's values are spread out: which values are common and which are rare.",
+   "lesson": 1
+  },
+  {
+   "term": "DataFrame",
+   "match": [
+    "\\bdata ?frames?\\b"
+   ],
+   "exclude": [],
+   "definition": "a table in Python (from the Pandas library): rows, named columns.",
+   "lesson": 4
+  },
+  {
+   "term": "pandas",
+   "match": [
+    "\\bpandas\\b"
+   ],
+   "exclude": [],
+   "definition": "the Python library for tables (DataFrames).",
+   "lesson": 4
+  },
+  {
+   "term": "notebook",
+   "match": [
+    "\\bnotebooks?\\b"
+   ],
+   "exclude": [],
+   "definition": "a document (Jupyter, Google Colab) where code cells and their output sit together.",
+   "lesson": 1
+  },
+  {
+   "term": "idempotent",
+   "match": [
+    "\\bidempoten(t|ce|cy)\\b"
+   ],
+   "exclude": [],
+   "definition": "safe to run twice: the second run changes nothing.",
+   "lesson": 4
+  },
+  {
+   "term": "target",
+   "match": [
+    "\\btargets?\\b"
+   ],
+   "exclude": [],
+   "definition": "the column you want to predict. Same thing as the label column.",
+   "lesson": 1
+  },
+  {
+   "term": "categorical attribute",
+   "match": [
+    "\\bcategorical\\b"
+   ],
+   "exclude": [],
+   "definition": "a column whose values come from a short fixed list (like ocean_proximity: NEAR BAY, INLAND ...), not free numbers.",
+   "lesson": 5
+  },
+  {
+   "term": "percentile",
+   "match": [
+    "\\bpercentiles?\\b"
+   ],
+   "exclude": [],
+   "definition": "the value below which that percentage of rows falls; the 25th percentile has 25% of rows below it.",
+   "lesson": 3
+  },
+  {
+   "term": "standard deviation",
+   "match": [
+    "\\bstandard deviations?\\b",
+    "\\bstd\\b"
+   ],
+   "exclude": [],
+   "definition": "the typical distance of a value from the column's average.",
+   "lesson": 5
+  },
+  {
+   "term": "histogram",
+   "match": [
+    "\\bhistograms?\\b"
+   ],
+   "exclude": [],
+   "definition": "a bar chart of how many rows fall in each range of values.",
+   "lesson": 5
+  },
+  {
+   "term": "transformation",
+   "match": [
+    "\\btransformations?\\b"
+   ],
+   "exclude": [],
+   "definition": "a step that changes the data, e.g. filling empty cells, or rescaling a column.",
+   "lesson": 5
+  },
+  {
+   "term": "training set",
+   "match": [
+    "\\btraining (set|sets|data|rows|examples?|districts)\\b"
+   ],
+   "exclude": [],
+   "definition": "the rows the model is allowed to learn from (here 80%, 16,512 districts).",
+   "lesson": 1
+  },
+  {
+   "term": "generalization error",
+   "match": [
+    "\\bgenerali[sz](ation|e|es|ed|ing|able)\\b"
+   ],
+   "exclude": [],
+   "definition": "how wrong the model is on NEW data it never saw; the number that actually matters.",
+   "lesson": 6
+  },
+  {
+   "term": "data snooping bias",
+   "match": [
+    "\\bsnooping\\b"
+   ],
+   "exclude": [],
+   "definition": "fooling yourself: you peeked at the test rows, your choices bent toward them, so the final score looks better than it really is.",
+   "lesson": 6
+  },
+  {
+   "term": "seed",
+   "match": [
+    "\\bseeds?\\b",
+    "\\brandom_state\\b"
+   ],
+   "exclude": [],
+   "definition": "the starting number of a random generator; the same seed gives the same \"random\" result every run.",
+   "lesson": 6
+  },
+  {
+   "term": "held out",
+   "match": [
+    "\\bheld[- ]out\\b",
+    "\\bhold(s|ing)? out\\b"
+   ],
+   "exclude": [],
+   "definition": "kept aside and not used for learning.",
+   "lesson": 1
+  },
+  {
+   "term": "stratified sampling",
+   "match": [
+    "\\bstratif(y|ied|ication)\\b"
+   ],
+   "exclude": [],
+   "definition": "split so each group (stratum) keeps the same share in the sample as in the whole data.",
+   "lesson": 7
+  },
+  {
+   "term": "stratum",
+   "match": [
+    "\\bstrat(a|um)\\b"
+   ],
+   "exclude": [],
+   "definition": "one group (bucket) that stratified sampling treats as its own pool; plural strata.",
+   "lesson": 7
+  },
+  {
+   "term": "sampling noise",
+   "match": [
+    "\\bsampling noise\\b"
+   ],
+   "exclude": [],
+   "definition": "a sample that is off by pure bad luck.",
+   "lesson": 7
+  },
+  {
+   "term": "sampling bias",
+   "match": [
+    "\\bsampling bias\\b"
+   ],
+   "exclude": [],
+   "definition": "a sample that is off because the way it was picked is flawed.",
+   "lesson": 7
+  },
+  {
+   "term": "continuous",
+   "match": [
+    "\\bcontinuous\\b"
+   ],
+   "exclude": [],
+   "definition": "can take any value in a range (3.5962 ...), not a few fixed values.",
+   "lesson": 2
+  },
+  {
+   "term": "scatterplot",
+   "match": [
+    "\\bscatter ?plots?\\b",
+    "\\bscatter\\b"
+   ],
+   "exclude": [
+    "\\bscatter matri(x|ces)\\b"
+   ],
+   "definition": "a chart with one dot per row, placed by two columns (here longitude across, latitude up).",
+   "lesson": 8
+  },
+  {
+   "term": "feature engineering",
+   "match": [
+    "\\bfeature engineering\\b",
+    "\\bengineered\\b",
+    "\\bengineer(ing)?\\b"
+   ],
+   "exclude": [],
+   "definition": "inventing new input columns from existing ones, e.g. rooms per household.",
+   "lesson": 8
+  },
+  {
+   "term": "cluster",
+   "match": [
+    "\\bclusters?\\b",
+    "\\bclustering\\b"
+   ],
+   "exclude": [],
+   "definition": "a group of points that sit close together.",
+   "lesson": 8
+  },
+  {
+   "term": "correlation",
+   "match": [
+    "\\bcorrelat(e|es|ed|ion|ions|ing)\\b"
+   ],
+   "exclude": [],
+   "definition": "a score from -1 to +1 of how well two columns follow a straight line together (+1: rise together; -1: one rises as the other falls; 0: no straight-line link).",
+   "lesson": 9
+  },
+  {
+   "term": "linear",
+   "match": [
+    "\\blinear\\b"
+   ],
+   "exclude": [
+    "\\blinear regression\\b",
+    "\\bLinearRegression\\b"
+   ],
+   "definition": "in a straight line.",
+   "lesson": 3
+  },
+  {
+   "term": "scatter matrix",
+   "match": [
+    "\\bscatter matri(x|ces)\\b"
+   ],
+   "exclude": [],
+   "definition": "a grid of scatterplots, every chosen column against every other.",
+   "lesson": 9
+  },
+  {
+   "term": "elementwise",
+   "match": [
+    "\\belement-?wise\\b"
+   ],
+   "exclude": [],
+   "definition": "row by row: each district's own number divided by its own other number.",
+   "lesson": 10
+  },
+  {
+   "term": "prototype",
+   "match": [
+    "\\bprototypes?\\b"
+   ],
+   "exclude": [],
+   "definition": "a first working version, built to learn from, not to ship.",
+   "lesson": 10
+  },
+  {
+   "term": "validation set",
+   "match": [
+    "(?<!-)\\bvalidation\\b"
+   ],
+   "exclude": [],
+   "definition": "rows set aside from the training set to compare models and settings while you are still building (the test set stays locked).",
+   "lesson": 11
+  },
+  {
+   "term": "predictor",
+   "match": [
+    "\\bpredictors?\\b"
+   ],
+   "exclude": [],
+   "definition": "(1) an input column that helps predict the label — median_income is a strong predictor of price. (2) From b12 on it also names a Scikit-Learn object that makes predictions with predict().",
+   "lesson": 9
+  },
+  {
+   "term": "X and y",
+   "match": [
+    "\\bX\\b(?= and y| \\(|,? the inputs)",
+    "\\by\\b(?= \\(the| is the)"
+   ],
+   "exclude": [],
+   "definition": "the book's names: X = the table of input columns (features), y = the label column (the answers).",
+   "lesson": 3
+  },
+  {
+   "term": "imputation",
+   "match": [
+    "\\bimput(e|es|ed|ing|ation|er)\\b",
+    "\\bSimpleImputer\\b"
+   ],
+   "exclude": [],
+   "definition": "filling an empty cell with a stand-in value. SimpleImputer is Scikit-Learn's tool for it.",
+   "lesson": 5
+  },
+  {
+   "term": "Scikit-Learn",
+   "match": [
+    "\\bscikit-learn\\b",
+    "\\bsklearn\\b"
+   ],
+   "exclude": [],
+   "definition": "the Python library of ML tools used in this chapter (imports start with sklearn).",
+   "lesson": 3
+  },
+  {
+   "term": "NumPy",
+   "match": [
+    "\\bnumpy\\b"
+   ],
+   "exclude": [],
+   "definition": "the Python library for grids of numbers.",
+   "lesson": 6
+  },
+  {
+   "term": "array",
+   "match": [
+    "\\barrays?\\b"
+   ],
+   "exclude": [],
+   "definition": "a grid of numbers with no column names (NumPy's format).",
+   "lesson": 11
+  },
+  {
+   "term": "fit",
+   "match": [
+    "\\bfit\\(\\)",
+    "\\bfit\\b",
+    "\\bfitt(ed|ing)\\b"
+   ],
+   "exclude": [
+    "\\bfits? in memory\\b",
+    "\\bfit(s)? into memory\\b",
+    "\\bfits the\\b(?= single-box)"
+   ],
+   "definition": "the LEARN step: look at the training data and remember what was learned (for example a column's middle value). The data itself is not changed yet — only the object now remembers. Training a model is fitting it.",
+   "lesson": 1
+  },
+  {
+   "term": "transform",
+   "match": [
+    "\\btransform\\(\\)",
+    "\\btransform\\b"
+   ],
+   "exclude": [
+    "\\blog transforms?\\b"
+   ],
+   "definition": "the APPLY step: use what fit stored to change data (fill blanks, rescale). Can be run on any data, any number of times.",
+   "lesson": 11
+  },
+  {
+   "term": "estimator",
+   "match": [
+    "\\bestimators?\\b"
+   ],
+   "exclude": [],
+   "definition": "any Scikit-Learn object that learns from data with fit().",
+   "lesson": 12
+  },
+  {
+   "term": "transformer",
+   "match": [
+    "\\btransformers?\\b"
+   ],
+   "exclude": [],
+   "definition": "an estimator that can also change data with transform() (e.g. SimpleImputer).",
+   "lesson": 12
+  },
+  {
+   "term": "hyperparameter",
+   "match": [
+    "\\bhyper-?parameters?\\b"
+   ],
+   "exclude": [],
+   "definition": "a setting YOU choose before training, e.g. strategy=\"median\".",
+   "lesson": 12
+  },
+  {
+   "term": "parameter",
+   "match": [
+    "\\bparameters?\\b"
+   ],
+   "exclude": [
+    "\\bvisual parameters\\b"
+   ],
+   "definition": "a value learned from the data during fit, e.g. the median 434 in b11. Learned ones end in _ in Scikit-Learn (statistics_).",
+   "lesson": 12
+  },
+  {
+   "term": "fit_transform",
+   "match": [
+    "\\bfit_transform\\b"
+   ],
+   "exclude": [],
+   "definition": "fit, then transform, in one call. Use it only on training data.",
+   "lesson": 12
+  },
+  {
+   "term": "constructor",
+   "match": [
+    "\\bconstructors?\\b"
+   ],
+   "exclude": [],
+   "definition": "the call that creates the object, e.g. SimpleImputer(strategy=\"median\"); settings go in here.",
+   "lesson": 12
+  },
+  {
+   "term": "sparse matrix",
+   "match": [
+    "\\bsparse matri(x|ces)\\b"
+   ],
+   "exclude": [],
+   "definition": "a table stored as only its non-zero cells, to save memory when almost every cell is 0.",
+   "lesson": 12
+  },
+  {
+   "term": "one-hot encoding",
+   "match": [
+    "\\bone-hot\\b",
+    "\\bOneHotEncoder\\b"
+   ],
+   "exclude": [],
+   "definition": "turn a text column into one 0/1 column per category; exactly one of them is 1 in each row.",
+   "lesson": 13
+  },
+  {
+   "term": "encode",
+   "match": [
+    "\\bencod(e|es|ed|ing|er|ers)\\b"
+   ],
+   "exclude": [
+    "\\bone-hot encod(e|es|ed|ing)\\b",
+    "\\bencoded into the same plot\\b",
+    "\\bEncoding more variables\\b"
+   ],
+   "definition": "turn text into numbers a model can do arithmetic on.",
+   "lesson": 13
+  },
+  {
+   "term": "feature scaling",
+   "match": [
+    "\\bscal(ing|ed|er|ers)\\b",
+    "\\brescal(e|es|ed|ing)\\b"
+   ],
+   "exclude": [],
+   "definition": "rescaling columns so they sit on comparable ranges and no column wins just because its numbers are bigger.",
+   "lesson": 1
+  },
+  {
+   "term": "min-max scaling",
+   "match": [
+    "\\bmin-?max\\b",
+    "\\bnormali[sz]ation\\b"
+   ],
+   "exclude": [],
+   "definition": "rescale to 0..1: (value - min) / (max - min). Also called normalization.",
+   "lesson": 14
+  },
+  {
+   "term": "standardization",
+   "match": [
+    "\\bstandardi[sz](ation|e|es|ed|ing)\\b",
+    "\\bStandardScaler\\b"
+   ],
+   "exclude": [],
+   "definition": "subtract the column's average, divide by its standard deviation: the result is centred on 0 with typical size 1.",
+   "lesson": 14
+  },
+  {
+   "term": "variance",
+   "match": [
+    "\\bvariances?\\b"
+   ],
+   "exclude": [],
+   "definition": "the standard deviation squared; another measure of spread.",
+   "lesson": 9
+  },
+  {
+   "term": "heavy-tailed",
+   "match": [
+    "\\bheavy[- ]tail(ed|s)?\\b",
+    "\\blong(-| )tail(ed)?\\b",
+    "\\btail\\b"
+   ],
+   "exclude": [],
+   "definition": "a few rows have huge values far out to one side (like total_rooms up to 39,320 while most are near 2,000).",
+   "lesson": 14
+  },
+  {
+   "term": "logarithm",
+   "match": [
+    "\\blog(arithm|arithms)?\\b",
+    "\\bnp\\.log\\b"
+   ],
+   "exclude": [
+    "\\blogs? (of|and) (the )?runs?\\b"
+   ],
+   "definition": "here always the NATURAL logarithm, ln (np.log in code): it squeezes big numbers, ln(562) = 6.33 and ln(1576) = 7.36. On a calculator use the ln key, not log: log is base 10 and gives 2.75. Ten times bigger becomes only 2.3 bigger.",
+   "lesson": 5
+  },
+  {
+   "term": "Gaussian",
+   "match": [
+    "\\bgaussian\\b",
+    "\\bbell(-| )shaped?\\b",
+    "\\bbell curve\\b"
+   ],
+   "exclude": [],
+   "definition": "the bell-shaped curve: most values near the middle, fewer and fewer further out.",
+   "lesson": 3
+  },
+  {
+   "term": "radial basis function",
+   "match": [
+    "\\bradial basis\\b",
+    "\\bRBF\\b",
+    "\\brbf_kernel\\b"
+   ],
+   "exclude": [],
+   "definition": "a similarity score: 1 when a value sits exactly on a chosen centre, falling toward 0 as it moves away.",
+   "lesson": 14
+  },
+  {
+   "term": "k-means",
+   "match": [
+    "\\bk-?means\\b",
+    "\\bKMeans\\b"
+   ],
+   "exclude": [],
+   "definition": "an algorithm that finds a chosen number (k) of centre points the rows crowd around.",
+   "lesson": 15
+  },
+  {
+   "term": "stateless",
+   "match": [
+    "\\bstateless\\b"
+   ],
+   "exclude": [],
+   "definition": "learns nothing from data; does the same arithmetic every time (e.g. taking a log).",
+   "lesson": 15
+  },
+  {
+   "term": "duck typing",
+   "match": [
+    "\\bduck typing\\b"
+   ],
+   "exclude": [],
+   "definition": "the library checks that your object HAS fit/transform methods, not what class it comes from.",
+   "lesson": 12
+  },
+  {
+   "term": "mixin",
+   "match": [
+    "\\bmixins?\\b",
+    "\\bTransformerMixin\\b"
+   ],
+   "exclude": [],
+   "definition": "a helper class you inherit from to get ready-made methods for free.",
+   "lesson": 15
+  },
+  {
+   "term": "linear regression",
+   "match": [
+    "\\blinear regression\\b",
+    "\\bLinearRegression\\b"
+   ],
+   "exclude": [],
+   "definition": "a model that multiplies each input by a learned number (its weight), adds them up and adds a starting value — a straight-line formula.",
+   "lesson": 12
+  },
+  {
+   "term": "decision tree",
+   "match": [
+    "\\btrees?\\b",
+    "\\bDecisionTreeRegressor\\b"
+   ],
+   "exclude": [],
+   "definition": "a model that predicts by asking a chain of yes/no questions about the inputs (\"median_income > 5?\").",
+   "lesson": 14
+  },
+  {
+   "term": "regressor",
+   "match": [
+    "\\bregressors?\\b"
+   ],
+   "exclude": [],
+   "definition": "a Scikit-Learn model that predicts a number (regression).",
+   "lesson": 21
+  },
+  {
+   "term": "gradient-based",
+   "match": [
+    "\\bgradient\\b"
+   ],
+   "exclude": [],
+   "definition": "algorithms that learn by nudging their numbers step by step in the direction that lowers the error; they are sensitive to column scale.",
+   "lesson": 14
+  },
+  {
+   "term": "regularization",
+   "match": [
+    "\\bregulari[sz](ation|ed|e)\\b"
+   ],
+   "exclude": [],
+   "definition": "a deliberate restriction on a model so it cannot fit the training data too closely.",
+   "lesson": 17
+  },
+  {
+   "term": "overfitting",
+   "match": [
+    "\\boverfit(s|ting|ted)?\\b"
+   ],
+   "exclude": [],
+   "definition": "the model memorised the training rows (including their noise) and does badly on new rows.",
+   "lesson": 17
+  },
+  {
+   "term": "underfitting",
+   "match": [
+    "\\bunderfit(s|ting|ted)?\\b"
+   ],
+   "exclude": [],
+   "definition": "the model is too simple: it is wrong even on the rows it trained on.",
+   "lesson": 17
+  },
+  {
+   "term": "cross-validation",
+   "match": [
+    "\\bcross-?validat(ion|ed|e)\\b",
+    "\\bcross_val_score\\b"
+   ],
+   "exclude": [],
+   "definition": "score a model without the test set: cut the training set into k equal parts, train k times, each time scoring on the one part left out (b18).",
+   "lesson": 1
+  },
+  {
+   "term": "fold",
+   "match": [
+    "\\bfolds?\\b"
+   ],
+   "exclude": [
+    "\\bfold them\\b"
+   ],
+   "definition": "one of the k equal parts the training set is cut into for cross-validation.",
+   "lesson": 16
+  },
+  {
+   "term": "random forest",
+   "match": [
+    "\\brandom forests?\\b",
+    "\\bforests?\\b",
+    "\\bRandomForestRegressor\\b"
+   ],
+   "exclude": [],
+   "definition": "many decision trees, each trained on a random part of the data, whose predictions are averaged.",
+   "lesson": 15
+  },
+  {
+   "term": "ensemble",
+   "match": [
+    "\\bensembles?\\b"
+   ],
+   "exclude": [],
+   "definition": "several models whose answers are combined (averaged or voted).",
+   "lesson": 18
+  },
+  {
+   "term": "grid search",
+   "match": [
+    "\\bgrid search\\b",
+    "\\bGridSearchCV\\b"
+   ],
+   "exclude": [],
+   "definition": "try EVERY combination of the settings you list, cross-validating each, and keep the best.",
+   "lesson": 19
+  },
+  {
+   "term": "randomized search",
+   "match": [
+    "\\brandomi[sz]ed search\\b",
+    "\\bRandomizedSearchCV\\b",
+    "\\brandom search\\b"
+   ],
+   "exclude": [],
+   "definition": "try a fixed number of RANDOM combinations of settings instead of all of them.",
+   "lesson": 19
+  },
+  {
+   "term": "halving",
+   "match": [
+    "\\bhalving\\b"
+   ],
+   "exclude": [],
+   "definition": "a search that gives many candidates a little compute, then more compute only to the best half, round after round.",
+   "lesson": 19
+  },
+  {
+   "term": "feature importance",
+   "match": [
+    "\\bimportances?\\b"
+   ],
+   "exclude": [
+    "\\bimportance of\\b"
+   ],
+   "definition": "a score per input column of how much the model relied on it.",
+   "lesson": 9
+  },
+  {
+   "term": "point estimate",
+   "match": [
+    "\\bpoint estimates?\\b"
+   ],
+   "exclude": [],
+   "definition": "a single number used as the best guess (one RMSE), without a range around it.",
+   "lesson": 20
+  },
+  {
+   "term": "confidence interval",
+   "match": [
+    "\\bconfidence intervals?\\b"
+   ],
+   "exclude": [],
+   "definition": "a range that probably contains the true value, e.g. \"RMSE between 39,415 and 43,592 (our run, b20)\".",
+   "lesson": 20
+  },
+  {
+   "term": "model rot",
+   "match": [
+    "\\bmodel rot\\b",
+    "\\bdata drift\\b",
+    "\\bdrift\\b(?! optimistic)"
+   ],
+   "exclude": [],
+   "definition": "the model slowly gets worse because the world changes after it was trained. Also called data drift.",
+   "lesson": 20
+  },
+  {
+   "term": "deploy",
+   "match": [
+    "\\bdeploy(s|ed|ing|ment)?\\b"
+   ],
+   "exclude": [],
+   "definition": "install the model where production systems can call it.",
+   "lesson": 1
+  },
+  {
+   "term": "web service",
+   "match": [
+    "\\bweb services?\\b"
+   ],
+   "exclude": [],
+   "definition": "a program that answers requests over the network; here, inputs in, predictions out.",
+   "lesson": 20
+  },
+  {
+   "term": "support vector machine",
+   "match": [
+    "\\bsupport vector\\b",
+    "\\bSVR\\b"
+   ],
+   "exclude": [],
+   "definition": "another family of models (Chapter 5); SVR is its regression version.",
+   "lesson": 15
+  },
+  {
+   "term": "kernel",
+   "match": [
+    "\\bkernels?\\b"
+   ],
+   "exclude": [
+    "\\brbf_kernel\\b"
+   ],
+   "definition": "a function that scores how similar two points are. The RBF kernel (b14–b15) is one; support vector machines (Chapter 5) use kernels too.",
+   "lesson": 15
+  },
+  {
+   "term": "k-nearest neighbors",
+   "match": [
+    "\\bnearest[- ]neighbou?rs?\\b",
+    "\\bKNeighborsRegressor\\b"
+   ],
+   "exclude": [],
+   "definition": "a model that predicts a row's value from the rows closest to it (here: nearby districts' prices).",
+   "lesson": 14
+  },
+  {
+   "term": "utility function",
+   "match": [
+    "\\butility function\\b",
+    "\\bcost function\\b"
+   ],
+   "exclude": [],
+   "definition": "a utility function is a score where higher is better; a cost function is one where lower is better (like RMSE).",
+   "lesson": 18
+  },
+  {
+   "term": "CSV",
+   "match": [
+    "\\bCSV\\b"
+   ],
+   "exclude": [],
+   "definition": "a plain text file of a table: one row per line, commas between the columns.",
+   "lesson": 4
+  },
+  {
+   "term": "SciPy",
+   "match": [
+    "\\bscipy\\b"
+   ],
+   "exclude": [],
+   "definition": "a Python library of maths and statistics tools that sits beside NumPy.",
+   "lesson": 12
+  },
+  {
+   "term": "artifact",
+   "match": [
+    "\\bartifacts?\\b"
+   ],
+   "exclude": [
+    "\\bone artifact\\b"
+   ],
+   "definition": "a pattern that comes from how the data was collected or processed, not from the real world (e.g. hundreds of prices of exactly 500,001).",
+   "lesson": 5
+  },
+  {
+   "term": "noise",
+   "match": [
+    "\\bnoise\\b"
+   ],
+   "exclude": [],
+   "definition": "random variation in the data that no model can or should predict.",
+   "lesson": 5
+  },
+  {
+   "term": "signal",
+   "match": [
+    "\\bsignals?\\b"
+   ],
+   "exclude": [],
+   "definition": "information in a column that really helps predict the label.",
+   "lesson": 8
+  },
+  {
+   "term": "leak",
+   "match": [
+    "\\bleak(s|ed|age|ing|y)?\\b"
+   ],
+   "exclude": [],
+   "definition": "information from the test set sneaking into training or into your decisions, which makes scores look better than they really are.",
+   "lesson": 6
+  },
+  {
+   "term": "capacity",
+   "match": [
+    "\\bcapacity\\b"
+   ],
+   "exclude": [],
+   "definition": "how complicated a pattern a model is able to learn.",
+   "lesson": 17
+  },
+  {
+   "term": "monotonic",
+   "match": [
+    "\\bmonotonic\\b"
+   ],
+   "exclude": [],
+   "definition": "always moving one way as the input grows (always up, or always down).",
+   "lesson": 15
+  },
+  {
+   "term": "nonlinear",
+   "match": [
+    "\\bnon-?linear\\b"
+   ],
+   "exclude": [],
+   "definition": "not a straight line: the output bends or curves as the input changes.",
+   "lesson": 9
+  },
+  {
+   "term": "dtype",
+   "match": [
+    "\\bdtypes?\\b",
+    "\\bselect_dtypes\\b"
+   ],
+   "exclude": [],
+   "definition": "a column's data type: numbers (float, int) or text, which pandas calls object.",
+   "lesson": 11
+  },
+  {
+   "term": "<1H OCEAN",
+   "match": [
+    "<1H OCEAN"
+   ],
+   "exclude": [],
+   "definition": "a value of ocean_proximity: the district is less than one hour's drive from the ocean. The others are INLAND, NEAR OCEAN, NEAR BAY (by San Francisco Bay) and ISLAND.",
+   "lesson": 5
+  },
+  {
+   "term": "distance-based",
+   "match": [
+    "\\bdistance-based\\b"
+   ],
+   "exclude": [],
+   "definition": "algorithms that compare rows by how far apart their numbers are (like k-nearest neighbors); a column with big numbers dominates that distance.",
+   "lesson": 14
+  },
+  {
+   "term": "stateful",
+   "match": [
+    "\\bstateful\\b"
+   ],
+   "exclude": [],
+   "definition": "learns something from the data in fit and reuses it in transform (the opposite of stateless).",
+   "lesson": 15
+  },
+  {
+   "term": "dense",
+   "match": [
+    "\\bdense (array|arrays|matrix|format)\\b"
+   ],
+   "exclude": [],
+   "definition": "stored in full: every cell, zeros included (the opposite of sparse).",
+   "lesson": 13
+  },
+  {
+   "term": "hash",
+   "match": [
+    "\\bhash(es|ing|ed)?\\b"
+   ],
+   "exclude": [],
+   "definition": "a function that turns a value (such as a row's id) into a number that looks random but is always the same for the same input.",
+   "lesson": 6
+  },
+  {
+   "term": "t-distribution",
+   "match": [
+    "\\bt-distribution\\b",
+    "\\bt\\.interval\\b"
+   ],
+   "exclude": [],
+   "definition": "a standard statistics formula used to build a confidence interval from a sample.",
+   "lesson": 20
+  }
+ ]
+}

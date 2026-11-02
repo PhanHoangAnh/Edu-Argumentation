@@ -1,68 +1,69 @@
-## Architecture & Mechanism Design
+# Edu-Argumentation
 
-The **Edu-Argumentation / AWS Quiz App** is a lightweight, client-side web application designed to deliver interactive quizzes and educational modules using a modular vanilla JavaScript architecture.
+Edu-Argumentation is a Géron tutorial and quiz interface. It bundles the populated study content from the adjacent Lakehouse learning app, keeps a local fresh-quiz mode, and can optionally generate new questions through a server-side OpenAI-compatible provider.
 
-The same JSON format can also be generated from longer source material such as book chapters. In that workflow, the AI reads the source text, extracts the important concepts, and produces a tutorial plus quiz set that students can use to study.
+## Study navigation
 
-### Core Components
+The reader presents one theory block at a time. Its persistent table of contents opens a chapter and jumps directly to any block; the current location is shareable as a `#chapter=N&block=N` URL fragment. The browser never receives provider credentials.
 
-* **Static Data Layer (`/data/courseData.json` & `testModule.json`)**: Contains structured course modules, questions, options, and explanations.
-* **Front-End Interface (`index.html` & `js/app.js`)**: Built utilizing pure JavaScript, HTML5, and CSS without heavy framework overhead (avoiding React, opting for clean DOM management).
-* **AI Worker / Integration (`js/ai-worker.js` & `test_gemini.js`)**: Offloads background processing or handles dynamic generation of similar but different questions based on the context of the tutorial and static practice.
-* **Book-to-Questions CLI (`book_to_questions.js`)**: Accepts a text book or chapter excerpt and generates the same `tutorialData` + `quizData` structure used by the web app.
+## Optional AI quiz provider
 
-### How It Works
+`aws-quiz-app/edu_server.py` serves the static files and a same-origin `POST /api/quiz` gateway. It accepts an OpenAI-compatible Chat Completions endpoint, so it can be configured for OpenAI or a compatible hosted/local provider. The production systemd unit reads `/etc/foxai/edu-argumentation.env`, not a file in this repository.
 
-1. **Initialization**: The main application (`app.js`) loads and parses the static JSON course data (`courseData.json`) upon startup.
-2. **State Management**: It tracks user quiz progress, selected answers, scores, and active module states entirely within the browser's session/local state.
-3. **Interactive Evaluation**: When a user selects an answer, the app immediately validates it against the schema, updates the UI score counters, and pulls contextual explanations.
-4. **AI Assistance**: Background workers or test modules interface asynchronously to generate similar but different questions based on the context of the tutorial and static practice. A separate CLI can also turn book text into the same learning format.
+1. Copy `aws-quiz-app/edu-argumentation.env.example` to `/etc/foxai/edu-argumentation.env` on `nn`.
+2. Set the API URL, API key, model, and a long `EDU_QUIZ_ACCESS_TOKEN`; set the real file to `root:root` and mode `600`.
+3. Install `aws-quiz-app/foxai-edu-argumentation.service`, reload systemd, and restart the service.
+4. Enter only the short generation access token in the browser when generating a quiz. It is not the provider key and is not persisted.
 
-### Book Input Workflow
+The current service is plain HTTP on a private LAN. Do not expose this endpoint publicly or reuse the generation token outside a trusted network; deploy TLS and an authenticated application boundary first.
 
-If your assignment is to build an AI that reads books and generates learning questions, the cleanest path in this repository is:
+## Included learning material
 
-1. Extract the book into plain text or markdown.
-2. Pass the text into `book_to_questions.js`.
-3. Let Gemini return strict JSON with `tutorialData` and `quizData`.
-4. Load that JSON directly into the existing web app.
+- Chapters 1–9 from `../learn-app/content/ch01.json` through `ch09.json`
+- 115 theory blocks rendered as nine tutorial sections
+- 92 end-of-chapter exercise prompts
+- 150 objective checks: 104 multiple-choice and 46 true/false questions
+- Chapters 10–19 are excluded because their source files are stubs
+- 88 short-answer and code-output checks remain in the source learning app and are not converted because this interface grades selectable options
 
-This keeps the whole system simple: the book becomes the source of truth, and the app only needs one stable data contract.
+The generated module lives at `aws-quiz-app/data/geron_hands_on_ml_ch01_ch09.json`. The browser loads it automatically. Uploading another JSON module through the header control still replaces the active module for that browser session.
 
----
+## Rebuild the bundled module
 
-## How to Use This Code
+Run the deterministic generator whenever the Géron source content changes:
 
-### Prerequisites
+```bash
+node aws-quiz-app/build_geron_module.js
+```
 
-* A modern web browser (Chrome, Firefox, Edge, Safari).
-* A local development server (e.g., VS Code **Live Server** extension, Python `http.server`, or Node `http-server`) to prevent CORS issues when loading local JSON files.
+The script refuses to generate placeholder material if any chapter from 1 through 9 is not marked `populated`. It converts the existing theory text, code examples, book exercises, and objective checks without calling an external service.
 
-### Running Locally
+## Run locally
 
-1. Clone or extract the repository folder.
-2. Navigate into the application directory:
+Serve the repository through HTTP so the browser can fetch the bundled JSON and create the local quiz worker:
+
 ```bash
 cd aws-quiz-app
-
-```
-
-
-3. Start a local server. For example, using Python:
-```bash
 python3 -m http.server 8000
-
 ```
 
+Open `http://localhost:8000`. Use **Fresh Book Quiz** to sample up to 20 questions from the active module. Each request shuffles a copy of the question bank in a Web Worker; the bundled data remains unchanged.
 
-4. Open your browser and navigate to `http://localhost:8000`.
+## Data contract
 
----
+The app accepts JSON with these root fields:
 
-## Improvements for Later Versions
+```json
+{
+  "tutorialData": {
+    "title": "Module title",
+    "lead": "Module description",
+    "sections": []
+  },
+  "quizData": []
+}
+```
 
-* **State Persistence**: Implement `localStorage` or `IndexedDB` caching so users can resume quizzes where they left off if the browser accidentally closes.
-* **Modular Web Components**: Refactor UI elements into native Web Components with Shadow DOM for cleaner encapsulation and modular styling.
-* **Enhanced Error Handling & Validation**: Add schema validation (using JSON Schema) for incoming course data to gracefully handle malformed JSON inputs.
-* **Dynamic AI Prompt Tuning**: Upgrade the `ai-worker.js` implementation to support customizable system instructions for generating tailored practice questions.
-* **Book Ingestion Pipeline**: Add PDF/text extraction plus chapter chunking so longer books can be processed without manually copying excerpts.
+Each quiz entry contains `question`, `options`, a zero-based `correct` index, and one `explanations` entry per option.
+
+This remains a client-side learning app. Correct answers are withheld by the interface until a choice is submitted, but they are present in the downloaded JSON and can be inspected with browser developer tools.

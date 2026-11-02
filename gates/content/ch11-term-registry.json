@@ -1,0 +1,1332 @@
+{
+ "chapter": 11,
+ "flow": [
+  "Get the data",
+  "Set aside a test set",
+  "Explore",
+  "Prepare the data",
+  "Train",
+  "Evaluate",
+  "Fine-tune",
+  "Launch"
+ ],
+ "known": [
+  "ch02-term-registry.json"
+ ],
+ "generated_by": "ml/study/geron-lab/ch11-notes (chapter_build.py)",
+ "terms": [
+  {
+   "term": "neural network",
+   "match": [
+    "\\bneural net(work)?s?\\b",
+    "\\bnetworks?\\b",
+    "\\bnets?\\b(?!\\w)"
+   ],
+   "exclude": [
+    "\\bnet effect\\b"
+   ],
+   "definition": "a model built from many small calculating units (neurons) arranged in layers; each layer's outputs are the next layer's inputs.",
+   "lesson": 1
+  },
+  {
+   "term": "deep neural network",
+   "match": [
+    "\\bdeep (neural )?net(work)?s?\\b",
+    "\\bDNNs?\\b",
+    "\\bdeep learning\\b"
+   ],
+   "exclude": [],
+   "definition": "a neural network with many layers stacked between input and output (\"deep\" = many layers).",
+   "lesson": 1
+  },
+  {
+   "term": "layer",
+   "match": [
+    "\\blayers?\\b"
+   ],
+   "exclude": [
+    "\\blayers of the chain\\b"
+   ],
+   "definition": "one step of a network: a group of neurons that all read the same inputs and pass their outputs on together.",
+   "lesson": 1
+  },
+  {
+   "term": "neuron",
+   "match": [
+    "\\bneurons?\\b",
+    "\\bunits?\\b"
+   ],
+   "exclude": [
+    "\\bunits of\\b",
+    "\\bunits per step\\b",
+    "\\bunits\\)",
+    "\\bsame units\\b",
+    "\\bunit variance\\b"
+   ],
+   "definition": "one calculating unit: it multiplies each input by a weight, adds them up with a bias, and passes the sum through an activation function.",
+   "lesson": 1
+  },
+  {
+   "term": "hidden layer",
+   "match": [
+    "\\bhidden\\b"
+   ],
+   "exclude": [
+    "\\bhidden uncertainty\\b",
+    "\\buncertainty that standard inference hid\\b"
+   ],
+   "definition": "a layer between the input and the output; you never see its outputs directly, only the next layer does.",
+   "lesson": 1
+  },
+  {
+   "term": "output layer",
+   "match": [
+    "\\boutput layers?\\b",
+    "\\btop (classification )?layer\\b"
+   ],
+   "exclude": [],
+   "definition": "the last layer; its outputs are the network's predictions (here: one probability per class).",
+   "lesson": 5
+  },
+  {
+   "term": "weight",
+   "match": [
+    "\\bweights?\\b"
+   ],
+   "exclude": [
+    "\\bweighted\\b"
+   ],
+   "definition": "a number on one connection between two neurons; the input is multiplied by it. Training is changing the weights. (Keras also calls weights parameters.)",
+   "lesson": 1
+  },
+  {
+   "term": "bias",
+   "match": [
+    "\\bbias(es)?\\b",
+    "\\buse_bias\\b"
+   ],
+   "exclude": [
+    "\\bbias correction\\b",
+    "\\bbias toward zero\\b",
+    "\\bbias-corrected\\b",
+    "\\bbiased\\b"
+   ],
+   "definition": "one extra number per neuron, added to its weighted sum, so the neuron can shift its output up or down even when every input is 0.",
+   "lesson": 1
+  },
+  {
+   "term": "weighted sum",
+   "match": [
+    "\\bweighted sums?\\b",
+    "\\bz\\b(?= ?=)",
+    "\\binput sum\\b"
+   ],
+   "exclude": [],
+   "definition": "what a neuron computes before its activation function: each input times its weight, all added up, plus the bias. The book calls it z.",
+   "lesson": 1
+  },
+  {
+   "term": "activation function",
+   "match": [
+    "\\bactivation( functions?)?\\b",
+    "\\bactivations\\b"
+   ],
+   "exclude": [],
+   "definition": "the small function a neuron applies to its weighted sum before passing it on (sigmoid, ReLU ...). Without it, a stack of layers could only draw straight lines.",
+   "lesson": 1
+  },
+  {
+   "term": "sigmoid",
+   "match": [
+    "\\bsigmoids?\\b",
+    "\\blogistic\\b"
+   ],
+   "exclude": [],
+   "definition": "the S-shaped activation 1 / (1 + e^-z): squeezes any number into 0..1. Also called the logistic function.",
+   "lesson": 1
+  },
+  {
+   "term": "tanh",
+   "match": [
+    "\\btanh\\b"
+   ],
+   "exclude": [],
+   "definition": "the hyperbolic tangent: an S-shaped activation like sigmoid, but its outputs run from -1 to +1, centred on 0.",
+   "lesson": 1
+  },
+  {
+   "term": "ReLU",
+   "match": [
+    "\\bReLUs?\\b",
+    "\\brectified linear\\b"
+   ],
+   "exclude": [
+    "\\bleaky ?relu\\b",
+    "\\bparametric relu\\b",
+    "\\bPReLU\\b"
+   ],
+   "definition": "the rectified linear unit, max(0, z): passes positive sums unchanged and turns every negative sum into exactly 0.",
+   "lesson": 1
+  },
+  {
+   "term": "softmax",
+   "match": [
+    "\\bsoftmax\\b"
+   ],
+   "exclude": [],
+   "definition": "an output-layer activation that turns the 10 raw scores into 10 probabilities that add up to 1, one per class.",
+   "lesson": 1
+  },
+  {
+   "term": "Keras",
+   "match": [
+    "\\bkeras\\b"
+   ],
+   "exclude": [],
+   "definition": "the part of TensorFlow for building and training networks (imports start with tf.keras).",
+   "lesson": 1
+  },
+  {
+   "term": "TensorFlow",
+   "match": [
+    "\\btensorflow\\b",
+    "\\btf\\.",
+    "\\bTF\\b"
+   ],
+   "exclude": [],
+   "definition": "Google's library for deep learning: fast arithmetic on big grids of numbers, plus automatic gradients.",
+   "lesson": 1
+  },
+  {
+   "term": "Sequential",
+   "match": [
+    "\\bsequential\\b"
+   ],
+   "exclude": [],
+   "definition": "Keras's simplest kind of model: a plain list of layers, each feeding the next.",
+   "lesson": 3
+  },
+  {
+   "term": "Dense layer",
+   "match": [
+    "\\bDense\\b"
+   ],
+   "exclude": [
+    "\\bdense (array|arrays|matrix|format|models?|stack|networks?|layers of the)\\b"
+   ],
+   "definition": "a layer in which every neuron is connected to every input (tf.keras.layers.Dense). Dense(100) = 100 neurons.",
+   "lesson": 1
+  },
+  {
+   "term": "Flatten",
+   "match": [
+    "\\bFlatten\\(",
+    "\\bFlatten layers?\\b"
+   ],
+   "exclude": [],
+   "definition": "a layer that turns each 28 x 28 image into one row of 784 numbers, because a Dense layer reads rows.",
+   "lesson": 3
+  },
+  {
+   "term": "kernel (Keras)",
+   "match": [
+    "\\bkernel\\b",
+    "\\bkernel_\\w+"
+   ],
+   "exclude": [],
+   "definition": "Keras's name for a layer's weight matrix, as in kernel_initializer. Not the similarity kernel of Chapter 2: same word, different thing.",
+   "lesson": 1
+  },
+  {
+   "term": "initialization",
+   "match": [
+    "\\binitiali[sz](ation|ations|e|es|ed|er|ers|ing)\\b",
+    "\\bstarting weights\\b",
+    "\\bstart weights\\b"
+   ],
+   "exclude": [],
+   "definition": "choosing the random numbers the weights start at, before any training step.",
+   "lesson": 1
+  },
+  {
+   "term": "fan-in",
+   "match": [
+    "\\bfan[-_ ]?in\\b",
+    "\\bfan_\\w+",
+    "\\bfan[-_ ]?avg\\b",
+    "\\bfan[-_ ]?out\\b"
+   ],
+   "exclude": [],
+   "definition": "the number of inputs one neuron of a layer receives (fan-out: the number of outputs the layer produces; fan_avg = their average).",
+   "lesson": 1
+  },
+  {
+   "term": "uniform distribution",
+   "match": [
+    "\\buniform\\b"
+   ],
+   "exclude": [],
+   "definition": "random numbers spread evenly between a low and a high limit: every value in the range is equally likely.",
+   "lesson": 1
+  },
+  {
+   "term": "normal distribution",
+   "match": [
+    "\\bnormal distribution\\b",
+    "\\bnormal\\b(?= with mean)",
+    "\\bhe_normal\\b",
+    "\\blecun_normal\\b",
+    "\\bglorot_normal\\b",
+    "\\btruncated_normal\\b",
+    "\\bstandard normal\\b"
+   ],
+   "exclude": [],
+   "definition": "the bell curve of Chapter 2 (Gaussian), described by its mean and its spread; he_normal draws starting weights from one.",
+   "lesson": 1
+  },
+  {
+   "term": "Glorot initialization",
+   "match": [
+    "\\bglorot\\b",
+    "\\bxavier\\b"
+   ],
+   "exclude": [],
+   "definition": "start each weight at random with variance 1 / fan_avg; Keras's default. Suits sigmoid, tanh, softmax or no activation.",
+   "lesson": 1
+  },
+  {
+   "term": "He initialization",
+   "match": [
+    "\\bHe (initiali[sz]ation|init|normal|uniform)\\b",
+    "\\bhe_normal\\b",
+    "\\bhe_uniform\\b",
+    "\\bUnder He\\b",
+    "\\bHe-like\\b"
+   ],
+   "exclude": [],
+   "definition": "start each weight at random with variance 2 / fan_in: twice as spread out, because ReLU throws away the negative half. Suits ReLU and its variants.",
+   "lesson": 1
+  },
+  {
+   "term": "LeCun initialization",
+   "match": [
+    "\\blecun\\b"
+   ],
+   "exclude": [],
+   "definition": "start each weight at random with variance 1 / fan_in; the one SELU needs.",
+   "lesson": 1
+  },
+  {
+   "term": "gradient",
+   "match": [
+    "\\bgradients?\\b"
+   ],
+   "exclude": [],
+   "definition": "for every weight, one number saying how much the loss would change if that weight moved a little, and in which direction. The list of all of them points uphill.",
+   "lesson": 1
+  },
+  {
+   "term": "loss",
+   "match": [
+    "\\bloss(es)?\\b",
+    "\\bcost function\\b",
+    "\\bJ\\(θ\\)"
+   ],
+   "exclude": [
+    "\\bloss of\\b"
+   ],
+   "definition": "one number saying how wrong the network's predictions are on a set of images; training pushes it down. Also called the cost function, J.",
+   "lesson": 1
+  },
+  {
+   "term": "gradient descent",
+   "match": [
+    "\\bgradient descent\\b",
+    "\\bSGD\\b",
+    "\\bdescent\\b"
+   ],
+   "exclude": [],
+   "definition": "the training rule: move every weight a small step against its gradient, so the loss goes down, then repeat. SGD (stochastic gradient descent) does it on a small random group of images at a time.",
+   "lesson": 1
+  },
+  {
+   "term": "learning rate",
+   "match": [
+    "\\blearning[ _]rates?\\b",
+    "\\blr0?\\b",
+    "\\bη\\b"
+   ],
+   "exclude": [],
+   "definition": "the size of each gradient-descent step, η (eta): weight change = learning rate x gradient.",
+   "lesson": 3
+  },
+  {
+   "term": "backpropagation",
+   "match": [
+    "\\bback-?propagat(ion|e|es|ed|ing)\\b",
+    "\\bbackward pass(es)?\\b",
+    "\\bbackward\\b"
+   ],
+   "exclude": [],
+   "definition": "the method that computes every weight's gradient: it walks backward from the loss through the layers, one layer at a time.",
+   "lesson": 1
+  },
+  {
+   "term": "derivative",
+   "match": [
+    "\\bderivatives?\\b"
+   ],
+   "exclude": [],
+   "definition": "the slope of a curve at one point: how fast the output changes when the input changes a little. Flat curve = derivative near 0.",
+   "lesson": 1
+  },
+  {
+   "term": "saturate",
+   "match": [
+    "\\bsaturat(e|es|ed|ing|ion)\\b"
+   ],
+   "exclude": [],
+   "definition": "an activation saturates when its input is so large or so negative that the curve is flat there: pushing further barely changes the output.",
+   "lesson": 1
+  },
+  {
+   "term": "vanishing gradients",
+   "match": [
+    "\\bvanish(es|ed|ing)?\\b"
+   ],
+   "exclude": [],
+   "definition": "gradients that shrink layer after layer on the way back, so the first layers get almost no update and stop learning.",
+   "lesson": 1
+  },
+  {
+   "term": "exploding gradients",
+   "match": [
+    "\\bexplod(e|es|ed|ing)\\b",
+    "\\bexplosion\\b"
+   ],
+   "exclude": [],
+   "definition": "gradients that grow layer after layer on the way back, so the weight updates become huge and training falls apart.",
+   "lesson": 1
+  },
+  {
+   "term": "unstable gradients",
+   "match": [
+    "\\bunstable\\b"
+   ],
+   "exclude": [],
+   "definition": "the family name for vanishing and exploding gradients: the gradient's size changes wildly from layer to layer.",
+   "lesson": 1
+  },
+  {
+   "term": "epoch",
+   "match": [
+    "\\bepochs?\\b"
+   ],
+   "exclude": [],
+   "definition": "one full pass over the training set. With 55,000 images and batches of 32, one epoch is 1,719 gradient steps.",
+   "lesson": 3
+  },
+  {
+   "term": "mini-batch",
+   "match": [
+    "\\bmini-?batch(es)?\\b",
+    "\\bbatch size\\b",
+    "\\bbatch(es)?\\b"
+   ],
+   "exclude": [
+    "\\bbatch learning\\b",
+    "\\bbatch normali[sz]ation\\b",
+    "\\bBatchNormalization\\b",
+    "\\bbatch norm\\b",
+    "\\bbatch-norm\\b",
+    "\\bbatch-normali[sz]ed\\b"
+   ],
+   "definition": "the small group of training images used for one gradient step (Keras default: 32).",
+   "lesson": 2
+  },
+  {
+   "term": "accuracy",
+   "match": [
+    "\\baccurac(y|ies)\\b"
+   ],
+   "exclude": [],
+   "definition": "the share of images whose predicted class is the true class, e.g. 0.87 = 87% right.",
+   "lesson": 2
+  },
+  {
+   "term": "cross-entropy",
+   "match": [
+    "\\bcross-?entropy\\b",
+    "\\bcrossentropy\\b"
+   ],
+   "exclude": [],
+   "definition": "the usual loss for classification: minus the log of the probability the network gave the TRUE class, so a confident wrong answer costs a lot.",
+   "lesson": 4
+  },
+  {
+   "term": "compile",
+   "match": [
+    "\\bcompile(s|d)?\\b",
+    "\\bcompiling\\b",
+    "\\brecompil(e|ed|ing)\\b"
+   ],
+   "exclude": [],
+   "definition": "Keras's step that attaches a loss, an optimizer and the metrics to a built model, before fit().",
+   "lesson": 4
+  },
+  {
+   "term": "optimizer",
+   "match": [
+    "\\boptimi[sz]ers?\\b"
+   ],
+   "exclude": [],
+   "definition": "the object that turns the gradients into weight updates (plain SGD is one; lessons b06-b11 compare several). Chosen in compile().",
+   "lesson": 4
+  },
+  {
+   "term": "Fashion MNIST",
+   "match": [
+    "\\bfashion[ _]mnist\\b"
+   ],
+   "exclude": [],
+   "definition": "the book's image set: 70,000 greyscale 28 x 28 photos of clothes in 10 classes (T-shirt, trouser, pullover, dress, coat, sandal, shirt, sneaker, bag, ankle boot).",
+   "lesson": 1
+  },
+  {
+   "term": "inference",
+   "match": [
+    "\\binference\\b",
+    "\\btest time\\b",
+    "\\bprediction time\\b"
+   ],
+   "exclude": [],
+   "definition": "using a trained network to predict (no weight changes); in Keras, predict() or calling the model with training=False.",
+   "lesson": 2
+  },
+  {
+   "term": "dying ReLU",
+   "match": [
+    "\\bdying\\b",
+    "\\bdead\\b",
+    "\\bdies\\b",
+    "\\bdie\\b"
+   ],
+   "exclude": [
+    "\\bdie out\\b",
+    "\\bsteps that die\\b"
+   ],
+   "definition": "a ReLU neuron whose weighted sum is negative for every training image: it always outputs 0, gets a 0 gradient, and never changes again.",
+   "lesson": 2
+  },
+  {
+   "term": "Leaky ReLU",
+   "match": [
+    "\\bleaky\\s?relu\\b",
+    "\\bleaky\\b"
+   ],
+   "exclude": [],
+   "definition": "max(alpha x z, z): like ReLU, but negative sums keep a small slope alpha (e.g. 0.2) instead of becoming 0.",
+   "lesson": 2
+  },
+  {
+   "term": "PReLU",
+   "match": [
+    "\\bPReLU\\b",
+    "\\bparametric relu\\b"
+   ],
+   "exclude": [],
+   "definition": "Parametric ReLU: a Leaky ReLU whose slope alpha is learned in training instead of chosen by you.",
+   "lesson": 2
+  },
+  {
+   "term": "ELU",
+   "match": [
+    "\\bELUs?\\b",
+    "\\bexponential linear unit\\b"
+   ],
+   "exclude": [],
+   "definition": "exponential linear unit: z for positive sums, alpha x (e^z - 1) for negative ones, a smooth curve that settles at -alpha.",
+   "lesson": 1
+  },
+  {
+   "term": "SELU",
+   "match": [
+    "\\bSELUs?\\b",
+    "\\bscaled ELU\\b"
+   ],
+   "exclude": [],
+   "definition": "scaled ELU: an ELU times fixed constants, chosen so a plain stack of Dense layers keeps its outputs at mean 0 and std 1.",
+   "lesson": 1
+  },
+  {
+   "term": "self-normalizing",
+   "match": [
+    "\\bself-?normali[sz](e|es|ed|ing|ation)\\b"
+   ],
+   "exclude": [],
+   "definition": "a network whose layer outputs keep mean about 0 and standard deviation about 1 on their own, with no extra normalization layer.",
+   "lesson": 2
+  },
+  {
+   "term": "MLP",
+   "match": [
+    "\\bMLPs?\\b",
+    "\\bmultilayer perceptrons?\\b"
+   ],
+   "exclude": [],
+   "definition": "multilayer perceptron: a plain stack of Dense layers, nothing else.",
+   "lesson": 2
+  },
+  {
+   "term": "GELU",
+   "match": [
+    "\\bGELU\\b"
+   ],
+   "exclude": [],
+   "definition": "an activation z x Phi(z), where Phi(z) is the chance a bell-curve value is below z: smooth, with a small dip below 0.",
+   "lesson": 2
+  },
+  {
+   "term": "Swish",
+   "match": [
+    "\\bswish\\b",
+    "\\bSiLU\\b"
+   ],
+   "exclude": [],
+   "definition": "an activation z x sigmoid(z): smooth, dips slightly below 0, then rises like ReLU.",
+   "lesson": 2
+  },
+  {
+   "term": "Mish",
+   "match": [
+    "\\bmish\\b"
+   ],
+   "exclude": [],
+   "definition": "another smooth ReLU-like activation with a small dip below 0 (its curve is in Figure 11-4).",
+   "lesson": 2
+  },
+  {
+   "term": "skip connection",
+   "match": [
+    "\\bskip connections?\\b"
+   ],
+   "exclude": [],
+   "definition": "a shortcut that adds a layer's input to an output further up, skipping layers in between (Chapter 14).",
+   "lesson": 2
+  },
+  {
+   "term": "recurrent neural network",
+   "match": [
+    "\\brecurrent\\b",
+    "\\bRNNs?\\b"
+   ],
+   "exclude": [],
+   "definition": "a network for sequences (text, time series) that feeds its own output back in at every step (Chapter 15).",
+   "lesson": 2
+  },
+  {
+   "term": "batch normalization",
+   "match": [
+    "\\bbatch normali[sz]ation\\b",
+    "\\bBatchNormalization\\b",
+    "\\bbatch norm\\b",
+    "\\bbatch-norm",
+    "\\bBN\\b"
+   ],
+   "exclude": [],
+   "definition": "a layer that standardizes its inputs using the mean and spread of the current mini-batch, then rescales them with two learned numbers. Not the min-max normalization of Chapter 2.",
+   "lesson": 2
+  },
+  {
+   "term": "moving average",
+   "match": [
+    "\\bmoving averages?\\b",
+    "\\bmoving_(mean|variance)\\b",
+    "\\brunning (average|mean|estimate|statistics)\\b"
+   ],
+   "exclude": [],
+   "definition": "a running average updated at every step that fades out old values, so it follows the recent state without storing the history.",
+   "lesson": 3
+  },
+  {
+   "term": "non-trainable parameter",
+   "match": [
+    "\\bnon-?trainable\\b",
+    "\\btrainable\\b"
+   ],
+   "exclude": [],
+   "definition": "a number stored in the model that gradient descent does not change (BN's moving averages); trainable ones (weights, gamma, beta) it does change.",
+   "lesson": 3
+  },
+  {
+   "term": "float16",
+   "match": [
+    "\\bfloat ?16\\b",
+    "\\bfloat precision\\b",
+    "\\bprecision reduction\\b",
+    "\\b(8|16) bits\\b"
+   ],
+   "exclude": [],
+   "definition": "storing each number in 16 bits instead of 32: half the memory, usually faster, slightly less exact.",
+   "lesson": 17
+  },
+  {
+   "term": "gradient clipping",
+   "match": [
+    "\\bclip(s|ped|ping)?\\b",
+    "\\bclipvalue\\b",
+    "\\bclipnorm\\b"
+   ],
+   "exclude": [],
+   "definition": "capping the gradient before the weights are updated, so one huge gradient cannot wreck the model.",
+   "lesson": 4
+  },
+  {
+   "term": "diverge",
+   "match": [
+    "\\bdiverg(e|es|ed|ing|ence)\\b"
+   ],
+   "exclude": [],
+   "definition": "training diverges when the loss grows instead of shrinking, until the numbers become useless (often NaN, 'not a number').",
+   "lesson": 4
+  },
+  {
+   "term": "partial derivative",
+   "match": [
+    "\\bpartial derivatives?\\b"
+   ],
+   "exclude": [],
+   "definition": "the slope with respect to ONE weight while all the others are held still; the gradient is the list of them.",
+   "lesson": 4
+  },
+  {
+   "term": "L2 norm",
+   "match": [
+    "\\b(L|ℓ)\\s?2 norm\\b",
+    "\\bℓ₂ norm\\b",
+    "\\bL2 norm\\b"
+   ],
+   "exclude": [],
+   "definition": "the ordinary length of a vector: square each component, add them up, take the square root.",
+   "lesson": 4
+  },
+  {
+   "term": "TensorBoard",
+   "match": [
+    "\\btensorboard\\b"
+   ],
+   "exclude": [],
+   "definition": "TensorFlow's web page for watching a training run: loss curves, gradient sizes and more.",
+   "lesson": 4
+  },
+  {
+   "term": "transfer learning",
+   "match": [
+    "\\btransfer(red|ring)?\\b"
+   ],
+   "exclude": [],
+   "definition": "starting a new model from layers another model already learned on a related task, instead of from random weights.",
+   "lesson": 5
+  },
+  {
+   "term": "pretrained",
+   "match": [
+    "\\bpre-?trained\\b"
+   ],
+   "exclude": [
+    "\\bunsupervised pretraining\\b"
+   ],
+   "definition": "already trained on another task, and reused as the starting point.",
+   "lesson": 5
+  },
+  {
+   "term": "freeze",
+   "match": [
+    "\\bfr(eeze|eezes|eezing|ozen)\\b",
+    "\\bunfr(eeze|eezes|eezing|ozen)\\b"
+   ],
+   "exclude": [
+    "\\bfrozen (statistics|estimate|moving averages)\\b"
+   ],
+   "definition": "mark a layer's weights as not trainable (layer.trainable = False), so training leaves them alone; unfreeze = make them trainable again.",
+   "lesson": 5
+  },
+  {
+   "term": "fine-tuning (reused layers)",
+   "match": [
+    "\\bfine-?tun(e|es|ed|ing)\\b"
+   ],
+   "exclude": [
+    "→ Fine-tune\\b",
+    "\\bFine-tune step\\b"
+   ],
+   "definition": "in transfer learning: keep training the reused layers with SMALL steps so they adjust to the new task. (Chapter 2's fine-tune meant choosing the best settings; this is a different use of the word.)",
+   "lesson": 5
+  },
+  {
+   "term": "binary classifier",
+   "match": [
+    "\\bbinary\\b"
+   ],
+   "exclude": [],
+   "definition": "a model that sorts its inputs into only two classes (yes/no); here one sigmoid output gives the probability of the positive class.",
+   "lesson": 5
+  },
+  {
+   "term": "unsupervised pretraining",
+   "match": [
+    "\\bunsupervised\\b"
+   ],
+   "exclude": [],
+   "definition": "first training the lower layers on unlabeled data (no answers attached), then reusing them for the labeled task.",
+   "lesson": 5
+  },
+  {
+   "term": "error rate",
+   "match": [
+    "\\berror rates?\\b"
+   ],
+   "exclude": [],
+   "definition": "the share of wrong predictions: 1 - accuracy. 91.85% accuracy = 8.15% error rate.",
+   "lesson": 5
+  },
+  {
+   "term": "momentum",
+   "match": [
+    "\\bmomentum\\b"
+   ],
+   "exclude": [],
+   "definition": "an optimizer that remembers its previous steps: the gradient changes the speed of the step instead of setting it, so steps build up speed in a consistent direction.",
+   "lesson": 6
+  },
+  {
+   "term": "oscillate",
+   "match": [
+    "\\boscillat(e|es|ed|ing|ion|ions)\\b",
+    "\\bwobble\\b",
+    "\\bzig-?zag"
+   ],
+   "exclude": [],
+   "definition": "swing back and forth across the minimum instead of settling in it.",
+   "lesson": 6
+  },
+  {
+   "term": "plateau",
+   "match": [
+    "\\bplateaus?\\b",
+    "\\bplateaued\\b"
+   ],
+   "exclude": [],
+   "definition": "a long flat stretch of the loss: the gradient is tiny, so plain gradient descent crawls; also a run where the validation loss stops improving.",
+   "lesson": 2
+  },
+  {
+   "term": "Nesterov",
+   "match": [
+    "\\bnesterov\\b",
+    "\\bNAG\\b"
+   ],
+   "exclude": [],
+   "definition": "Nesterov accelerated gradient: momentum that measures the gradient a little ahead, where the momentum is about to carry the weights.",
+   "lesson": 7
+  },
+  {
+   "term": "AdaGrad",
+   "match": [
+    "\\badagrad\\b"
+   ],
+   "exclude": [],
+   "definition": "an optimizer that divides each weight's step by the square root of the sum of all its past squared gradients, so steep directions take smaller steps.",
+   "lesson": 8
+  },
+  {
+   "term": "adaptive learning rate",
+   "match": [
+    "\\badaptive\\b"
+   ],
+   "exclude": [
+    "\\badaptive brake\\b"
+   ],
+   "definition": "a step size worked out separately for every weight from its own gradient history, instead of one rate for all.",
+   "lesson": 8
+  },
+  {
+   "term": "RMSProp",
+   "match": [
+    "\\bRMSprop\\b"
+   ],
+   "exclude": [],
+   "definition": "AdaGrad that forgets: it keeps a fading average of recent squared gradients instead of the sum of all of them.",
+   "lesson": 8
+  },
+  {
+   "term": "Adam",
+   "match": [
+    "\\bAdam\\b",
+    "\\badaptive moment\\b"
+   ],
+   "exclude": [],
+   "definition": "the usual default optimizer: momentum (which way) plus RMSProp (how far, per weight), with a correction for its first steps.",
+   "lesson": 8
+  },
+  {
+   "term": "bias correction",
+   "match": [
+    "\\bbias correction\\b",
+    "\\bbias-corrected\\b"
+   ],
+   "exclude": [],
+   "definition": "in Adam: dividing the running averages by 1 - beta^t early on, because they start at 0 and would report values that are too small.",
+   "lesson": 9
+  },
+  {
+   "term": "AdaMax",
+   "match": [
+    "\\badamax\\b"
+   ],
+   "exclude": [],
+   "definition": "Adam that scales each step by the largest recent gradient size instead of the root of the average square.",
+   "lesson": 10
+  },
+  {
+   "term": "Nadam",
+   "match": [
+    "\\bnadam\\b"
+   ],
+   "exclude": [],
+   "definition": "Adam plus the Nesterov look-ahead; often converges a little faster.",
+   "lesson": 10
+  },
+  {
+   "term": "converge",
+   "match": [
+    "\\bconverg(e|es|ed|ing|ence)\\b"
+   ],
+   "exclude": [],
+   "definition": "training converges when the loss stops going down because the weights have settled.",
+   "lesson": 3
+  },
+  {
+   "term": "weight decay",
+   "match": [
+    "\\bweight decay\\b",
+    "\\bweight_decay\\b"
+   ],
+   "exclude": [],
+   "definition": "shrinking every weight by a small fixed fraction at every step (e.g. times 0.99), so no weight grows large without a reason.",
+   "lesson": 9
+  },
+  {
+   "term": "AdamW",
+   "match": [
+    "\\bAdamW\\b"
+   ],
+   "exclude": [],
+   "definition": "Adam with weight decay applied directly to the weights after each step, not mixed into the gradient.",
+   "lesson": 9
+  },
+  {
+   "term": "L1 and L2 regularization",
+   "match": [
+    "\\b(L|ℓ)\\s?[12]\\b",
+    "\\bℓ[₁₂]\\b",
+    "\\bl[12]\\(",
+    "\\bkernel_regularizer\\b",
+    "\\bregularizers?\\b"
+   ],
+   "exclude": [],
+   "definition": "adding a penalty on the weights to the loss: L2 = sum of squared weights (all shrink), L1 = sum of absolute weights (many become exactly 0).",
+   "lesson": 2
+  },
+  {
+   "term": "sparse model",
+   "match": [
+    "\\bsparse\\b"
+   ],
+   "exclude": [
+    "\\bsparse_categorical\\b",
+    "\\bsparse data\\b"
+   ],
+   "definition": "a model in which most weights are exactly 0, so it is smaller and faster.",
+   "lesson": 11
+  },
+  {
+   "term": "Hessian",
+   "match": [
+    "\\bhessians?\\b",
+    "\\bjacobians?\\b",
+    "\\bsecond-order\\b",
+    "\\bfirst-order\\b"
+   ],
+   "exclude": [],
+   "definition": "the table of second derivatives (how each slope changes); first-order optimizers use only the slopes (Jacobians) because Hessians are far too big.",
+   "lesson": 11
+  },
+  {
+   "term": "learning schedule",
+   "match": [
+    "\\b(learning|lr) schedul(e|es|ing)\\b",
+    "\\bschedul(e|es|ed|er|ers|ing)\\b"
+   ],
+   "exclude": [],
+   "definition": "a rule that changes the learning rate while training runs, usually from big steps to small ones.",
+   "lesson": 11
+  },
+  {
+   "term": "callback",
+   "match": [
+    "\\bcallbacks?\\b"
+   ],
+   "exclude": [],
+   "definition": "an object you pass to fit() that Keras calls at fixed moments (start of each epoch, end of each batch) to do extra work, such as changing the learning rate.",
+   "lesson": 12
+  },
+  {
+   "term": "1cycle",
+   "match": [
+    "\\b1-?cycle\\b",
+    "\\bone-?cycle\\b"
+   ],
+   "exclude": [],
+   "definition": "a schedule that raises the learning rate for the first half of training, then lowers it for the second half.",
+   "lesson": 12
+  },
+  {
+   "term": "CIFAR-10",
+   "match": [
+    "\\bCIFAR-?10\\b"
+   ],
+   "exclude": [],
+   "definition": "an image set of 60,000 small colour photos (32 x 32) in 10 classes, such as airplane, cat and truck.",
+   "lesson": 12
+  },
+  {
+   "term": "closure",
+   "match": [
+    "\\bclosures?\\b"
+   ],
+   "exclude": [],
+   "definition": "a function built inside another function that remembers the outer function's values (here lr0 and s).",
+   "lesson": 12
+  },
+  {
+   "term": "checkpoint",
+   "match": [
+    "\\bcheckpoints?\\b"
+   ],
+   "exclude": [],
+   "definition": "a saved copy of a model (and optimizer) during or after training, so it can be reloaded and continued.",
+   "lesson": 12
+  },
+  {
+   "term": "penalty",
+   "match": [
+    "\\bpenalt(y|ies)\\b",
+    "\\bpenali[sz](e|es|ed|ing)\\b"
+   ],
+   "exclude": [
+    "\\bruntime penalty\\b"
+   ],
+   "definition": "an extra amount added to the loss that grows with the weights, so large weights cost something.",
+   "lesson": 2
+  },
+  {
+   "term": "dropout",
+   "match": [
+    "\\bdrop-?outs?\\b",
+    "\\bdropped out\\b",
+    "\\bdropped neurons\\b"
+   ],
+   "exclude": [],
+   "definition": "at every training step, switch off a random share of the neurons (their output becomes 0) so none can rely on a particular neighbour. Off at prediction time.",
+   "lesson": 2
+  },
+  {
+   "term": "co-adapt",
+   "match": [
+    "\\bco-?adapt(s|ed|ing|ation)?\\b"
+   ],
+   "exclude": [],
+   "definition": "two neurons co-adapt when each is only useful together with the other, a fragile arrangement that tends to memorise noise.",
+   "lesson": 14
+  },
+  {
+   "term": "keep probability",
+   "match": [
+    "\\bkeep probability\\b",
+    "\\b1 − p\\b",
+    "\\b1 - p\\b"
+   ],
+   "exclude": [],
+   "definition": "1 - p, the chance a neuron is NOT dropped; the surviving outputs are divided by it during training.",
+   "lesson": 14
+  },
+  {
+   "term": "Monte Carlo dropout",
+   "match": [
+    "\\bmonte carlo\\b",
+    "\\bMC\\b",
+    "\\bMCDropout\\b"
+   ],
+   "exclude": [],
+   "definition": "keep dropout ON at prediction time, predict the same image many times, and average: the spread of the answers shows how unsure the model is.",
+   "lesson": 15
+  },
+  {
+   "term": "uncertainty",
+   "match": [
+    "\\buncertain(ty|ties)?\\b"
+   ],
+   "exclude": [],
+   "definition": "how much you should doubt a prediction; here measured as the spread of the Monte Carlo predictions.",
+   "lesson": 15
+  },
+  {
+   "term": "calibrated",
+   "match": [
+    "\\bcalibrat(ed|ion)\\b"
+   ],
+   "exclude": [],
+   "definition": "a model is well calibrated when its probabilities match reality: of the images it gives 70%, about 70% are right.",
+   "lesson": 15
+  },
+  {
+   "term": "max-norm regularization",
+   "match": [
+    "\\bmax-?norm\\b",
+    "\\bmax_norm\\b",
+    "\\bkernel_constraint\\b",
+    "\\bconstraints?\\b"
+   ],
+   "exclude": [],
+   "definition": "after each training step, shrink any neuron's incoming weight vector whose length is above r back to length r.",
+   "lesson": 2
+  },
+  {
+   "term": "AlphaDropout",
+   "match": [
+    "\\balpha ?dropout\\b"
+   ],
+   "exclude": [],
+   "definition": "a dropout variant that keeps the mean and spread of its inputs, so it does not break SELU's self-normalization.",
+   "lesson": 17
+  },
+  {
+   "term": "latency",
+   "match": [
+    "\\blatency\\b",
+    "\\blow-latency\\b"
+   ],
+   "exclude": [],
+   "definition": "how long one prediction takes, from input in to answer out.",
+   "lesson": 2
+  },
+  {
+   "term": "NaN",
+   "match": [
+    "\\bNaN\\b"
+   ],
+   "exclude": [],
+   "definition": "\"not a number\": what a calculation returns once it has gone wrong (e.g. 0 divided by 0, or a number too big to store). Once one weight is NaN, everything it touches becomes NaN.",
+   "lesson": 4
+  },
+  {
+   "term": "overshoot",
+   "match": [
+    "\\bovershoot(s|ing)?\\b",
+    "\\bovershot\\b"
+   ],
+   "exclude": [],
+   "definition": "go past the lowest point of the loss because the step was too big or too fast, and land on the far side.",
+   "lesson": 6
+  },
+  {
+   "term": "optimum",
+   "match": [
+    "\\boptim(um|a)\\b",
+    "\\bminimum\\b",
+    "\\bminima\\b"
+   ],
+   "exclude": [],
+   "definition": "the best point: the weights where the loss is lowest (the minimum). A local optimum is lowest only compared with its neighbourhood.",
+   "lesson": 6
+  },
+  {
+   "term": "loss landscape",
+   "match": [
+    "\\blandscapes?\\b",
+    "\\bvalleys?\\b",
+    "\\bbowls?\\b"
+   ],
+   "exclude": [],
+   "definition": "the loss drawn as a surface over all possible weights: hills, valleys, flat plateaus. Training walks downhill on it.",
+   "lesson": 2
+  },
+  {
+   "term": "iteration",
+   "match": [
+    "\\biterations?\\b"
+   ],
+   "exclude": [
+    "\\bIteration Methods\\b"
+   ],
+   "definition": "one training step: one mini-batch in, gradients computed, weights updated once.",
+   "lesson": 8
+  },
+  {
+   "term": "matrix",
+   "match": [
+    "\\bmatri(x|ces)\\b"
+   ],
+   "exclude": [
+    "\\bsparse matri(x|ces)\\b"
+   ],
+   "definition": "a table of numbers in rows and columns; a Dense layer's weights are one matrix, inputs x neurons (784 x 300 for the first layer here).",
+   "lesson": 1
+  },
+  {
+   "term": "pixel",
+   "match": [
+    "\\bpixels?\\b"
+   ],
+   "exclude": [],
+   "definition": "one dot of an image. A Fashion MNIST image is 28 x 28 = 784 pixels, each a brightness from 0 (black) to 255 (white), here divided by 255 to 0..1.",
+   "lesson": 1
+  },
+  {
+   "term": "shape (of an array)",
+   "match": [
+    "\\bshapes?\\b(?= \\[| \\(|:| of y_)",
+    "\\.shape\\b"
+   ],
+   "exclude": [
+    "\\bbell-shaped\\b",
+    "\\bS-shaped\\b"
+   ],
+   "definition": "the size of an array along each direction; shape (100, 10000, 10) = 100 blocks of 10,000 rows of 10 numbers.",
+   "lesson": 15
+  },
+  {
+   "term": "axis",
+   "match": [
+    "\\baxis\\b",
+    "\\baxes\\b"
+   ],
+   "exclude": [
+    "\\bsecond axis\\b",
+    "\\bsteep axis\\b"
+   ],
+   "definition": "one direction of an array; axis=0 runs down the first index. .mean(axis=0) averages over it, removing that direction.",
+   "lesson": 15
+  },
+  {
+   "term": "representation",
+   "match": [
+    "\\brepresentations?\\b"
+   ],
+   "exclude": [],
+   "definition": "what a layer's outputs capture about the input: the pattern of numbers it hands to the next layer.",
+   "lesson": 3
+  },
+  {
+   "term": "generalize",
+   "match": [
+    "\\bgenerali[sz](e|es|ed|ing)\\b"
+   ],
+   "exclude": [],
+   "definition": "do well on NEW data, not just on the training data.",
+   "lesson": 5
+  },
+  {
+   "term": "benchmark",
+   "match": [
+    "\\bbenchmarks?\\b"
+   ],
+   "exclude": [],
+   "definition": "a standard test (fixed data and task) used to compare methods fairly.",
+   "lesson": 2
+  },
+  {
+   "term": "transformer (network)",
+   "match": [
+    "\\btransformers?\\b"
+   ],
+   "exclude": [],
+   "definition": "a kind of deep network behind today's large language models (Chapter 16). Not Chapter 2's Scikit-Learn transformer.",
+   "lesson": 9
+  },
+  {
+   "term": "early stopping",
+   "match": [
+    "\\bearly stopping\\b",
+    "\\bEarlyStopping\\b"
+   ],
+   "exclude": [],
+   "definition": "stop training when the validation loss has not improved for a set number of epochs (the patience).",
+   "lesson": 12
+  },
+  {
+   "term": "convolutional neural network",
+   "match": [
+    "\\bconvolutional\\b",
+    "\\bCNNs?\\b"
+   ],
+   "exclude": [],
+   "definition": "a network for images whose layers slide small filters over the picture (Chapter 14).",
+   "lesson": 5
+  },
+  {
+   "term": "subclass",
+   "match": [
+    "\\bsubclass(es|ing|ed)?\\b",
+    "\\binherit(s|ing|ed)?\\b",
+    "\\bsuper\\(\\)"
+   ],
+   "exclude": [
+    "\\binherited\\. Freezing\\b",
+    "\\bjust inherited\\b",
+    "\\boptimizer inherits\\b"
+   ],
+   "definition": "a new class built on an existing one: it gets (inherits) all its behaviour and replaces only what it redefines; super() calls the original version.",
+   "lesson": 15
+  },
+  {
+   "term": "affine",
+   "match": [
+    "\\baffine\\b"
+   ],
+   "exclude": [],
+   "definition": "multiply by a number and add a number (a x + b): a stretch and a shift.",
+   "lesson": 17
+  },
+  {
+   "term": "pruning",
+   "match": [
+    "\\bprun(e|es|ed|ing)\\b"
+   ],
+   "exclude": [],
+   "definition": "removing weights (setting them to 0 for good) or whole neurons that matter little, to make a network smaller and faster.",
+   "lesson": 17
+  },
+  {
+   "term": "quantization",
+   "match": [
+    "\\bquanti[sz](ation|e|ed)\\b"
+   ],
+   "exclude": [],
+   "definition": "storing weights with fewer bits (e.g. 8-bit whole numbers instead of 32-bit decimals) to save memory and time.",
+   "lesson": 17
+  },
+  {
+   "term": "partial()",
+   "match": [
+    "\\bpartial\\(\\)",
+    "\\bfunctools\\b",
+    "\\bpartial\\b(?= wrapper| sets| is used|,)"
+   ],
+   "exclude": [],
+   "definition": "Python's functools.partial: makes a new function from an old one with some arguments already filled in.",
+   "lesson": 13
+  }
+ ]
+}

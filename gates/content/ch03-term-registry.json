@@ -1,0 +1,797 @@
+{
+ "chapter": 3,
+ "flow": [
+  "Get the data",
+  "Set aside a test set",
+  "Explore",
+  "Prepare the data",
+  "Train",
+  "Evaluate",
+  "Fine-tune",
+  "Launch"
+ ],
+ "known": [
+  "ch02-term-registry.json"
+ ],
+ "generated_by": "ml/study/geron-lab/chapter-build/build_chapter.py --chapter 3",
+ "terms": [
+  {
+   "term": "MNIST",
+   "match": [
+    "\\bMNIST\\b"
+   ],
+   "exclude": [],
+   "definition": "a famous dataset of 70,000 small pictures of handwritten digits (0 to 9), each labelled with the digit it shows.",
+   "lesson": 1
+  },
+  {
+   "term": "pixel",
+   "match": [
+    "\\bpixels?\\b"
+   ],
+   "exclude": [],
+   "definition": "one dot of a picture. Each MNIST pixel is a number from 0 (white) to 255 (black).",
+   "lesson": 1
+  },
+  {
+   "term": "digit",
+   "match": [
+    "\\bdigits?\\b"
+   ],
+   "exclude": [],
+   "definition": "one of the ten figures 0 to 9; in this chapter, a handwritten one in a picture.",
+   "lesson": 1
+  },
+  {
+   "term": "class",
+   "match": [
+    "\\bclass(es)?\\b"
+   ],
+   "exclude": [
+    "\\bclassif\\w*",
+    "\\bsubclass\\w*",
+    "\\bmulticlass\\b"
+   ],
+   "definition": "one of the fixed answers a classifier chooses between, e.g. \"5\" or \"not 5\". (Python code has classes too: a kind of object. Every model type in Scikit-Learn is one.)",
+   "lesson": 1
+  },
+  {
+   "term": "classifier",
+   "match": [
+    "\\bclassifiers?\\b"
+   ],
+   "exclude": [],
+   "definition": "a model that predicts a class (a category) instead of a number.",
+   "lesson": 1
+  },
+  {
+   "term": "fetch_openml",
+   "match": [
+    "\\bfetch_openml\\b",
+    "\\bOpenML\\b"
+   ],
+   "exclude": [],
+   "definition": "Scikit-Learn function that downloads a dataset from OpenML.org, a public website of datasets.",
+   "lesson": 1
+  },
+  {
+   "term": "Bunch",
+   "match": [
+    "\\bBunch\\b"
+   ],
+   "exclude": [],
+   "definition": "the container Scikit-Learn's dataset helpers return: a dictionary whose entries (data, target, DESCR) can also be read with a dot, e.g. mnist.data.",
+   "lesson": 1
+  },
+  {
+   "term": "dictionary",
+   "match": [
+    "\\bdictionar(y|ies)\\b",
+    "\\bdictionary-like\\b"
+   ],
+   "exclude": [],
+   "definition": "a Python lookup table of names and values, e.g. {\"data\": ..., \"target\": ...}.",
+   "lesson": 1
+  },
+  {
+   "term": "as_frame",
+   "match": [
+    "\\bas_frame\\b"
+   ],
+   "exclude": [],
+   "definition": "the fetch_openml setting that chooses the format: True gives pandas tables, False gives plain NumPy arrays.",
+   "lesson": 1
+  },
+  {
+   "term": "string",
+   "match": [
+    "\\bstrings?\\b"
+   ],
+   "exclude": [],
+   "definition": "text in Python, written in quotes: '5' is a string, 5 is a number.",
+   "lesson": 1
+  },
+  {
+   "term": "shuffled",
+   "match": [
+    "\\bshuffl(e|es|ed|ing)\\b"
+   ],
+   "exclude": [],
+   "definition": "put in a random order.",
+   "lesson": 1
+  },
+  {
+   "term": "reshape",
+   "match": [
+    "\\breshap(e|es|ed|ing)\\b"
+   ],
+   "exclude": [],
+   "definition": "change the layout of an array without changing its numbers, e.g. 784 in a row into a 28 × 28 square.",
+   "lesson": 1
+  },
+  {
+   "term": "neural network",
+   "match": [
+    "\\bneural networks?\\b"
+   ],
+   "exclude": [],
+   "definition": "a kind of model built from many small connected units, each of which multiplies its inputs by numbers, adds them up and passes the result on (Chapter 10).",
+   "lesson": 1
+  },
+  {
+   "term": "convolutional network",
+   "match": [
+    "\\bconvolutional\\b"
+   ],
+   "exclude": [],
+   "definition": "a kind of neural network made for pictures that looks at nearby pixels together (Chapter 14).",
+   "lesson": 1
+  },
+  {
+   "term": "weight",
+   "match": [
+    "\\bweights?\\b"
+   ],
+   "exclude": [
+    "\\bsample_weight\\b"
+   ],
+   "definition": "a number a model multiplies one input by before adding the results up; a bigger weight means that input counts more in the answer.",
+   "lesson": 1
+  },
+  {
+   "term": "benchmark",
+   "match": [
+    "\\bbenchmark(s|ed|ing)?\\b"
+   ],
+   "exclude": [],
+   "definition": "a standard test that everyone runs so that results can be compared.",
+   "lesson": 1
+  },
+  {
+   "term": "binary classifier",
+   "match": [
+    "\\bbinary\\b"
+   ],
+   "exclude": [],
+   "definition": "a classifier with exactly two possible answers, e.g. \"5\" or \"not 5\".",
+   "lesson": 2
+  },
+  {
+   "term": "boolean",
+   "match": [
+    "\\bboolean\\b",
+    "\\bTrue/False\\b",
+    "\\bTrue or False\\b"
+   ],
+   "exclude": [],
+   "definition": "a True/False value.",
+   "lesson": 2
+  },
+  {
+   "term": "SGDClassifier",
+   "match": [
+    "\\bSGDClassifier\\b",
+    "\\bSGD\\b"
+   ],
+   "exclude": [],
+   "definition": "Scikit-Learn's classifier trained by stochastic gradient descent: it updates the model from one training row at a time (Chapter 4 explains the method).",
+   "lesson": 2
+  },
+  {
+   "term": "stochastic gradient descent",
+   "match": [
+    "\\bstochastic gradient descent\\b"
+   ],
+   "exclude": [],
+   "definition": "a training method that looks at one random row at a time and nudges the model a little after each (Chapter 4).",
+   "lesson": 2
+  },
+  {
+   "term": "5-detector",
+   "match": [
+    "\\b5-detector\\b"
+   ],
+   "exclude": [],
+   "definition": "this chapter's first model: a binary classifier that answers only \"is this picture a 5?\".",
+   "lesson": 2
+  },
+  {
+   "term": "positive class",
+   "match": [
+    "\\bpositive (class|classes|instances?|predictions?)\\b",
+    "\\bnegative (class|classes|instances?|predictions?)\\b",
+    "\\bpositives\\b",
+    "\\bnegatives\\b"
+   ],
+   "exclude": [
+    "\\b(true|false) (positives?|negatives?)\\b"
+   ],
+   "definition": "the class a binary classifier looks for (here \"is a 5\") is the positive class; the other one (\"not a 5\") is the negative class. Neither word means good or bad.",
+   "lesson": 3
+  },
+  {
+   "term": "accuracy",
+   "match": [
+    "\\baccura(cy|te)\\b"
+   ],
+   "exclude": [],
+   "definition": "the share of predictions that are correct.",
+   "lesson": 2
+  },
+  {
+   "term": "cross_val_score",
+   "match": [
+    "\\bcross_val_score\\b"
+   ],
+   "exclude": [],
+   "definition": "Scikit-Learn function that runs k-fold cross-validation and returns one score per fold.",
+   "lesson": 3
+  },
+  {
+   "term": "DummyClassifier",
+   "match": [
+    "\\bDummyClassifier\\b",
+    "\\bdummy\\b"
+   ],
+   "exclude": [],
+   "definition": "a deliberately useless classifier; by default it always predicts the most common class, whatever the input.",
+   "lesson": 3
+  },
+  {
+   "term": "skewed dataset",
+   "match": [
+    "\\bskewed\\b"
+   ],
+   "exclude": [],
+   "definition": "here: a dataset where one class is much more common than the other (about 90% \"not 5\"). (Chapter 2 used skewed for a column whose values pile up at one end.)",
+   "lesson": 3
+  },
+  {
+   "term": "StratifiedKFold",
+   "match": [
+    "\\bStratifiedKFold\\b"
+   ],
+   "exclude": [],
+   "definition": "Scikit-Learn tool that cuts the data into folds that each keep the same share of each class as the whole set.",
+   "lesson": 3
+  },
+  {
+   "term": "clone",
+   "match": [
+    "\\bclone\\b"
+   ],
+   "exclude": [],
+   "definition": "Scikit-Learn function that makes a fresh, untrained copy of a model with the same settings.",
+   "lesson": 3
+  },
+  {
+   "term": "confusion matrix",
+   "match": [
+    "\\bconfusion matri(x|ces)\\b"
+   ],
+   "exclude": [],
+   "definition": "a table counting, for each true class (rows), how often each class was predicted (columns).",
+   "lesson": 4
+  },
+  {
+   "term": "cross_val_predict",
+   "match": [
+    "\\bcross_val_predict\\b"
+   ],
+   "exclude": [],
+   "definition": "like cross_val_score, but it returns a prediction for every row, each made by a model that did not train on that row.",
+   "lesson": 4
+  },
+  {
+   "term": "out-of-sample",
+   "match": [
+    "\\bout-of-sample\\b"
+   ],
+   "exclude": [],
+   "definition": "made by a model that never trained on that row.",
+   "lesson": 4
+  },
+  {
+   "term": "true positive",
+   "match": [
+    "\\btrue positives?\\b",
+    "\\bTP\\b"
+   ],
+   "exclude": [],
+   "definition": "TP: an actual 5 that the model called a 5.",
+   "lesson": 4
+  },
+  {
+   "term": "false positive",
+   "match": [
+    "\\bfalse positives?\\b",
+    "\\bFP\\b"
+   ],
+   "exclude": [],
+   "definition": "FP: something that is not a 5 but the model called a 5 (a false alarm).",
+   "lesson": 4
+  },
+  {
+   "term": "false negative",
+   "match": [
+    "\\bfalse negatives?\\b",
+    "\\bFN\\b"
+   ],
+   "exclude": [],
+   "definition": "FN: an actual 5 that the model missed (called it not a 5).",
+   "lesson": 4
+  },
+  {
+   "term": "true negative",
+   "match": [
+    "\\btrue negatives?\\b",
+    "\\bTN\\b"
+   ],
+   "exclude": [],
+   "definition": "TN: something that is not a 5 and the model correctly called not a 5.",
+   "lesson": 4
+  },
+  {
+   "term": "type I error",
+   "match": [
+    "\\btype I\\b",
+    "\\btype II\\b"
+   ],
+   "exclude": [],
+   "definition": "statisticians' names: a type I error is a false positive, a type II error is a false negative.",
+   "lesson": 4
+  },
+  {
+   "term": "precision",
+   "match": [
+    "\\bprecision\\b"
+   ],
+   "exclude": [],
+   "definition": "of everything the model called positive, the share that really was: TP ÷ (TP + FP).",
+   "lesson": 4
+  },
+  {
+   "term": "recall",
+   "match": [
+    "\\brecall\\b"
+   ],
+   "exclude": [],
+   "definition": "of all the real positives, the share the model found: TP ÷ (TP + FN).",
+   "lesson": 4
+  },
+  {
+   "term": "F1 score",
+   "match": [
+    "\\bF1\\b",
+    "\\bF score\\b",
+    "\\bF_\\{1\\}"
+   ],
+   "exclude": [],
+   "definition": "one number combining precision and recall (their harmonic mean); it is high only when both are high.",
+   "lesson": 5
+  },
+  {
+   "term": "harmonic mean",
+   "match": [
+    "\\bharmonic mean\\b"
+   ],
+   "exclude": [],
+   "definition": "an average that is dragged down hard by the smaller number: 2 ÷ (1/a + 1/b).",
+   "lesson": 5
+  },
+  {
+   "term": "reciprocal",
+   "match": [
+    "\\breciprocals?\\b"
+   ],
+   "exclude": [],
+   "definition": "one divided by a number: the reciprocal of 4 is 1/4.",
+   "lesson": 5
+  },
+  {
+   "term": "diagonal",
+   "match": [
+    "\\bdiagonal\\b"
+   ],
+   "exclude": [],
+   "definition": "the cells from top-left to bottom-right of a square table; in a confusion matrix, the correct predictions.",
+   "lesson": 4
+  },
+  {
+   "term": "decision score",
+   "match": [
+    "\\bdecision scores?\\b",
+    "\\bdecision_function\\b"
+   ],
+   "exclude": [],
+   "definition": "the raw number a classifier computes for a row before deciding; the higher it is, the more the model leans to \"yes\".",
+   "lesson": 6
+  },
+  {
+   "term": "threshold",
+   "match": [
+    "\\bthresholds?\\b"
+   ],
+   "exclude": [],
+   "definition": "the cut-off: a score (or probability) above it means \"yes\", below it \"no\".",
+   "lesson": 4
+  },
+  {
+   "term": "precision_recall_curve",
+   "match": [
+    "\\bprecision_recall_curve\\b"
+   ],
+   "exclude": [],
+   "definition": "Scikit-Learn function that lists the precision and recall you would get at every possible threshold.",
+   "lesson": 6
+  },
+  {
+   "term": "precision/recall trade-off",
+   "match": [
+    "\\btrade-offs?\\b"
+   ],
+   "exclude": [],
+   "definition": "raising the threshold tends to raise precision and lower recall, and lowering it does the reverse.",
+   "lesson": 4
+  },
+  {
+   "term": "argmax",
+   "match": [
+    "\\bargmax\\b"
+   ],
+   "exclude": [],
+   "definition": "the position of the largest value in an array, not the value itself.",
+   "lesson": 6
+  },
+  {
+   "term": "ROC curve",
+   "match": [
+    "\\bROC\\b",
+    "\\breceiver operating characteristic\\b"
+   ],
+   "exclude": [],
+   "definition": "a plot of the true positive rate against the false positive rate at every threshold.",
+   "lesson": 7
+  },
+  {
+   "term": "true positive rate",
+   "match": [
+    "\\btrue positive rate\\b",
+    "\\bTPR\\b",
+    "\\bsensitivity\\b"
+   ],
+   "exclude": [],
+   "definition": "the same as recall: the share of real positives found.",
+   "lesson": 7
+  },
+  {
+   "term": "false positive rate",
+   "match": [
+    "\\bfalse positive rate\\b",
+    "\\bFPR\\b",
+    "\\bfall-out\\b"
+   ],
+   "exclude": [],
+   "definition": "the share of real negatives wrongly flagged as positive: FP ÷ (FP + TN).",
+   "lesson": 7
+  },
+  {
+   "term": "specificity",
+   "match": [
+    "\\bspecificity\\b",
+    "\\btrue negative rate\\b"
+   ],
+   "exclude": [],
+   "definition": "the share of real negatives correctly left alone: TN ÷ (TN + FP). It equals 1 minus the false positive rate.",
+   "lesson": 7
+  },
+  {
+   "term": "AUC",
+   "match": [
+    "\\bAUC\\b",
+    "\\barea under the curve\\b"
+   ],
+   "exclude": [],
+   "definition": "the area under the ROC curve: 1.0 for a perfect classifier, 0.5 for random guessing.",
+   "lesson": 7
+  },
+  {
+   "term": "random forest",
+   "match": [
+    "\\brandom forests?\\b",
+    "\\bRandomForestClassifier\\b"
+   ],
+   "exclude": [],
+   "definition": "a model made of many decision trees, each trained on a random part of the data, that vote together.",
+   "lesson": 8
+  },
+  {
+   "term": "predict_proba",
+   "match": [
+    "\\bpredict_proba\\b"
+   ],
+   "exclude": [],
+   "definition": "Scikit-Learn method that returns, for each row, an estimated probability for every class.",
+   "lesson": 8
+  },
+  {
+   "term": "probability",
+   "match": [
+    "\\bprobabilit(y|ies)\\b"
+   ],
+   "exclude": [],
+   "definition": "how likely something is, from 0 (never) to 1 (certain).",
+   "lesson": 2
+  },
+  {
+   "term": "calibration",
+   "match": [
+    "\\bcalibrat(ed|ion|e)\\b"
+   ],
+   "exclude": [],
+   "definition": "how well a model's stated probabilities match what really happens: of all the rows it gives 80%, about 80% should be positive.",
+   "lesson": 8
+  },
+  {
+   "term": "vote share",
+   "match": [
+    "\\bvote share\\b"
+   ],
+   "exclude": [],
+   "definition": "the fraction of a forest's trees that voted for a class; the forest reports it as a probability.",
+   "lesson": 8
+  },
+  {
+   "term": "ensemble",
+   "match": [
+    "\\bensembles?\\b"
+   ],
+   "exclude": [],
+   "definition": "several models combined into one, e.g. many trees voting.",
+   "lesson": 8
+  },
+  {
+   "term": "multiclass",
+   "match": [
+    "\\bmulticlass\\b",
+    "\\bmulti-class\\b"
+   ],
+   "exclude": [],
+   "definition": "a classification with more than two possible classes, e.g. the ten digits.",
+   "lesson": 2
+  },
+  {
+   "term": "OvR",
+   "match": [
+    "\\bOvR\\b",
+    "\\bone-versus-the-rest\\b",
+    "\\bone-versus-rest\\b",
+    "\\bOneVsRestClassifier\\b"
+   ],
+   "exclude": [],
+   "definition": "one-versus-the-rest: build a ten-class classifier from ten yes/no detectors (a 0-detector, a 1-detector, …) and pick the one with the highest score.",
+   "lesson": 9
+  },
+  {
+   "term": "OvO",
+   "match": [
+    "\\bOvO\\b",
+    "\\bone-versus-one\\b",
+    "\\bOneVsOneClassifier\\b"
+   ],
+   "exclude": [],
+   "definition": "one-versus-one: train a yes/no classifier for every pair of classes (45 pairs for ten digits) and pick the class that wins the most duels.",
+   "lesson": 9
+  },
+  {
+   "term": "support vector machine",
+   "match": [
+    "\\bsupport vector\\b",
+    "\\bSVC\\b",
+    "\\bSVMs?\\b"
+   ],
+   "exclude": [],
+   "definition": "a family of models (Chapter 5); SVC is Scikit-Learn's support vector classifier. It gets slow on large training sets.",
+   "lesson": 9
+  },
+  {
+   "term": "classes_",
+   "match": [
+    "\\bclasses_\\b"
+   ],
+   "exclude": [],
+   "definition": "the list of class labels a trained Scikit-Learn classifier stores, in order; position i of a score list belongs to classes_[i].",
+   "lesson": 9
+  },
+  {
+   "term": "StandardScaler",
+   "match": [
+    "\\bStandardScaler\\b"
+   ],
+   "exclude": [],
+   "definition": "Scikit-Learn's tool for standardization: it shifts and rescales each column to average 0 and typical size 1.",
+   "lesson": 9
+  },
+  {
+   "term": "normalize",
+   "match": [
+    "\\bnormali[sz](e|es|ed|ing|ation)\\b"
+   ],
+   "exclude": [],
+   "definition": "here: divide each cell of a confusion matrix by a total (its row's or its column's) so it becomes a share.",
+   "lesson": 10
+  },
+  {
+   "term": "ConfusionMatrixDisplay",
+   "match": [
+    "\\bConfusionMatrixDisplay\\b"
+   ],
+   "exclude": [],
+   "definition": "Scikit-Learn tool that computes a confusion matrix and draws it as a coloured grid.",
+   "lesson": 10
+  },
+  {
+   "term": "sample_weight",
+   "match": [
+    "\\bsample_weight\\b"
+   ],
+   "exclude": [],
+   "definition": "a number per row saying how much that row counts; 0 means the row is ignored.",
+   "lesson": 10
+  },
+  {
+   "term": "error analysis",
+   "match": [
+    "\\berror analysis\\b"
+   ],
+   "exclude": [],
+   "definition": "looking at which mistakes a model makes, to decide what to improve.",
+   "lesson": 10
+  },
+  {
+   "term": "multilabel",
+   "match": [
+    "\\bmultilabel\\b",
+    "\\bmulti-label\\b"
+   ],
+   "exclude": [],
+   "definition": "classification where one row can carry several yes/no labels at once.",
+   "lesson": 11
+  },
+  {
+   "term": "KNeighborsClassifier",
+   "match": [
+    "\\bKNeighborsClassifier\\b"
+   ],
+   "exclude": [],
+   "definition": "Scikit-Learn's k-nearest neighbours classifier: it answers from the most similar training rows.",
+   "lesson": 11
+  },
+  {
+   "term": "support",
+   "match": [
+    "\\bsupport\\b"
+   ],
+   "exclude": [
+    "\\bsupport vector\\b",
+    "\\bsupports?\\b(?= multilabel| multi-label| it)"
+   ],
+   "definition": "the number of rows that really carry a label.",
+   "lesson": 11
+  },
+  {
+   "term": "macro average",
+   "match": [
+    "\\bmacro\\b",
+    "average=\\\"weighted\\\""
+   ],
+   "exclude": [],
+   "definition": "\"macro\": average the per-label scores with every label counting equally; \"weighted\": each label counts in proportion to its support.",
+   "lesson": 11
+  },
+  {
+   "term": "ClassifierChain",
+   "match": [
+    "\\bClassifierChain\\b",
+    "\\bthe chain\\b"
+   ],
+   "exclude": [],
+   "definition": "a set of classifiers in a row, where each one also gets the earlier ones' predictions as extra inputs.",
+   "lesson": 11
+  },
+  {
+   "term": "multioutput",
+   "match": [
+    "\\bmultioutput\\b",
+    "\\bmulti-output\\b"
+   ],
+   "exclude": [],
+   "definition": "multilabel where each label can take many values, not just yes/no; e.g. 784 pixel values.",
+   "lesson": 11
+  },
+  {
+   "term": "denoising",
+   "match": [
+    "\\bdenois(e|ing|er)\\b"
+   ],
+   "exclude": [],
+   "definition": "removing noise from a picture: getting the clean image back from a damaged one.",
+   "lesson": 12
+  },
+  {
+   "term": "intensity",
+   "match": [
+    "\\bintensit(y|ies)\\b"
+   ],
+   "exclude": [],
+   "definition": "how dark a pixel is, from 0 to 255.",
+   "lesson": 1
+  },
+  {
+   "term": "self-supervised learning",
+   "match": [
+    "\\bself-supervised\\b"
+   ],
+   "exclude": [],
+   "definition": "training where the labels come from the data itself, e.g. damage a picture and learn to undo the damage.",
+   "lesson": 12
+  },
+  {
+   "term": "data augmentation",
+   "match": [
+    "\\bdata augmentation\\b",
+    "\\btraining set expansion\\b"
+   ],
+   "exclude": [],
+   "definition": "making the training set bigger by adding changed copies of its rows, e.g. pictures shifted by one pixel.",
+   "lesson": 13
+  },
+  {
+   "term": "Titanic",
+   "match": [
+    "\\bTitanic\\b"
+   ],
+   "exclude": [],
+   "definition": "a well-known practice dataset: the passengers of the ship Titanic, and whether each one survived.",
+   "lesson": 13
+  },
+  {
+   "term": "Kaggle",
+   "match": [
+    "\\bKaggle\\b"
+   ],
+   "exclude": [],
+   "definition": "a website that hosts datasets and machine learning competitions.",
+   "lesson": 13
+  },
+  {
+   "term": "stemming",
+   "match": [
+    "\\bstemming\\b"
+   ],
+   "exclude": [],
+   "definition": "cutting word endings off, so \"learning\" and \"learned\" both become \"learn\".",
+   "lesson": 13
+  }
+ ]
+}

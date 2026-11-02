@@ -1,0 +1,110 @@
+/* tokens copied from app/frontend/tailwind.config.js + src/styles/app.css (24-09-26)
+ *
+ * The page rule below is VERBATIM from app/frontend/src/styles/app.css ("THE PAGE ITSELF"):
+ * without it the page falls back to the UA default (white) and every text-white heading
+ * reads as missing. Everything else in this file is Lab-only. */
+body { background-color: #111827; color: #cbd5e1; -webkit-font-smoothing: antialiased; }
+
+/* #root carries the body's column so <main> can take the rest of the height. */
+#root { display: flex; flex-direction: column; flex: 1 1 auto; min-height: 0; }
+
+/* ⚑ 24-09-26 (visual polish): the workspace USES THE SCREEN.
+ *   Default (phone, tablet, short windows): the page scrolls and each panel has a fixed,
+ *   generous height with its own internal scroll.
+ *   Wide + tall enough (lg and >= 640 px high): the page is exactly the viewport; the lesson
+ *   list, the editor and the result each scroll inside themselves and stretch to the bottom.
+ *   Stacked splits the height code 45 % / result 55 %; a single panel takes all of it. */
+.lab-pane { height: 72vh; min-height: 20rem; }
+@media (min-width: 1024px) and (min-height: 640px) {
+  body { height: 100vh; height: 100dvh; overflow: hidden; }
+  #lab-main { min-height: 0; overflow: hidden; }
+  #lab-aside { min-height: 0; max-height: none; }
+  #lab-section { min-height: 0; }
+  #lab-stage { min-height: 0; }
+  #lab-workspace { flex: 1 1 0; min-height: 0; }
+  #lab-workspace[data-rows="split"] { grid-template-rows: minmax(0, 45fr) minmax(0, 55fr); }
+  #lab-workspace[data-rows="one"] { grid-template-rows: minmax(0, 1fr); }
+  .lab-pane { height: auto; min-height: 0; }
+}
+
+/* ⚑ 25-09-26: inside the study app's Learn window (an iframe, usually < 1024 px wide) Lab ALWAYS
+   fills its frame — body.lab-fill is set by main.tsx when embedded. Same rules as above. */
+body.lab-fill { height: 100vh; height: 100dvh; overflow: hidden; }
+body.lab-fill #lab-main { min-height: 0; overflow: hidden; }
+body.lab-fill #lab-aside { min-height: 0; max-height: none; }
+body.lab-fill #lab-section { min-height: 0; }
+body.lab-fill #lab-stage { min-height: 0; }
+body.lab-fill #lab-workspace { flex: 1 1 0; min-height: 0; }
+body.lab-fill #lab-workspace[data-rows="split"] { grid-template-rows: minmax(0, 45fr) minmax(0, 55fr); }
+body.lab-fill #lab-workspace[data-rows="one"] { grid-template-rows: minmax(0, 1fr); }
+body.lab-fill .lab-pane { height: auto; min-height: 0; }
+
+/* ── OVERLAY SCROLLBARS, APP-WIDE (25-09-26, user; ported from the CoreX console index.css) ──
+   Invisible at rest; a thumb fades in PER AXIS while that axis is scrolled or while the pointer
+   is on that bar's own strip — classes from overlayScrollbars (JS). Vertical AND horizontal.
+   Brand red everywhere; code (pre / the Lab editor) keeps a quiet grey. Track always transparent. */
+* { scrollbar-width: thin; scrollbar-color: transparent transparent; }
+*::-webkit-scrollbar { width: 8px; height: 8px; }
+*::-webkit-scrollbar-track, *::-webkit-scrollbar-corner { background: transparent; }
+*::-webkit-scrollbar-thumb {
+  background-color: transparent; border-radius: 999px;
+  border: 2px solid transparent; background-clip: padding-box;
+  transition: background-color 220ms ease;
+}
+.is-scrolling-y::-webkit-scrollbar-thumb:vertical, .is-scroll-hover-y::-webkit-scrollbar-thumb:vertical,
+.is-scrolling-x::-webkit-scrollbar-thumb:horizontal, .is-scroll-hover-x::-webkit-scrollbar-thumb:horizontal { background-color: #ef5b5b; }
+.is-scroll-hover-y::-webkit-scrollbar-thumb:vertical:hover, .is-scroll-hover-x::-webkit-scrollbar-thumb:horizontal:hover { background-color: #f87171; }
+.is-scrolling-y, .is-scrolling-x, .is-scroll-hover-y, .is-scroll-hover-x { scrollbar-color: #ef5b5b transparent; } /* Firefox: no per-axis API */
+pre.is-scrolling-y::-webkit-scrollbar-thumb:vertical, pre.is-scroll-hover-y::-webkit-scrollbar-thumb:vertical,
+pre.is-scrolling-x::-webkit-scrollbar-thumb:horizontal, pre.is-scroll-hover-x::-webkit-scrollbar-thumb:horizontal,
+#lab-editor.is-scrolling-y::-webkit-scrollbar-thumb:vertical, #lab-editor.is-scroll-hover-y::-webkit-scrollbar-thumb:vertical,
+#lab-editor.is-scrolling-x::-webkit-scrollbar-thumb:horizontal, #lab-editor.is-scroll-hover-x::-webkit-scrollbar-thumb:horizontal { background-color: #6b7280; }
+pre.is-scrolling-y, pre.is-scrolling-x, pre.is-scroll-hover-y, pre.is-scroll-hover-x,
+#lab-editor.is-scrolling-y, #lab-editor.is-scrolling-x, #lab-editor.is-scroll-hover-y, #lab-editor.is-scroll-hover-x { scrollbar-color: #6b7280 transparent; }
+@media (prefers-reduced-motion: reduce) { *::-webkit-scrollbar-thumb { transition: none; } }
+
+/* The code editor is a plain <textarea> (no editor dependency). Keep tabs at 4 columns and
+   never wrap code lines — wrapped Python reads as different code. Long lines scroll sideways. */
+#lab-editor { tab-size: 4; -moz-tab-size: 4; white-space: pre; overflow-wrap: normal; overflow: auto; }
+
+/* Result blocks keep the program's own layout: NO wrapping (a pandas describe() table wrapped
+   mid-row is unreadable). A block wider than the panel scrolls sideways inside itself. */
+.lab-pre { white-space: pre; overflow-wrap: normal; word-break: normal; overflow-x: auto; max-width: 100%; }
+
+/* Native <select>: our own chevron with room for it, and an ellipsis for a long name. */
+.lab-select {
+  appearance: none; -webkit-appearance: none;
+  text-overflow: ellipsis; white-space: nowrap; overflow: hidden;
+  padding-right: 2.25rem;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20' fill='%239ca3af'%3E%3Cpath fill-rule='evenodd' d='M5.23 7.21a.75.75 0 011.06.02L10 11.17l3.71-3.94a.75.75 0 111.08 1.04l-4.25 4.5a.75.75 0 01-1.08 0l-4.25-4.5a.75.75 0 01.02-1.06z' clip-rule='evenodd'/%3E%3C/svg%3E");
+  background-repeat: no-repeat; background-position: right 0.6rem center; background-size: 1.1rem;
+}
+
+/* ⚑ 25-09-26 (user): ONE joined block — the menu box, Code and Result touch with a single shared
+ * 1px border and only the block's OUTER corners rounded, in every combination:
+ *   menus on TOP (and "sidebar" below lg, where it renders on top): menus / [Code | Result] or
+ *     menus / Code / Result;
+ *   menus as a SIDEBAR (lg+): menus | [Code | Result]  or  menus | (Code / Result).
+ * Id selectors (#lab-stage ... #lab-code) outrank the cards' Tailwind rounded-xl / border utilities.
+ * Only when a lesson is open (data-lesson="yes"); the empty-state card keeps its own corners. */
+#lab-stage[data-lesson="yes"] #lab-code,
+#lab-stage[data-lesson="yes"] #lab-result { border-radius: 0; }
+#lab-stage[data-lesson="yes"] #lab-result { border-top-width: 0; }            /* stacked: under Code */
+
+/* menus ON TOP */
+#lab-stage[data-lesson="yes"] #lab-aside { border-radius: 0.75rem 0.75rem 0 0; }
+#lab-stage[data-lesson="yes"] #lab-code { border-top-width: 0; }
+#lab-stage[data-lesson="yes"] #lab-result { border-radius: 0 0 0.75rem 0.75rem; }  /* stacked: bottom */
+@media (min-width: 768px) {
+  #lab-stage[data-lesson="yes"] #lab-workspace[data-arrangement="side"] #lab-code { border-radius: 0 0 0 0.75rem; }
+  #lab-stage[data-lesson="yes"] #lab-workspace[data-arrangement="side"] #lab-result { border-radius: 0 0 0.75rem 0; border-left-width: 0; }
+}
+
+/* menus as a SIDEBAR (lg+ only — below lg the sidebar renders on top, rules above apply) */
+@media (min-width: 1024px) {
+  #lab-stage[data-lesson="yes"][data-place="sidebar"] #lab-aside { border-radius: 0.75rem 0 0 0.75rem; border-right-width: 0; }
+  #lab-stage[data-lesson="yes"][data-place="sidebar"] #lab-code { border-top-width: 1px; border-radius: 0 0.75rem 0 0; }
+  #lab-stage[data-lesson="yes"][data-place="sidebar"] #lab-result { border-radius: 0 0 0.75rem 0; }
+  #lab-stage[data-lesson="yes"][data-place="sidebar"] #lab-workspace[data-arrangement="side"] #lab-code { border-radius: 0; }
+  #lab-stage[data-lesson="yes"][data-place="sidebar"] #lab-workspace[data-arrangement="side"] #lab-result { border-radius: 0 0.75rem 0.75rem 0; border-top-width: 1px; border-left-width: 0; }
+}

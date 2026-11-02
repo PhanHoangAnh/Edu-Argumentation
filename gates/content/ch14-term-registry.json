@@ -1,0 +1,1189 @@
+{
+ "chapter": 14,
+ "flow": [
+  "Get the data",
+  "Set aside a test set",
+  "Explore",
+  "Prepare the data",
+  "Train",
+  "Evaluate",
+  "Fine-tune",
+  "Launch"
+ ],
+ "known": [
+  "ch02-term-registry.json"
+ ],
+ "generated_by": "ml/study/geron-lab/ch14-notes (chapter_build.py)",
+ "terms": [
+  {
+   "term": "neural network",
+   "match": [
+    "\\bneural net(work)?s?\\b",
+    "\\bnetworks?\\b",
+    "\\bsubnetworks?\\b"
+   ],
+   "exclude": [],
+   "definition": "a model built from many small calculating units (neurons) arranged in layers; each layer's outputs are the next layer's inputs.",
+   "lesson": 1
+  },
+  {
+   "term": "layer",
+   "match": [
+    "\\blayers?\\b"
+   ],
+   "exclude": [],
+   "definition": "one step of a network: a group of neurons that all read the same inputs and pass their outputs on together.",
+   "lesson": 1
+  },
+  {
+   "term": "neuron",
+   "match": [
+    "\\bneurons?\\b"
+   ],
+   "exclude": [],
+   "definition": "one calculating unit: it multiplies each input by a weight, adds them up with a bias, and passes the sum through an activation function.",
+   "lesson": 1
+  },
+  {
+   "term": "weight",
+   "match": [
+    "\\bweights?\\b"
+   ],
+   "exclude": [
+    "\\bweighted\\b",
+    "\\bweight sharing\\b",
+    "\\bloss weights?\\b",
+    "\\bloss_weights\\b"
+   ],
+   "definition": "a number on one connection between two neurons; the input is multiplied by it. Training is changing the weights.",
+   "lesson": 1
+  },
+  {
+   "term": "fully connected layer",
+   "match": [
+    "\\bfully[ -]connected\\b",
+    "\\bdense (layers?|units?|neurons?|output layers?|hidden layers?|head|classifier|network)\\b",
+    "\\bDense\\(",
+    "\\blayers\\.Dense\\b"
+   ],
+   "exclude": [],
+   "definition": "a layer in which every neuron is wired to every input (written Dense in code). Also called a dense layer; not Chapter 2's 'dense' (the opposite of a sparse matrix).",
+   "lesson": 1
+  },
+  {
+   "term": "pixel",
+   "match": [
+    "\\bpixels?\\b"
+   ],
+   "exclude": [],
+   "definition": "one dot of a picture: one number (grey) or three numbers (red, green, blue) at one row and column.",
+   "lesson": 1
+  },
+  {
+   "term": "convolutional neural network",
+   "match": [
+    "\\bconvolutional neural net(work)?s?\\b",
+    "\\bCNNs?\\b"
+   ],
+   "exclude": [],
+   "definition": "a CNN: a neural network whose early layers are convolutional layers (and usually pooling layers) instead of fully connected ones.",
+   "lesson": 1
+  },
+  {
+   "term": "receptive field",
+   "match": [
+    "\\breceptive fields?\\b"
+   ],
+   "exclude": [],
+   "definition": "the small patch of the layer below (or of the image) that one neuron reads, e.g. 3 x 3 pixels.",
+   "lesson": 1
+  },
+  {
+   "term": "weight sharing",
+   "match": [
+    "\\bweight sharing\\b",
+    "\\bshared weights?\\b",
+    "\\bparameter sharing\\b"
+   ],
+   "exclude": [],
+   "definition": "the same small set of weights is reused at every position of the image, instead of a separate set per pixel.",
+   "lesson": 1
+  },
+  {
+   "term": "convolutional layer",
+   "match": [
+    "\\bconvolutional layers?\\b",
+    "\\bconv layers?\\b",
+    "\\bConv2D\\b",
+    "\\bconvolutions?\\b",
+    "\\bconvolv\\w*"
+   ],
+   "exclude": [
+    "\\bconvolutional neural net(work)?s?\\b",
+    "\\btransposed convolution\\w*\\b",
+    "\\bseparable convolution\\w*\\b",
+    "\\bdepthwise separable\\b",
+    "\\bdilated convolution\\w*\\b",
+    "\\bConv2DTranspose\\b"
+   ],
+   "definition": "a layer that slides small grids of weights over its input and writes one number per position; in code, Conv2D.",
+   "lesson": 1
+  },
+  {
+   "term": "pooling layer",
+   "match": [
+    "\\bpooling\\b",
+    "\\bpool(s|ed)?\\b",
+    "\\bMaxPool2D\\b",
+    "\\bpool_size\\b"
+   ],
+   "exclude": [
+    "\\bglobal average pooling\\b",
+    "\\bGlobalAvgPool2D\\b",
+    "\\bGlobalAveragePooling2D\\b",
+    "\\bmax pooling\\b",
+    "\\baverage pooling\\b",
+    "\\bdepthwise max pooling\\b"
+   ],
+   "definition": "a layer with no weights that shrinks its input grid by keeping one number (the max or the mean) per small window (lesson b06).",
+   "lesson": 1
+  },
+  {
+   "term": "sigmoid",
+   "match": [
+    "\\bsigmoids?\\b"
+   ],
+   "exclude": [],
+   "definition": "the S-shaped function 1 / (1 + e^-z): squeezes any number into 0..1.",
+   "lesson": 1
+  },
+  {
+   "term": "activation function",
+   "match": [
+    "\\bactivation functions?\\b",
+    "\\bactivation=",
+    "\\bnon-?linearit(y|ies)\\b"
+   ],
+   "exclude": [],
+   "definition": "the small function a neuron applies to its total before passing it on (for example the S-shaped sigmoid). Without one, a stack of layers could only learn straight-line rules.",
+   "lesson": 1
+  },
+  {
+   "term": "bottleneck",
+   "match": [
+    "\\bbottlenecks?\\b"
+   ],
+   "exclude": [
+    "\\bbottleneck layers?\\b"
+   ],
+   "definition": "the narrow part that limits the whole: in a network, a layer with fewer outputs than it gets inputs.",
+   "lesson": 1
+  },
+  {
+   "term": "filter",
+   "match": [
+    "\\bfilters?\\b"
+   ],
+   "exclude": [
+    "\\bfilters= ?\\b"
+   ],
+   "definition": "a small grid of weights (e.g. 7 x 7) slid across the image; it responds strongly where the image looks like its pattern.",
+   "lesson": 1
+  },
+  {
+   "term": "kernel (CNN)",
+   "match": [
+    "\\bkernels?\\b",
+    "\\bkernel_size\\b"
+   ],
+   "exclude": [
+    "\\bkernel_initializer\\b"
+   ],
+   "definition": "in this chapter, another name for a filter (kernel_size = its height and width). Not the similarity kernel of Chapter 2.",
+   "lesson": 2
+  },
+  {
+   "term": "feature map",
+   "match": [
+    "\\bfeature maps?\\b",
+    "\\bfmaps\\b"
+   ],
+   "exclude": [],
+   "definition": "the 2D grid of outputs one filter produces by sliding over its input: big numbers where its pattern is, small ones elsewhere.",
+   "lesson": 2
+  },
+  {
+   "term": "zero padding",
+   "match": [
+    "\\bzero[ -]padding\\b",
+    "\\bpadding\\b",
+    "\\bpadded\\b",
+    "\\bpad(s|ding)?\\b"
+   ],
+   "exclude": [],
+   "definition": "extra zeros added around the border of the input so the filter can also be centred on edge pixels (padding=\"same\" in code; \"valid\" = no padding).",
+   "lesson": 2
+  },
+  {
+   "term": "stride",
+   "match": [
+    "\\bstrides?\\b",
+    "\\bstrided\\b"
+   ],
+   "exclude": [],
+   "definition": "how many pixels the filter (or pooling window) moves between two neighbouring outputs; stride 2 roughly halves the height and width.",
+   "lesson": 1
+  },
+  {
+   "term": "flatten",
+   "match": [
+    "\\bflatten\\w*\\b"
+   ],
+   "exclude": [],
+   "definition": "lay the rows of a grid end to end as one long list; the Flatten layer does this before a dense layer.",
+   "lesson": 2
+  },
+  {
+   "term": "downsample",
+   "match": [
+    "\\bdownsampl\\w*\\b"
+   ],
+   "exclude": [],
+   "definition": "produce a smaller grid than you started with (by a stride or a pooling layer).",
+   "lesson": 2
+  },
+  {
+   "term": "channel",
+   "match": [
+    "\\bchannels?\\b"
+   ],
+   "exclude": [],
+   "definition": "one 2D layer of a picture or of a layer's output: an RGB image has 3 channels, a layer with 32 filters outputs 32 (feature maps).",
+   "lesson": 2
+  },
+  {
+   "term": "RGB",
+   "match": [
+    "\\bRGB\\b"
+   ],
+   "exclude": [],
+   "definition": "red, green, blue: a colour image stored as three channels, one per colour, each 0 to 255.",
+   "lesson": 2
+  },
+  {
+   "term": "bias",
+   "match": [
+    "\\bbias(es)?\\b",
+    "\\buse_bias\\b",
+    "\\bb_k\\b"
+   ],
+   "exclude": [],
+   "definition": "one extra number a neuron adds to its inputs-times-weights total; a convolutional layer has one per filter, like a brightness knob for that filter's output.",
+   "lesson": 1
+  },
+  {
+   "term": "activation",
+   "match": [
+    "\\bactivations?\\b"
+   ],
+   "exclude": [
+    "\\bactivation functions?\\b",
+    "\\bactivation="
+   ],
+   "definition": "one output number of a neuron for one input image; a layer's whole output grid is its activations.",
+   "lesson": 3
+  },
+  {
+   "term": "weighted sum",
+   "match": [
+    "\\bweighted sums?\\b"
+   ],
+   "exclude": [],
+   "definition": "each input times its weight, all added up (plus the bias): what a neuron computes before its activation function.",
+   "lesson": 3
+  },
+  {
+   "term": "TensorFlow",
+   "match": [
+    "\\btensorflow\\b",
+    "\\btf\\.",
+    "\\bTF\\b"
+   ],
+   "exclude": [],
+   "definition": "Google's library for deep learning: fast arithmetic on big grids of numbers.",
+   "lesson": 3
+  },
+  {
+   "term": "Keras",
+   "match": [
+    "\\bkeras\\b"
+   ],
+   "exclude": [],
+   "definition": "the part of TensorFlow for building and training networks with ready-made layers (imports start with tf.keras).",
+   "lesson": 3
+  },
+  {
+   "term": "tensor",
+   "match": [
+    "\\btensors?\\b"
+   ],
+   "exclude": [],
+   "definition": "TensorFlow's array: a number, a list, a table or a stack of tables, all of one type; images come as [batch, height, width, channels].",
+   "lesson": 4
+  },
+  {
+   "term": "batch",
+   "match": [
+    "\\bmini-?batch(es)?\\b",
+    "\\bbatch(es)?\\b",
+    "\\bbatch_size\\b"
+   ],
+   "exclude": [
+    "\\bbatch normali[sz]ation\\b",
+    "\\bBatchNormalization\\b",
+    "\\bbatch norm\\b",
+    "\\bBatchNorm\\b"
+   ],
+   "definition": "a small group of images processed together in one step (32 by default).",
+   "lesson": 2
+  },
+  {
+   "term": "custom layer",
+   "match": [
+    "\\bcustom (Keras )?layers?\\b",
+    "\\bkeras\\.layers\\.Layer\\b",
+    "\\bsubclass\\w*\\b"
+   ],
+   "exclude": [],
+   "definition": "a layer you write yourself as a Python class that inherits from tf.keras.layers.Layer: __init__ builds its parts, call() computes.",
+   "lesson": 7
+  },
+  {
+   "term": "GPU",
+   "match": [
+    "\\bGPUs?\\b",
+    "\\bVRAM\\b"
+   ],
+   "exclude": [],
+   "definition": "graphics processor: a chip that does a network's arithmetic much faster than the ordinary processor, with its own (limited) memory.",
+   "lesson": 5
+  },
+  {
+   "term": "CPU",
+   "match": [
+    "\\bCPUs?\\b",
+    "\\bcentral processing unit\\b"
+   ],
+   "exclude": [],
+   "definition": "the computer's ordinary processor.",
+   "lesson": 8
+  },
+  {
+   "term": "RAM",
+   "match": [
+    "\\bRAM\\b",
+    "\\brandom-access memory\\b"
+   ],
+   "exclude": [],
+   "definition": "the computer's working memory, where the numbers being computed are held.",
+   "lesson": 5
+  },
+  {
+   "term": "forward pass",
+   "match": [
+    "\\bforward pass(es)?\\b"
+   ],
+   "exclude": [],
+   "definition": "running the input through the network from the first layer to the last to get a prediction.",
+   "lesson": 5
+  },
+  {
+   "term": "backpropagation",
+   "match": [
+    "\\bback-?propagat\\w*\\b",
+    "\\bbackward pass(es)?\\b"
+   ],
+   "exclude": [],
+   "definition": "the method that computes every weight's gradient by walking backward from the loss through the layers, one layer at a time.",
+   "lesson": 2
+  },
+  {
+   "term": "gradient",
+   "match": [
+    "\\bgradients?\\b"
+   ],
+   "exclude": [],
+   "definition": "for every weight, one number saying how much the loss would change if that weight moved a little, and in which direction.",
+   "lesson": 2
+  },
+  {
+   "term": "inference",
+   "match": [
+    "\\binference\\b"
+   ],
+   "exclude": [],
+   "definition": "using a trained network to predict, with no weight changes (predict() in code).",
+   "lesson": 5
+  },
+  {
+   "term": "training step",
+   "match": [
+    "\\btraining steps?\\b"
+   ],
+   "exclude": [],
+   "definition": "one update of all the weights, computed from one batch.",
+   "lesson": 5
+  },
+  {
+   "term": "float32",
+   "match": [
+    "\\b32-bit\\b",
+    "\\b16-bit\\b",
+    "\\bfloat(32|16)\\b",
+    "\\bfloating[- ]point\\b"
+   ],
+   "exclude": [],
+   "definition": "the usual number format: 32 bits = 4 bytes per number; 16-bit floats take half the memory and are less precise.",
+   "lesson": 5
+  },
+  {
+   "term": "out-of-memory",
+   "match": [
+    "\\bout-of-memory\\b",
+    "\\bout of memory\\b",
+    "\\bruns out of\\b"
+   ],
+   "exclude": [],
+   "definition": "the crash you get when the numbers a step needs do not fit in RAM (or GPU memory).",
+   "lesson": 5
+  },
+  {
+   "term": "max pooling",
+   "match": [
+    "\\bmax pooling\\b",
+    "\\bMaxPool2D\\b",
+    "\\bmax_pool\\b"
+   ],
+   "exclude": [
+    "\\bdepthwise max pooling\\b"
+   ],
+   "definition": "pooling that keeps the largest value in each window (e.g. 2 x 2, stride 2): three of every four numbers are dropped.",
+   "lesson": 6
+  },
+  {
+   "term": "translation invariance",
+   "match": [
+    "\\binvarian(ce|t)\\b"
+   ],
+   "exclude": [],
+   "definition": "the output stays the same when the input is shifted a little ('translation' = a shift in position).",
+   "lesson": 3
+  },
+  {
+   "term": "equivariance",
+   "match": [
+    "\\bequivarian(ce|t)\\b"
+   ],
+   "exclude": [],
+   "definition": "shift the input and the output shifts the same way; what pixel-level tasks need.",
+   "lesson": 6
+  },
+  {
+   "term": "semantic segmentation",
+   "match": [
+    "\\bsemantic segmentation\\b",
+    "\\bsegmentation\\b"
+   ],
+   "exclude": [
+    "\\binstance segmentation\\b"
+   ],
+   "definition": "giving every pixel of an image a class (road, car, sky ...); objects of the same class are not told apart.",
+   "lesson": 4
+  },
+  {
+   "term": "average pooling",
+   "match": [
+    "\\baverage pooling\\b",
+    "\\bAvgPool2D\\b"
+   ],
+   "exclude": [
+    "\\bglobal average pooling\\b",
+    "\\bGlobalAvgPool2D\\b"
+   ],
+   "definition": "pooling that keeps the mean of each window instead of the max.",
+   "lesson": 7
+  },
+  {
+   "term": "depthwise max pooling",
+   "match": [
+    "\\bdepthwise max pooling\\b",
+    "\\bDepthPool\\b",
+    "\\bdepthwise pooling\\b"
+   ],
+   "exclude": [],
+   "definition": "max pooling across groups of feature maps (channels) at the same pixel, instead of across a window of pixels.",
+   "lesson": 7
+  },
+  {
+   "term": "global average pooling",
+   "match": [
+    "\\bglobal average pooling\\b",
+    "\\bGlobalAvgPool2D\\b",
+    "\\bGlobalAveragePooling2D\\b",
+    "\\bglobal_avg_pool\\b"
+   ],
+   "exclude": [],
+   "definition": "the mean of each entire feature map: one number per map per image; [2, 28, 28, 3] becomes (2, 3).",
+   "lesson": 7
+  },
+  {
+   "term": "Lambda layer",
+   "match": [
+    "\\bLambda\\b"
+   ],
+   "exclude": [],
+   "definition": "a Keras layer that just wraps a function you give it (Lambda(lambda X: ...)); it has no weights.",
+   "lesson": 7
+  },
+  {
+   "term": "ReLU",
+   "match": [
+    "\\bReLUs?\\b",
+    "\\brectified linear\\b"
+   ],
+   "exclude": [],
+   "definition": "the rectified linear unit, max(0, z): keeps positive numbers, turns negative ones into 0.",
+   "lesson": 7
+  },
+  {
+   "term": "softmax",
+   "match": [
+    "\\bsoftmax\\b"
+   ],
+   "exclude": [],
+   "definition": "an output activation that turns the final scores into probabilities adding up to 1, one per class.",
+   "lesson": 8
+  },
+  {
+   "term": "dropout",
+   "match": [
+    "\\bdropout\\b"
+   ],
+   "exclude": [],
+   "definition": "during training, randomly ignore a share of a layer's neurons (50% here) at each step, so no neuron becomes indispensable; switched off for predictions.",
+   "lesson": 8
+  },
+  {
+   "term": "Fashion MNIST",
+   "match": [
+    "\\bfashion[ _]mnist\\b"
+   ],
+   "exclude": [],
+   "definition": "the book's image set: 70,000 greyscale 28 x 28 photos of clothes in 10 classes.",
+   "lesson": 1
+  },
+  {
+   "term": "Sequential",
+   "match": [
+    "\\bSequential\\b"
+   ],
+   "exclude": [],
+   "definition": "Keras's simplest kind of model: a plain list of layers, each feeding the next.",
+   "lesson": 8
+  },
+  {
+   "term": "epoch",
+   "match": [
+    "\\bepochs?\\b"
+   ],
+   "exclude": [],
+   "definition": "one full pass over the training set.",
+   "lesson": 8
+  },
+  {
+   "term": "accuracy",
+   "match": [
+    "\\baccurac(y|ies)\\b"
+   ],
+   "exclude": [],
+   "definition": "the share of images whose predicted class is the true class, e.g. 0.92 = 92% right.",
+   "lesson": 8
+  },
+  {
+   "term": "loss",
+   "match": [
+    "\\bloss(es)?\\b"
+   ],
+   "exclude": [
+    "\\bloss of\\b"
+   ],
+   "definition": "one number saying how wrong the network's predictions are; training pushes it down.",
+   "lesson": 2
+  },
+  {
+   "term": "ImageNet",
+   "match": [
+    "\\bImageNet\\b",
+    "\\bILSVRC\\b"
+   ],
+   "exclude": [],
+   "definition": "a public set of over a million photos in 1,000 classes; its yearly contest (ILSVRC) is where most architectures in this chapter were first shown.",
+   "lesson": 9
+  },
+  {
+   "term": "top-5 error rate",
+   "match": [
+    "\\btop[- ]fi(ve|5) error( rate)?\\b",
+    "\\btop-5\\b",
+    "\\btop five\\b"
+   ],
+   "exclude": [],
+   "definition": "the share of images whose true class is NOT among the model's five best guesses.",
+   "lesson": 9
+  },
+  {
+   "term": "data augmentation",
+   "match": [
+    "\\bdata augmentation\\b",
+    "\\baugment\\w*\\b"
+   ],
+   "exclude": [],
+   "definition": "making extra training images by slightly shifting, flipping, rotating or re-lighting the ones you have.",
+   "lesson": 7
+  },
+  {
+   "term": "local response normalization",
+   "match": [
+    "\\blocal response normali[sz]ation\\b",
+    "\\bLRN\\b",
+    "\\blocal_response_normalization\\b"
+   ],
+   "exclude": [],
+   "definition": "AlexNet's step that divides a neuron's output by how strongly the same pixel fires in neighbouring feature maps, so the maps compete.",
+   "lesson": 9
+  },
+  {
+   "term": "depth radius",
+   "match": [
+    "\\bdepth[ _]radius\\b"
+   ],
+   "exclude": [],
+   "definition": "in LRN, how many neighbouring feature maps above and below take part (r).",
+   "lesson": 9
+  },
+  {
+   "term": "inception module",
+   "match": [
+    "\\binception modules?\\b",
+    "\\bSE-Inception\\b"
+   ],
+   "exclude": [],
+   "definition": "GoogLeNet's block: 1 x 1, 3 x 3 and 5 x 5 convolutions and a pooling layer run side by side on the same input, their outputs stacked along the depth.",
+   "lesson": 10
+  },
+  {
+   "term": "1 x 1 convolution",
+   "match": [
+    "\\b1 ?[x×] ?1 (convolution|conv|filter|kernel|layer)\\w*\\b"
+   ],
+   "exclude": [],
+   "definition": "a convolution whose filter reads one pixel but all channels: a learned mix of the channels, applied at every position.",
+   "lesson": 3
+  },
+  {
+   "term": "bottleneck layer",
+   "match": [
+    "\\bbottleneck layers?\\b"
+   ],
+   "exclude": [],
+   "definition": "a layer (usually a 1 x 1 convolution) that outputs fewer feature maps than it reads, to cut the cost of the next layer.",
+   "lesson": 10
+  },
+  {
+   "term": "concatenation",
+   "match": [
+    "\\bconcatenat\\w*\\b",
+    "\\bconcat\\b"
+   ],
+   "exclude": [],
+   "definition": "gluing tensors together along one axis; 'depth concatenation' stacks feature maps of the same height and width.",
+   "lesson": 7
+  },
+  {
+   "term": "skip connection",
+   "match": [
+    "\\bskip connections?\\b",
+    "\\bshortcut( connections?)?\\b",
+    "\\bskip (path|layers?)\\b",
+    "\\bskip_\\w+\\b",
+    "\\bskip\\b"
+   ],
+   "exclude": [],
+   "definition": "a wire that adds a block's input straight onto its output, so the block only has to learn the difference.",
+   "lesson": 4
+  },
+  {
+   "term": "residual unit",
+   "match": [
+    "\\bresidual units?\\b",
+    "\\bResidualUnit\\b",
+    "\\bRUs?\\b"
+   ],
+   "exclude": [],
+   "definition": "one ResNet block: two (or three) convolutional layers with a skip connection around them.",
+   "lesson": 11
+  },
+  {
+   "term": "residual",
+   "match": [
+    "\\bresiduals?\\b"
+   ],
+   "exclude": [
+    "\\bresidual units?\\b",
+    "\\bresidual networks?\\b"
+   ],
+   "definition": "the difference between what a block must output and its input: f(x) = h(x) - x.",
+   "lesson": 11
+  },
+  {
+   "term": "vanishing gradients",
+   "match": [
+    "\\bvanish\\w*\\b"
+   ],
+   "exclude": [],
+   "definition": "gradients that shrink layer after layer on the way back, so the first layers get almost no update and stop learning.",
+   "lesson": 11
+  },
+  {
+   "term": "identity function",
+   "match": [
+    "\\bidentity\\b"
+   ],
+   "exclude": [],
+   "definition": "the do-nothing function: it returns its input unchanged.",
+   "lesson": 11
+  },
+  {
+   "term": "batch normalization",
+   "match": [
+    "\\bbatch normali[sz]ation\\b",
+    "\\bBatchNormalization\\b",
+    "\\bBatchNorm\\b",
+    "\\bbatch norm\\b"
+   ],
+   "exclude": [],
+   "definition": "a layer that re-centres and re-scales each channel using the current batch's statistics, which keeps very deep networks trainable.",
+   "lesson": 9
+  },
+  {
+   "term": "ResNet",
+   "match": [
+    "\\bResNets?\\b",
+    "\\bresidual networks?\\b",
+    "\\bResNet-?\\d+\\w*\\b"
+   ],
+   "exclude": [],
+   "definition": "Residual Network (2015): a very deep CNN whose blocks add their input back onto their output (lesson b11); ResNet-34, -50, -152 differ in depth.",
+   "lesson": 10
+  },
+  {
+   "term": "depthwise separable convolution",
+   "match": [
+    "\\bseparable convolution\\w*\\b",
+    "\\bdepthwise separable\\b",
+    "\\bSeparableConv2D\\b",
+    "\\bseparable layers?\\b"
+   ],
+   "exclude": [],
+   "definition": "a convolution split in two: one spatial filter per input channel, then 1 x 1 filters that mix the channels. Fewer weights, less arithmetic.",
+   "lesson": 3
+  },
+  {
+   "term": "Xception",
+   "match": [
+    "\\bXception\\b"
+   ],
+   "exclude": [],
+   "definition": "Extreme Inception (2016): a CNN built almost entirely from depthwise separable convolutions; reused for flower photos in lesson b18.",
+   "lesson": 12
+  },
+  {
+   "term": "SE block",
+   "match": [
+    "\\bSE blocks?\\b",
+    "\\bse_block\\b",
+    "\\bSENets?\\b",
+    "\\bsqueeze-and-excitation\\b"
+   ],
+   "exclude": [],
+   "definition": "a small add-on block that averages each feature map, passes the averages through two dense layers, and multiplies every map by the weight (0 to 1) that comes back.",
+   "lesson": 9
+  },
+  {
+   "term": "embedding",
+   "match": [
+    "\\bembeddings?\\b"
+   ],
+   "exclude": [],
+   "definition": "a short list of numbers standing in for something bigger (a set of maps, an object's appearance).",
+   "lesson": 13
+  },
+  {
+   "term": "EfficientNet",
+   "match": [
+    "\\bEfficientNet\\w*\\b"
+   ],
+   "exclude": [],
+   "definition": "a CNN family (B0 to B7) that grows depth, width and input size together by fixed factors.",
+   "lesson": 12
+  },
+  {
+   "term": "compound scaling",
+   "match": [
+    "\\bcompound scaling\\b"
+   ],
+   "exclude": [],
+   "definition": "grow depth by alpha^phi, width by beta^phi and resolution by gamma^phi together, with alpha x beta^2 x gamma^2 about 2.",
+   "lesson": 14
+  },
+  {
+   "term": "top-1 accuracy",
+   "match": [
+    "\\btop-?1\\b"
+   ],
+   "exclude": [],
+   "definition": "how often the model's single best guess is the right class.",
+   "lesson": 15
+  },
+  {
+   "term": "latency",
+   "match": [
+    "\\blatency\\b"
+   ],
+   "exclude": [],
+   "definition": "the wait for one answer.",
+   "lesson": 15
+  },
+  {
+   "term": "MobileNetV2",
+   "match": [
+    "\\bMobileNet\\w*\\b"
+   ],
+   "exclude": [],
+   "definition": "a small, fast CNN designed for phones (3.5 million parameters).",
+   "lesson": 15
+  },
+  {
+   "term": "pretrained model",
+   "match": [
+    "\\bpre-?trained\\b"
+   ],
+   "exclude": [],
+   "definition": "an architecture shipped together with weights someone already trained, usually on ImageNet.",
+   "lesson": 15
+  },
+  {
+   "term": "preprocess_input",
+   "match": [
+    "\\bpreprocess_input\\b"
+   ],
+   "exclude": [],
+   "definition": "each pretrained Keras model's own function that rescales pixels (0-255) to the range that model was trained on.",
+   "lesson": 17
+  },
+  {
+   "term": "decode_predictions",
+   "match": [
+    "\\bdecode_predictions\\b"
+   ],
+   "exclude": [],
+   "definition": "turns a model's 1,000 ImageNet scores into (class id, name, probability) triples.",
+   "lesson": 17
+  },
+  {
+   "term": "transfer learning",
+   "match": [
+    "\\btransfer learning\\b"
+   ],
+   "exclude": [],
+   "definition": "reusing the lower layers of a network trained on a big task (e.g. ImageNet) for a new task with little data.",
+   "lesson": 15
+  },
+  {
+   "term": "head",
+   "match": [
+    "\\bheads?\\b",
+    "\\binclude_top\\b"
+   ],
+   "exclude": [],
+   "definition": "the top of a network: the layers that turn features into the final answer (here the pooling and dense output layers).",
+   "lesson": 8
+  },
+  {
+   "term": "freeze",
+   "match": [
+    "\\bfr(eeze|ozen|eezing)\\b",
+    "\\bunfr(eeze|ozen|eezing|eezes)\\b"
+   ],
+   "exclude": [],
+   "definition": "set layer.trainable = False: the layer still computes, but training no longer changes its weights.",
+   "lesson": 18
+  },
+  {
+   "term": "fine-tuning",
+   "match": [
+    "\\bfine-?tun(e|es|ed|ing)\\b"
+   ],
+   "exclude": [
+    "→ Fine-tune\\b",
+    "\\bFine-tune →"
+   ],
+   "definition": "in this chapter: continue training some of a pretrained network's own layers, gently (small learning rate), after the new head has settled.",
+   "lesson": 18
+  },
+  {
+   "term": "learning rate",
+   "match": [
+    "\\blearning[ _]rates?\\b"
+   ],
+   "exclude": [],
+   "definition": "the size of each training step: weight change = learning rate x gradient.",
+   "lesson": 5
+  },
+  {
+   "term": "optimizer",
+   "match": [
+    "\\boptimi[sz]ers?\\b",
+    "\\bSGD\\b"
+   ],
+   "exclude": [],
+   "definition": "the object that turns gradients into weight updates (SGD = stochastic gradient descent); chosen in compile().",
+   "lesson": 18
+  },
+  {
+   "term": "momentum",
+   "match": [
+    "\\bmomentum\\b"
+   ],
+   "exclude": [],
+   "definition": "an optimizer setting that keeps part of the previous step's direction (0.9 = 90%), which smooths the path.",
+   "lesson": 18
+  },
+  {
+   "term": "compile",
+   "match": [
+    "\\bcompile(s|d)?\\b",
+    "\\bcompiling\\b",
+    "\\brecompil\\w*\\b"
+   ],
+   "exclude": [],
+   "definition": "Keras's step that attaches a loss, an optimizer and metrics to a model, before fit().",
+   "lesson": 18
+  },
+  {
+   "term": "tf_flowers",
+   "match": [
+    "\\btf_flowers\\b",
+    "\\bflowers dataset\\b"
+   ],
+   "exclude": [],
+   "definition": "a free set of 3,670 flower photos in 5 classes (dandelion, daisy, tulips, sunflowers, roses), loaded with TensorFlow Datasets.",
+   "lesson": 18
+  },
+  {
+   "term": "bounding box",
+   "match": [
+    "\\bbounding[ _]box(es)?\\b",
+    "\\bbboxes\\b"
+   ],
+   "exclude": [],
+   "definition": "the rectangle around an object, given as 4 numbers (here centre x, centre y, width, height, each 0 to 1).",
+   "lesson": 19
+  },
+  {
+   "term": "localization",
+   "match": [
+    "\\blocali[sz](ation|e|es|ed|ing)\\b"
+   ],
+   "exclude": [],
+   "definition": "saying where the object is (a bounding box), not only what it is.",
+   "lesson": 19
+  },
+  {
+   "term": "cross-entropy",
+   "match": [
+    "\\bcross-?entropy\\b",
+    "\\bcrossentropy\\b"
+   ],
+   "exclude": [],
+   "definition": "the usual classification loss: minus the log of the probability given to the true class.",
+   "lesson": 19
+  },
+  {
+   "term": "MSE",
+   "match": [
+    "\\bMSE\\b",
+    "\\bmean squared error\\b"
+   ],
+   "exclude": [],
+   "definition": "mean squared error: average of the squared differences between predicted and true numbers.",
+   "lesson": 19
+  },
+  {
+   "term": "IoU",
+   "match": [
+    "\\bIoU\\b",
+    "\\bintersection over union\\b"
+   ],
+   "exclude": [],
+   "definition": "intersection over union: the area where two boxes overlap divided by the area they cover together; 1 = identical, 0 = no overlap.",
+   "lesson": 19
+  },
+  {
+   "term": "object detection",
+   "match": [
+    "\\bobject detection\\b",
+    "\\bdetectors?\\b"
+   ],
+   "exclude": [
+    "\\bcorner detectors\\b"
+   ],
+   "definition": "finding every object in an image: a class and a bounding box for each.",
+   "lesson": 20
+  },
+  {
+   "term": "objectness score",
+   "match": [
+    "\\bobjectness\\b"
+   ],
+   "exclude": [],
+   "definition": "the model's estimated probability that an object is centred in this window or cell (one sigmoid unit).",
+   "lesson": 20
+  },
+  {
+   "term": "non-max suppression",
+   "match": [
+    "\\bnon-?max(imum)? suppression\\b",
+    "\\bnon_max_suppression\\b"
+   ],
+   "exclude": [],
+   "definition": "the cleanup that keeps the highest-objectness box and drops the boxes overlapping it by more than an IoU threshold, then repeats.",
+   "lesson": 20
+  },
+  {
+   "term": "fully convolutional network",
+   "match": [
+    "\\bfully convolutional\\b",
+    "\\bFCNs?\\b"
+   ],
+   "exclude": [],
+   "definition": "a network made only of convolutional and pooling layers (no dense layer), so it accepts any image size.",
+   "lesson": 3
+  },
+  {
+   "term": "YOLO",
+   "match": [
+    "\\bYOLO\\b",
+    "\\bYou Only Look Once\\b"
+   ],
+   "exclude": [],
+   "definition": "You Only Look Once: a detector that predicts every box and class for a grid of cells in one forward pass.",
+   "lesson": 22
+  },
+  {
+   "term": "Kalman filter",
+   "match": [
+    "\\bKalman\\b"
+   ],
+   "exclude": [],
+   "definition": "a classic method that predicts where a moving object should be now from where it has been, assuming constant velocity.",
+   "lesson": 23
+  },
+  {
+   "term": "Hungarian algorithm",
+   "match": [
+    "\\bHungarian\\b"
+   ],
+   "exclude": [],
+   "definition": "a classic method that finds the cheapest overall pairing between two lists (detections and tracks) given a cost for every pair.",
+   "lesson": 23
+  },
+  {
+   "term": "upsampling",
+   "match": [
+    "\\bupsampl\\w*\\b"
+   ],
+   "exclude": [],
+   "definition": "producing a bigger grid than you were given.",
+   "lesson": 24
+  },
+  {
+   "term": "transposed convolution",
+   "match": [
+    "\\btransposed convolution\\w*\\b",
+    "\\bConv2DTranspose\\b"
+   ],
+   "exclude": [],
+   "definition": "an upsampling layer: it spreads its input out with zeros, then convolves with learned weights; a bigger stride gives a bigger output.",
+   "lesson": 24
+  },
+  {
+   "term": "dilated convolution",
+   "match": [
+    "\\bdilat(ed|ion)\\w*\\b",
+    "\\bà[- ]trous\\b",
+    "\\bdilation_rate\\b"
+   ],
+   "exclude": [],
+   "definition": "a convolution with gaps in its filter (dilation_rate): a wider view for the same number of weights.",
+   "lesson": 1
+  },
+  {
+   "term": "instance segmentation",
+   "match": [
+    "\\binstance segmentation\\b"
+   ],
+   "exclude": [],
+   "definition": "segmentation that also tells objects of the same class apart (each bicycle separately).",
+   "lesson": 24
+  },
+  {
+   "term": "functional API",
+   "match": [
+    "\\bfunctional[- ]API\\b"
+   ],
+   "exclude": [],
+   "definition": "the Keras style that builds a model by calling layers on tensors, x = layer(x), then naming the first and last tensors in tf.keras.Model(inputs=..., outputs=...), instead of listing layers in Sequential.",
+   "lesson": 13
+  },
+  {
+   "term": "VRAM",
+   "match": [
+    "\\bVRAM\\b"
+   ],
+   "exclude": [],
+   "definition": "the GPU's own memory, separate from the computer's RAM; the model, its activations and a batch must all fit in it during training.",
+   "lesson": 25
+  },
+  {
+   "term": "MNIST",
+   "match": [
+    "\\bMNIST\\b"
+   ],
+   "exclude": [
+    "\\bfashion[ _-]mnist\\b"
+   ],
+   "definition": "70,000 grey 28 x 28 images of handwritten digits 0-9 (60,000 for training, 10,000 for testing) — the older set that Fashion MNIST was made to replace.",
+   "lesson": 25
+  },
+  {
+   "term": "neural style transfer",
+   "match": [
+    "\\bneural style transfer\\b"
+   ],
+   "exclude": [],
+   "definition": "repainting one photo in the style of another (say, a painting) by adjusting its pixels until a pretrained CNN's feature maps match the photo's content and the painting's textures.",
+   "lesson": 25
+  }
+ ]
+}
